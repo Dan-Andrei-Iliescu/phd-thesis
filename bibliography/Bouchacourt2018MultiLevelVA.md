@@ -13,3 +13,8 @@ Unsupervised models have been modified to produce interpretable representations 
 Semi-supervised models use an extra conditioning variable (which sometimes appears and sometimes not) to help disentanglement. The conditioning variable can be either discrete [Kingma2014SemisupervisedLW](https://api.semanticscholar.org/CorpusID:6377199) or continuous [Narayanaswamy2017LearningDR](https://api.semanticscholar.org/CorpusID:5024767).
 
 There are models which learn representations invariant to an observed label. [Alemi2017DeepVI](https://api.semanticscholar.org/CorpusID:7167114) uses the Information Bottleneck (IB) [Tishby2000TheIB](https://api.semanticscholar.org/CorpusID:8936496) principle to train the invariance. [Louizos2016TheVF](https://api.semanticscholar.org/CorpusID:215827094) encourages independence between the representation and the sensitive variable by maximising the Maximum Mean Discrepancy (MMD), while [Edwards2016CensoringRW](https://api.semanticscholar.org/CorpusID:4986726) use adversarial training. [Chen2017VariationalLA](https://api.semanticscholar.org/CorpusID:15534684) choose which part of the data to encode, and use an autoregressive model for the rest.
+
+
+## Quantitative Evaluation
+
+> *In order to quantitatively evaluate the disentanglement power of ML- VAE, we use the style latent code S and content latent code C as features for a classification task. The quality of the disentanglement is high if the content C is informative about the class, while the style S is not.*
