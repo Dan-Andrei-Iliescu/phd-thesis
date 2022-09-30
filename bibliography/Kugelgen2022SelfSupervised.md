@@ -21,4 +21,6 @@ Assume a family of transformations $\mathcal{T}$ such that $\tilde{x} = t(x)$ wh
 **Def.** A content partition $c = f^{-1} (x)_{1:n_c}$ is *block-identified* by a function $g:\mathcal{X} \to \mathcal{Z}$ iff the inferred content partition $\hat{c} = g(x)_{1:n_c}$ has all and only the information in $c$. In the deterministic case, it means that there is an invertible function $h:\mathcal{Z} \to \mathcal{Z}$ matching the two content partitions $c = h(\hat{c})$.
 
 **Theorem.** A learned representation $g(x)_{1:n_c}$ block-identifies the true content partition $f^{-1}(x)_{1:n_c}$ if:
-- j
+- **Content invariance.** $p(\tilde{z}|z) = \delta(\tilde{c}, c) ~ p(\tilde{s}|s)$ where $\delta$ is the Dirac function. This basically says that the probability of the intervention is positive only when the content stays constant, and has the value of the probability of the intervention on the style.
+- **Style changes.** Let $A$ be the indices of a random subset of the style variables. $p(\tilde{s}|s, A) = \delta(\tilde{s}_{A^c}, s_{A^c}) ~ p(\tilde{s}_A | s_A)$ where $A^c = \{1:n_s\} \setminus A$. This says that the mask $A$ controls which of the style variables change in the intervention, and only those variables are allowed to change.
+- **Generative model.** The generative model of the augmentation is $z \sim p(z), ~ x = f(z), ~ A \sim p(A), ~ \tilde{z} \sim p(\tilde{z} | z, A), ~ \tilde{x} = f(\tilde{z})$.

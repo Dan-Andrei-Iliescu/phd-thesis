@@ -1,0 +1,2 @@
+- https://en.wikipedia.org/wiki/Jacques_Bertin
+- Semiologie graphique

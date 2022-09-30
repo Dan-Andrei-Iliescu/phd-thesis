@@ -1,0 +1,11 @@
+- **Title:** Toward Improved Predictions in Ungauged Basins: Exploiting the Power of Machine Learning
+- **Authors:** Kratzert
+- **Topics:** [[river_flow]]
+- Data
+	- One of the situations where the accuracy of out-of-sample predictions matter is for prediction in ungauged basins (PUB)
+	- PUB remains an important challenge because the majority of streams in the world are either ungauged or poorly gauged, and the number of gauged catchments, even in the United States, is shrinking.
+	- In this technical note, we demonstrate an ML strategy for PUB. Our results show that out-of-sample LSTMs outperform, on average, a conceptual model (SAC-SMA) calibrated independently for each catchment, and also a distributed, process-based model (NWM).
+- Discussion
+	- The challenge going forward is about how to extract the useful information from catchment attributes data for regional modeling.
+	- The results presented here show that the LSTM is able to extrapolate on catchment attributes to new catchments.
+	- In our opinion, the most effective strategy moving forward will probably be theory-guided data-science Karpatne et al. (2017).

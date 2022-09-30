@@ -1,0 +1,1 @@
+- The [[hidden keys]] are the members of `l` which are not determined by `k`. These keys disambiguate the elements of the agglomeration. These are the keys for which there is no directed path from `k`. The question is: $$\forall l_i \in l, ~ k \to l_i?$$

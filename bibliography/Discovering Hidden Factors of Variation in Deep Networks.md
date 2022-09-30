@@ -1,0 +1,9 @@
+- {{[[table]]}}
+    - Link
+        - https://api.semanticscholar.org/CorpusID:2536452
+    - Authors
+        - Brian Cheung, J. Livezey, Arjun K. Bansal, B. Olshausen
+    - Venue
+        - CoRR 2015
+    - Topics
+        - [[group_instance_disentanglement]]

@@ -1,0 +1,8 @@
+- **Link:** https://www.nature.com/articles/s41467-019-09785-8
+- **Authors:** Lu Cheng, Siddharth Ramchandran, Tommi Vatanen, Niina Lietzén, Riitta Lahesmaa, Aki Vehtari & Harri Lähdesmäki
+- **Year:** 2019
+- **Tags:** [[Linear Mixed Effects Model]] [[Gaussian Process]]
+- Linear models and their mixed effect variants have become a standard tool for longitudinal data analysis. However, a number of challenges still persist in longitudinal analysis, e.g. when data contains nonlinear and non-stationary effects. 
+- GPs differ from standard regression models in that they define priors for entire nonlinear functions, instead of their parameters.
+- Gaussian Processes don't need basis functions.
+- GPs can be made more flexible by making the outputs additive: $$\mathbf{f}_i = \sum_{d=1}^D \mathbf{f}_i^{(d)}$$ where $$d$$ is a component function. It's interesting that this is equivalent to keeping just one output but making the covariance function additive: $$k(\mathbf{x}_i, \mathbf{x}_j) = \sum_{d=1}^D k^{(d)}(\mathbf{x}_i, \mathbf{x}_j)$$.

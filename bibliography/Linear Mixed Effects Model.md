@@ -1,0 +1,18 @@
+- Used in regression analysis involving dependent data. We have multiple observations from the same subject, like longitudinal data. Random effects are realised differently in different groups. [1]
+- Vocabulary of [1]:
+    - **Covariates:** Inputs $$x$$.
+    - **Responses:** Outputs $$y$$.
+    - **Intercept:** Bias, $$b$$ from $$ax + b$$.
+- The specific LMEs implemented by [1] are:
+    - **Random intercept models:** All responses in a group are shifted additively by a value specific to the group.
+    - **Random slopes models:** Slopes and intercepts vary by group.
+    - **Variance components models:** Some categorical covariates are drawn from distributions. These determine the responses additively.
+- There are 2 types of random effects [1]:
+    - Random coefficients that have an unknown covariance matrix, e.g. $$Y_{ij} = \beta + \alpha X_{ij} +\gamma_i + \eta_i X_{ij} + \epsilon_{ij} $$, where $$i$$ is the group and $$j$$ is the instance. Here, $$\gamma_i, \eta_i$$ are drawn from a bivariate distribution and have a certain covariance matrix between them.
+        - $$\alpha, \beta$$ are fixed effects common to all observations
+        - $$\epsilon_{ij}$$ is an error term independent of everything
+        - $$\gamma_i, \eta_i$$ are random effects dependent on group but independent of instance
+    - Random coefficients that are independent draws from a common univariate distribution, e.g. $$Y_{ijk} = \beta + \gamma_i + \eta_j + \epsilon_{ijk}$$.
+- **References**
+    - [1] https://www.statsmodels.org/stable/mixed_linear.html
+    - [2]

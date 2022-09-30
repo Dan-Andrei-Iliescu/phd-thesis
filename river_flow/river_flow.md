@@ -1,0 +1,17 @@
+- Data consists of column tuple `[riverflow, temp, date, basin]`. We want to predict `riverflow`. The tuple `[basin, date]` is a sufficient key.
+    - All values are normalized
+    - Actual columns are:
+        - `basin_id` - Which basin this is
+        - `t` - Time in years (fractional)
+        - {{[[todo]]}} Dunno `Dayl(s)` 
+        - `PRCP(mm/day)` - Precipitation in mmeters per day
+        - {{[[todo]]}} Dunno SRAD(W/m2)
+        - `Tmax(C)` - Maximum temperature
+        - `Tmin(C)` - Minimum temperature
+        - {{[[todo]]}} Dunno `Vp(Pa)` - I assume atmospheric pressure in Pascals
+        - `Q` - This is the streamflow coefficient
+- We can approach this basically as a [[Linear Mixed Effects Model]]
+- Current methods
+    - Mark used Neural Processes
+    - Omer is using a transformer
+    - State-of-the-art LSTM https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2019WR026065

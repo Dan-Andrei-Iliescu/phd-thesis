@@ -1,0 +1,23 @@
+- Summary of Grammar of Graphics ( https://towardsdatascience.com/a-comprehensive-guide-to-the-grammar-of-graphics-for-effective-visualization-of-multi-dimensional-1f92b4ed4149 )
+    - A language that allows us to describe the components of any graphic. Instead of trial-and-error, we follow a layered approach, inspired by the **Layered Grammar of Graphics** ( http://vita.had.co.nz/papers/layered-grammar.html )
+    - The structure of a language contains syntax and semantics.
+- **The Mathematical Foundation of Analytic Visualizations** - Leland Wilkinson talk ( https://www.youtube.com/watch?v=1X93Sum_SyM )
+    - Taxonomies of charts are harmful.
+    - The graph of a function is the subset of the cartesian product of its domain and codomain.
+    - Data has no meaning, models have meaning.
+    - Language:
+        - **Graph:** $$\text{G} = \{(x,f(x)) | x \in \mathbb{R}, f(x)=e^{-x^2}\}$$
+        - **Frame:** $$\text{F} = [-3, 3] \times [0, 1]$$
+        - **Aesthetic** (derived from the work of [[Jacques Bertin]]) $$\text{A} = x \to x_\text{position}, f(x) \to y_\text{position}$$
+        - **Graphic**: $$\text{A} (\text{F} \cap \text{G})$$
+    - Grammar of Graphics function chain
+        - `vars -> algebra ->scales -> stats -> geometry -> coords -> aesthetics`
+            - `geometry: point, line, area etc`
+            - `coords: rotate, reflect, dilate, warp etc`
+            -  `algebra` - There are 3 operators ( https://royalsocietypublishing.org/doi/10.1098/rspa.1965.0012 )
+                - `cross: [x,y] * [a,b] -> [(x,a),(x,b),(y,a),(y,b)]`
+                    - `(x,a)` and `(y,a)` are comparable (translations) like in [[Group-Instance]]
+                - `nest: [x,y] / [a,b] -> [(x,[a,b]),(y,a)]`
+                    - `(x,a)` and `(y,a)` are not comparable, since `a` has a different meaning in the two classes
+                - `blend: [x,y,z] + [a,a,b] -> [x,y,z,a,a,b]`
+        - Each element is a class with **interchangeable functions**.
