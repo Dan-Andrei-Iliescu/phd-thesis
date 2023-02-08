@@ -12,3 +12,8 @@ The company is based in London so there are no visa issues, since I am an EU cit
 To whom it may concern,
 
 We confirm that Dan Andrei Iliescu will be undertaking a paid internship with Papercup Ltd between 6 June 2022 - 4 November 2022. His role will be that of a Machine Learning Intern and he will be using his experience with representation learning to help us improve prosody transfer in our automatic speech dubbing software.
+
+
+## Intermission extension
+
+I would like to request an extension to my non-medical intermission until the 3rd of February 2023 for the purpose of continuing my paid internship with Papercup Ltd. This internship has been extremely fruitful for my career development so far, and I have agreed with the company to extend the internship in order to collaborate on a research paper that we will submit to ICML 2023. I believe this paper will lead to an offer of employment from the company after I finish my PhD.
