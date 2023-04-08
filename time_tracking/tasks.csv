@@ -1,9 +1,10 @@
-task_id,proj_id,start_date,deadline,end_date,is_completed,est_time,log_time,description
-psiholog,health,2023-02-07 12:00,2023-02-04 18:15,1997-01-16 00:00,False,06:00,01:30,Să fac tema la psiholog
-phd-thesis,phd,2023-02-07 12:30,2023-05-30 12:00,1997-01-16 00:00,False,200:00,03:00,
-make-time-tracker,phd,2023-02-06 11:00,2023-02-07 15:00,2023-02-07 14:00,True,02:00,03:50,Program time tracker and project manager
-read-identifiability-proof,phd,2023-02-07 19:00,2023-02-09 15:00,1997-01-16 00:00,False,03:00,01:45,Understand proof and prepare candidate proof for meeting with Damon
-dissertation-first-draft,phd,2023-02-06 12:00,2023-02-17 12:00,1997-01-16 00:00,False,12:00,01:00,Write a first draft conforming to Damon's suggestions
-apology-email-kaylee,papercup,2023-02-08 22:08,2023-02-09 12:00,1997-01-16 00:00,False,00:30,00:00,Write an email apologising that I didn't communicate what I did with the relocation money
-rejection-email-james,papercup,2023-02-08 22:19,2023-02-09 12:00,1997-01-16 00:00,False,01:00,00:00,Write an email rejecting the Papercup full time offer
-prepare-meet-damon,phd,2023-02-08 12:00,2023-02-09 15:00,1997-01-16 00:00,False,03:00,00:30,Prepare meeting with Damon.
+task_id,proj_id,creation_date,deadline,completion_date,is_completed,est_time,log_time,description
+psiholog,health,2023-02-07 12:00,2023-02-12 12:00,,FALSE,06:00,01:30,Să fac tema la psiholog
+phd-thesis,phd,2023-02-07 12:30,2023-05-30 12:00,,FALSE,200:00,03:00,
+make-time-tracker,phd,2023-02-06 11:00,2023-02-07 15:00,2023-02-07 14:00,TRUE,02:00,03:50,Program time tracker and project manager
+read-identifiability-proof,phd,2023-02-07 19:00,2023-02-09 15:00,,FALSE,03:00,03:20,Understand proof and prepare candidate proof for meeting with Damon
+dissertation-first-draft,phd,2023-02-06 12:00,2023-02-17 12:00,,FALSE,12:00,01:00,Write a first draft conforming to Damon's suggestions
+apology-email-kaylee,papercup,2023-02-08 22:08,2023-02-09 12:00,,FALSE,00:30,00:00,Write an email apologising that I didn't communicate what I did with the relocation money
+rejection-email-james,papercup,2023-02-08 22:19,2023-02-09 12:00,,FALSE,01:00,00:00,Write an email rejecting the Papercup full time offer
+pay-accommodation-fitz,admin,2023-02-08 12:45,2023-02-08 18:00,,FALSE,,,Pay outstanding accommodation fees and ask when the next one will come
+paul-valentines-party,social,2023-02-08 14:47,2023-02-08 18:00,,FALSE,,,

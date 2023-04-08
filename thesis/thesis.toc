@@ -1,0 +1,12 @@
+\thispagestyle {empty}
+\contentsline {chapter}{\numberline {1}Introduction}{11}{chapter.1}%
+\contentsline {paragraph}{What is new here?}{11}{section*.5}%
+\contentsline {paragraph}{What is wrong with the existing paradigm?}{11}{section*.6}%
+\contentsline {paragraph}{What is an example of this?}{11}{section*.7}%
+\contentsline {paragraph}{But what is the population?}{11}{section*.8}%
+\contentsline {paragraph}{So how do we know if a group is useful?}{12}{section*.9}%
+\contentsline {paragraph}{What is the difference between a population and a feature?}{12}{section*.10}%
+\contentsline {paragraph}{What is an example of a group problem?}{12}{section*.11}%
+\contentsline {paragraph}{When is it useful to talk about groups?}{12}{section*.12}%
+\contentsline {paragraph}{Let's define some terms.}{13}{section*.13}%
+\contentsline {chapter}{References}{15}{section*.14}%

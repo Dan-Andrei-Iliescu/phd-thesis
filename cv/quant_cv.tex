@@ -1,0 +1,196 @@
+\documentclass[a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage[backend=biber]{biblatex-chicago}
+\addbibresource{schmidt.bib}
+
+\usepackage[T1]{fontenc}
+\usepackage{charter}
+
+\usepackage{epigrafica}
+\usepackage[LGR,OT1]{fontenc}
+
+%\pagestyle{empty}
+
+\definecolor{skillcolour}{rgb}{0.8, 0.8, 0.8}
+
+\newcommand{\entry}[7]{
+    \begin{minipage}[t]{.05\textwidth}
+        \centering #1
+    \end{minipage}
+    ---
+    \begin{minipage}[t]{.05\textwidth}
+        \centering #2
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{.83\textwidth}
+        \textbf{#3}, #4\\
+        #5\\
+        \vspace{-1em}
+        #6
+        \vspace{.3em}
+        #7
+    \end{minipage}
+}
+
+\newcommand{\entrysim}[6]{
+    \begin{minipage}[t]{.05\textwidth}
+        \centering #1
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{.9\textwidth}
+        \textbf{#2}, #3\\
+        #4\\
+        \vspace{-1em}
+        #5
+        \vspace{.3em}
+        #6
+    \end{minipage}
+}
+
+\newtcbox{\skill}[1][]{nobeforeafter,colframe=skillcolour,colback=white,top=0pt,bottom=0pt,before upper=\strut,left=0pt,right=0pt,#1}
+
+%%%% BEGIN DOCUMENT
+
+\begin{document}
+
+\begin{minipage}[t]{.5\textwidth}
+    \huge \sc Dan Andrei Iliescu
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.5\textwidth}
+    \flushright
+    E-mail: \href{iliescudanandrei@gmail.com}{\texttt{iliescudanandrei@gmail.com}}\\
+    Website: \href{https://dan-andrei-iliescu.github.io/}{\texttt{dan-andrei-iliescu.github.io}}\\
+    LinkedIn: \href{https://www.linkedin.com/in/dan-andrei-iliescu/}{\texttt{in/dan-andrei-iliescu}}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=white,colframe=skillcolour,fonttitle=\sc\Large, title=Skills]
+    \begin{tabular}{l l}
+        \textbf{Programming Languages:} & \skill{Python}  \skill{C++} \skill{Java} \\
+        \textbf{Python Packages:} & \skill{Pytorch} \skill{Tensorflow} \skill{Scipy} \skill{Scikit-Learn} \skill{Pandas} \skill{Matplotlib} \\
+        \textbf{Development Tools:} & \skill{Vscode} \skill{Git} \skill{Docker} \skill{Bash} \skill{Poetry} \skill{Pipenv} \skill{DVC}
+    \end{tabular}
+\end{tcolorbox}
+
+\vspace{1em}
+
+\textsc{\Large Education}
+
+\vspace{-1em}
+
+\rule{\textwidth}{1pt}
+
+\entry{Oct 2019}{June 2023}{University of Cambridge}{UK}{PhD in Machine Learning, \textit{supervised by Dr Damon Wischik}}{
+    \begin{itemize}[leftmargin=*]
+        \item Full scholarship from the Alan Turing Institute, the UK's national data science institute.
+        \item Developing AI models that learn disentangled, causal representations of the world.
+    \end{itemize}
+}{\skill{Causal Inference} \skill{Latent Variables} \skill{VAEs} \skill{Generative Models} \skill{Variational Inference}}
+
+\entry{Oct 2018}{July 2019}{University of Cambridge}{UK}{MPhil in Advanced Computer Science, \textit{supervised by Dr Rafal Mantiuk}}{
+    \begin{itemize}[leftmargin=*]
+        \item Starred distinction (top 10\%) in ``Machine Learning'' and ``Language Modelling'' courses.
+        \item Developing AI models for dealing with confounding in high-dimensional data.
+    \end{itemize}
+}{\skill{Transformers} \skill{Missing Data Imputation} \skill{Probabilistic Modelling}}
+
+\entry{Sep 2015}{July 2018}{University of Manchester}{UK}{BSc (Hons) in Computer Science, \textbf{UK First Class (1:1)}, \textit{supervised by Prof Gavin Brown}}{
+    \begin{itemize}[leftmargin=*]
+        \item Dissertation on visualising the learned concepts of Generative Adversarial Networks.
+    \end{itemize}
+}{\skill{Machine Learning} \skill{GANs} \skill{Convex Optimisation}}
+
+\textsc{\Large Work Experience}
+
+\vspace{-1em}
+
+\rule{\textwidth}{1pt}
+
+\entry{Oct 2019}{Now}{University of Cambridge}{UK}{Teaching Assistant}{
+    \begin{itemize}[leftmargin=*]
+        \item Teaching ``Data Science'', ``Machine Learning'', and ``Information Theory'' courses.
+    \end{itemize}
+}{\skill{Linear Models} \skill{Gaussian Process} \skill{MCMC} \skill{TimeSeries} \skill{Probabilities}}
+
+\entry{Mar 2023}{Now}{ION.gov.ro}{Bucharest, Romania}{Research Consultant}{
+    \begin{itemize}[leftmargin=*]
+        \item Developing an AI ChatBot connecting voters with their political representatives.
+    \end{itemize}
+}{\skill{Large Language Models} \skill{AI Ethics}}
+
+\entry{June 2022}{Feb 2023}{Papercup Technologies Ltd}{London, UK}{Machine Learning Scientist Intern}{
+    \begin{itemize}[leftmargin=*]
+        \item Authored a research paper on controlling text-to-speech generative models.
+    \end{itemize}
+}{\skill{Text-to-Speech Synthesis} \skill{Transformers} \skill{Missing Data} \skill{WaveNet}}
+
+\entry{May 2021}{Oct 2021}{Yokai.ai}{Paris, France}{Research Consultant}{
+    \begin{itemize}[leftmargin=*]
+        \item Developed deep learning models for automatically assessing image quality.
+    \end{itemize}
+}{\skill{Computer Vision} \skill{Image Quality Assessment} \skill{Image Synthesis}}
+
+\entry{June 2018}{Sep 2018}{University of Manchester}{UK}{Research Assistant Intern}{
+    \begin{itemize}[leftmargin=*]
+        \item Co-authored a research paper on specialisation in neural network ensembles.
+    \end{itemize}
+}{\skill{Deep Network Ensembles} \skill{Probabilistic Machine Learning} \skill{Loss Functions}}
+
+\entry{June 2017}{Sep 2017}{ARM Ltd}{Manchester, UK}{Software Engineering Intern}{
+    \begin{itemize}[leftmargin=*]
+        \item Co-authored a whitepaper on optimising ML operations for novel CPU architectures.
+    \end{itemize}
+}{\skill{C++} \skill{Linear Algebra} \skill{Compilers}}
+
+% \vspace{1em}
+
+\textsc{\Large Selected Projects}
+
+\vspace{-1em}
+
+\rule{\textwidth}{1pt}
+
+\entrysim{2021}{AI Mosaic}{Award at St Edmund's College, Cambridge Art Contest}{Python algorithm for assembling images using patches from other images.}{
+    \begin{itemize}[leftmargin=*]
+        \item Website: \href{https://github.com/Dan-Andrei-Iliescu/ai-painting}{/ai-painting}
+    \end{itemize}
+}{\skill{Digital Art} \skill{Internal Learning} \skill{Image Synthesis}}
+
+\entrysim{2020}{Machine Learning Reading Club}{Computer Laboratory, Cambridge}{Organized weekly ML paper presentations for PhD students in the Computer Lab.}{
+    \begin{itemize}[leftmargin=*]
+        \item Website: \href{https://www.cl.cam.ac.uk/research/rainbow/readingclub/}{/readingclub}
+    \end{itemize}
+}{\skill{Presentations} \skill{Machine Learning}}
+
+\entrysim{2018}{Visualising GAN Layers}{Undergraduate Thesis}{Interpreting the concepts learned by a GAN.}{
+    \begin{itemize}[leftmargin=*]
+        \item Website: \href{https://github.com/Dan-Andrei-Iliescu/visualizing-GAN-layers}{/visualizing-GAN-layers}
+    \end{itemize}
+}{\skill{GANs} \skill{Interpretable Deep Learning} \skill{Dimensionality Reduction}}
+
+% \vspace{1em}
+
+\textsc{\Large Publications}
+
+\vspace{-1em}
+
+\rule{\textwidth}{1pt}
+
+\begin{enumerate}[itemsep=.2em]
+    \item \textbf{Iliescu, Dan Andrei}, Devang Mohan, Tian Huey Teh, and Zack Hodari. Controlling High-Dimensional Data With Sparse Input. Under review at ICML 2023.
+    \item Mustafa, Aamir, Aliaksei Mikhailiuk, \textbf{Dan Andrei Iliescu}, Varun Babbar, and Rafał K. Mantiuk.``Training a task-specific image reconstruction loss.'' In Proceedings of the IEEE/CVF winter conference on applications of computer vision, pp. 2319--2328. 2022.
+    \item \textbf{Iliescu, Dan Andrei}, Aliaksei Mikhailiuk, Damon Wischik, and Rafal Mantiuk. Disentangling Domain and Content. Preprint 2022.
+    \item Webb, Andrew, Charles Reynolds, Wenlin Chen, Henry Reeve, \textbf{Dan Andrei Iliescu}, Mikel Lujan, and Gavin Brown. ``To ensemble or not ensemble: When does end-to-end training fail?.'' In Machine Learning and Knowledge Discovery in Databases: European Conference, ECML PKDD 2020, Ghent, Belgium, September 14–-18, 2020, Proceedings, Part III, pp. 109--123. Springer International Publishing, 2021.
+    \item \textbf{Iliescu, Dan Andrei}, and Francesco Petrogalli. ``Arm scalable vector extension and application to machine learning.'' Retrieved October (2018).
+\end{enumerate}
+
+\end{document}

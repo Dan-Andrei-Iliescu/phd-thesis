@@ -1,0 +1,192 @@
+%%%%%
+%%
+%% Sample document ``thesis.tex''
+%%
+%% Version: v0.2
+%% Authors: Jean Martina, Rok Strnisa, Matej Urbas
+%% Date: 30/07/2008
+%%
+%% Copyright (c) 2008-2011, Rok Strniša, Jean Martina, Matej Urbas
+%% License: Simplified BSD License
+%% License file: ./License
+%% Original License URL: http://www.freebsd.org/copyright/freebsd-license.html
+%%%%%
+
+% Available documentclass options:
+%
+%   <all `report` document class options, e.g.: `a5paper`>
+%   withindex   - enables the index. New index entries can be added through `\index{my entry}`
+%   glossary    - enables the glossary.
+%   techreport  - typesets the thesis in the technical report format.
+%   firstyr     - formats the document as a first-year report.
+%   times       - uses the `Times` font.
+%   backrefs    - add back references in the Bibliography section
+%
+% For more info see `README.md`
+\documentclass[times]{cam-thesis}
+
+% Citations using numbers
+\usepackage[numbers]{natbib}
+
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+
+\newcommand{\todo}[1]{\textcolor{red}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis meta-information
+%%
+
+%% The title of the thesis:
+\title{Population-level representations}
+
+%% The full name of the author (e.g.: James Smith):
+\author{Dan Andrei Iliescu}
+
+%% College affiliation:
+\college{St Edmund's College}
+
+%% College shield [optional]:
+% \collegeshield{CollegeShields/Christs}
+% \collegeshield{CollegeShields/Churchill}
+% \collegeshield{CollegeShields/Clare}
+% \collegeshield{CollegeShields/ClareHall}
+% \collegeshield{CollegeShields/CorpusChristi}
+% \collegeshield{CollegeShields/Darwin}
+% \collegeshield{CollegeShields/Downing}
+% \collegeshield{CollegeShields/Emmanuel}
+% \collegeshield{CollegeShields/Fitzwilliam}
+% \collegeshield{CollegeShields/Girton}
+% \collegeshield{CollegeShields/GonCaius}
+% \collegeshield{CollegeShields/Homerton}
+% \collegeshield{CollegeShields/HughesHall}
+% \collegeshield{CollegeShields/Jesus}
+% \collegeshield{CollegeShields/Kings}
+% \collegeshield{CollegeShields/LucyCavendish}
+% \collegeshield{CollegeShields/Magdalene}
+% \collegeshield{CollegeShields/MurrayEdwards}
+% \collegeshield{CollegeShields/Newnham}
+% \collegeshield{CollegeShields/Pembroke}
+% \collegeshield{CollegeShields/Peterhouse}
+% \collegeshield{CollegeShields/Queens}
+% \collegeshield{CollegeShields/Robinson}
+% \collegeshield{CollegeShields/Selwyn}
+% \collegeshield{CollegeShields/SidneySussex}
+% \collegeshield{CollegeShields/StCatharines}
+\collegeshield{CollegeShields/StEdmunds}
+% \collegeshield{CollegeShields/StJohns}
+% \collegeshield{CollegeShields/Trinity}
+% \collegeshield{CollegeShields/TrinityHall}
+% \collegeshield{CollegeShields/Wolfson}
+% \collegeshield{CollegeShields/FitzwilliamRed}
+
+%% Submission date [optional]:
+% \submissiondate{June, 2023}
+
+%% You can redefine the submission notice [optional]:
+% \submissionnotice{A badass thesis submitted on time for the Degree of PhD}
+
+%% Declaration date:
+\date{June, 2023}
+
+%% PDF meta-info:
+\subjectline{Computer Science}
+\keywords{one two three}
+
+\newcommand{\flag}[1]{\textcolor[rgb]{0.9,0.3,0.3}{\textbf{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Abstract:
+%%
+\abstract{I am investigating how representation learning can help data analysts with limited computing or statistics experience to explore their datasets. My approach involves, firstly, understanding what data queries users would like to ask, but are unable to with the software tools currently available. Secondly, I am investigating which representation learning models are able to answer which kinds of queries. Thirdly, I am building a software tool that allows users to formulate queries and visualise outputs by manipulating views of the data.}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Contents:
+%%
+\begin{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title page, abstract, declaration etc.:
+%% -    the title page (is automatically omitted in the technical report mode).
+\frontmatter{}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis body:
+%%
+\chapter{Introduction}
+
+The space of problems I am considering comprises machine learning tasks where the data can be split into separate groups. I want to sell the idea that using a group-level latent representation is useful for solving many of these problems.
+
+\paragraph{What is new here?} We propose that the population itself is an additional feature to the collection of features comprising the individual. The existing paradigm is that each individual is independent and identically distributed. Most ML algorithms have an input and an output, and they treat each input as if it has been randomly extracted from a pool containing all possible inputs.
+
+\paragraph{What is wrong with the existing paradigm?} The basic assumption that underpins learning is that data is independent and identically distributed. However, in practice
+
+\paragraph{What is an example of this?}
+
+\paragraph{But what is the population?} The good news is, finding the group is not hard. People are routinely inclined to spot population-level differences in dataset. This dataset comes from Stanford while this one comes from Harvard, this dataset has been collected 3 years ago, whereas this one is new, this dataset is outside whereas this one is inside. Not only can people routinely identify populations, but many of those population structures are causally connected to the way the data has been generated or collected. In fact, multiple overlapping population structures can be identified. For example, students can be grouped by school or by social class. The question is not ``which group structure is the correct one?'' but rather ``how can I make use of this group structure that I've identified?''
+
+\paragraph{So how do we know if a group is useful?} There are many ways to divide datasets into groups. Sometimes the group is obvious, sometimes we can identify many candidate groups. Don't choose a group when the group can be easily expressed as a number.
+
+\paragraph{What is the difference between a population and a feature?} Sometimes, it's not clear if a group-structure is actually just a feature. For example, in clinical studies, the individuals who received a treatment form one population, whereas the others form the reference population. But you could also represent the treatment as an indicator variable, whose value 1 denotes that the individual has taken the treatment, and value 0 denotes that the individual has taken a placebo. The question is not whether the treatment group is a valid population or not, the question is, when is the population-view useful? 
+
+For example, what if we have multiple treatments, each having taken a medicine with a different set of ingredients. Let's say we were interested in what would be the outcome if we had 200mg of salt in the treatment. No administered tratment actually has 200mg of salt, they all have less. But some have more salt than the others. Therefore, we can train a linear regression from salt to outcome, and extrapolate by querying a larger amount of salt.
+
+My hypothesis is that environments should be treated as random variables distributed according to a learnable density rather than as fixed parameters.
+
+This idea endows generative models with 3 new abilities. 
+
+\paragraph{What is an example of a group problem?} Throughout this thesis, we will follow the example of the quintessential group: the person. Our loosely defined task is to understand human behaviour.
+
+\paragraph{When is it useful to talk about groups?} The distinction between group and individual is not clear-cut. For example, sometimes a person can be a datapoint of features, sometimes they can be a group of observations. The key question is when is it useful to look at the group in order to learn more information about the individual?
+
+\paragraph{Let's define some terms.} A population is made from individuals. We assume that individuals are exchangeable. This means that, within each population, they are independent and identically distributed.
+
+\begin{enumerate}
+    \item \textbf{Generating individuals from a new population.} Generating high-dimensional samples is an important task. This includes translation and also random sampling. The counterfactual generative question.
+    \item \textbf{Inferring things about the population.} Sometimes, we want to learn from a set of observations rather than one single datapoint. The random variable of the group acts as an intermediary between the datapoints and the label. This setup is much more common than might be apparent at first glance. For example, we used it to learn the prosody of a sentence from sparse inputs. In order to make it work, we needed a way to transform sparse features into i.i.d.\ observations from an environment.
+    \item \textbf{Inferring things about individuals.} This is the task of estimating the true causal parameter $\theta$ that maximises the interventional density $\mathbb{P}_{\theta} (Y | \mathrm{do} (X))$. The target is $Y$, and $X$ is the source. We need the logic of groups in order to deal with the problem of confounding. 
+\end{enumerate}
+
+
+What are the advantages of modelling groups as random variables?
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% References:
+%%
+% If you include some work not referenced in the main text (e.g. using \nocite{}), consider changing "References" to "Bibliography".
+%
+
+% \renewcommand to change default "Bibliography" to "References"
+\renewcommand{\bibname}{References}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{plainnat}
+\bibliography{thesis}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Appendix:
+%%
+
+%\appendix
+
+%\chapter{Extra Information}
+
+\end{document}
