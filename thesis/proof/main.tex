@@ -1,0 +1,252 @@
+%%%%%
+%%
+%% Sample document ``thesis.tex''
+%%
+%% Version: v0.2
+%% Authors: Jean Martina, Rok Strnisa, Matej Urbas
+%% Date: 30/07/2008
+%%
+%% Copyright (c) 2008-2011, Rok Strniša, Jean Martina, Matej Urbas
+%% License: Simplified BSD License
+%% License file: ./License
+%% Original License URL: http://www.freebsd.org/copyright/freebsd-license.html
+%%%%%
+
+% Available documentclass options:
+%
+%   <all `report` document class options, e.g.: `a5paper`>
+%   withindex   - enables the index. New index entries can be added through `\index{our entry}`
+%   glossary    - enables the glossary.
+%   techreport  - typesets the thesis in the technical report format.
+%   firstyr     - formats the document as a first-year report.
+%   times       - uses the `Times` font.
+%   backrefs    - add back references in the Bibliography section
+%
+% For more info see `README.md`
+% \documentclass[times]{cam-thesis}
+\documentclass[a4paper,12pt,twoside,openright]{report}
+
+% Citations using numbers
+% \usepackage[numbers]{natbib}
+
+\usepackage[style=authoryear]{biblatex} %Imports biblatex package
+\addbibresource{../bibliography.bib}
+
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{sectsty}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+
+
+% \usepackage[T1]{fontenc}
+% \usepackage{crimson}
+% \usepackage{fbb}
+% \usepackage{charter}
+% \usepackage{imfellEnglish}
+% \usepackage{euscript}
+\usepackage{biolinum}
+% \usepackage{helvet}
+% \usepackage{tgpagella}
+% \usepackage{fbb}
+\usepackage{tgpagella}
+% \usepackage{times}
+
+% \usepackage{libertine}
+% \usepackage{libertinust1math}
+
+% \renewcommand{\sfdefault}{ppl}
+
+%\setlength{\parindent}{0em}
+%\setlength{\parskip}{1em}
+
+\newcommand{\crit}[1]{\textcolor{red}{#1}}
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis meta-information
+%%
+
+%% The title of the thesis:
+\title{\bf Groups of high-dimensional data}
+
+%% The full name of the author (e.g.: James Smith):
+\author{Dan Andrei Iliescu}
+
+%% College affiliation:
+% \college{St Edmund's College}
+
+%% College shield [optional]:
+% \collegeshield{CollegeShields/Christs}
+% \collegeshield{CollegeShields/Churchill}
+% \collegeshield{CollegeShields/Clare}
+% \collegeshield{CollegeShields/ClareHall}
+% \collegeshield{CollegeShields/CorpusChristi}
+% \collegeshield{CollegeShields/Darwin}
+% \collegeshield{CollegeShields/Downing}
+% \collegeshield{CollegeShields/Emmanuel}
+% \collegeshield{CollegeShields/Fitzwilliam}
+% \collegeshield{CollegeShields/Girton}
+% \collegeshield{CollegeShields/GonCaius}
+% \collegeshield{CollegeShields/Homerton}
+% \collegeshield{CollegeShields/HughesHall}
+% \collegeshield{CollegeShields/Jesus}
+% \collegeshield{CollegeShields/Kings}
+% \collegeshield{CollegeShields/LucyCavendish}
+% \collegeshield{CollegeShields/Magdalene}
+% \collegeshield{CollegeShields/MurrayEdwards}
+% \collegeshield{CollegeShields/Newnham}
+% \collegeshield{CollegeShields/Pembroke}
+% \collegeshield{CollegeShields/Peterhouse}
+% \collegeshield{CollegeShields/Queens}
+% \collegeshield{CollegeShields/Robinson}
+% \collegeshield{CollegeShields/Selwyn}
+% \collegeshield{CollegeShields/SidneySussex}
+% \collegeshield{CollegeShields/StCatharines}
+% \collegeshield{CollegeShields/StEdmunds}
+% \collegeshield{CollegeShields/StJohns}
+% \collegeshield{CollegeShields/Trinity}
+% \collegeshield{CollegeShields/TrinityHall}
+% \collegeshield{CollegeShields/Wolfson}
+% \collegeshield{CollegeShields/FitzwilliamRed}
+
+%% Submission date [optional]:
+% \submissiondate{June, 2023}
+
+%% You can redefine the submission notice [optional]:
+% \submissionnotice{A badass thesis submitted on time for the Degree of PhD}
+
+%% Declaration date:
+\date{June, 2023}
+\title{Missing Data Imputation}
+
+%% PDF meta-info:
+% \subjectline{Computer Science}
+% \keywords{one two three}
+
+\newcommand{\flag}[1]{\textcolor[rgb]{0.9,0.3,0.3}{\textbf{#1}}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Contents:
+%%
+\begin{document}
+
+\allsectionsfont{\sffamily}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title page, abstract, declaration etc.:
+%% -    the title page (is automatically omitted in the technical report mode).
+% \frontmatter{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis body:
+%%
+\chapter{Function approximation}
+
+\section{Identifiability of amortised function approximation}
+
+\paragraph{Theorem.} Let $P$ be a distribution over $Y \in \mathbb{R}^D$, $O \in \mathbb{R}^D$, $M \in \{0,1\}^D$. Let $Q$ be an equivalent distribution $Y, O, O' \in \mathbb{R}^D$, $M \in \{0,1\}^D$. 
+
+If 
+
+$$\forall y, o, o', ~ Q_{Y|O}(y|o) ~ Q_{Y|O}(y|o') = \frac{P_{Y|O,O'}(y | o, o') P_Y (y) P_{O, O'} (o, o')}{P_{O} (o) ~ P_{O'} (o')}$$
+
+Another way to say this is $\forall o, o', ~ \frac{Q(o' | o) Q(o | o')}{P(o, o')} = \frac{P(o, o')}{P(o) P(o')}$
+
+and 
+
+if $\forall y, ~ Q_Y (y) = P_Y (y)$, 
+
+then $\forall y,o, ~ Q_{Y|O = o} (y) = P_{Y | O = o} (y)$.
+
+\paragraph{Proof.} We prove this by contradiction, let's start by assuming the opposite: Assume there exists some distributions \(P\) and \(Q\), and random variables \(A\) and \(B\) such that:
+\begin{enumerate}
+    \item For some values of \(A\) and \(B\), either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\).
+    \item Yet, for all values of \(A\) and \(B\), we have \(\frac{Q(A | B) Q(B | A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)}\).
+\end{enumerate}
+
+From Bayes theorem, we have:
+\[P(A|B) = \frac{P(B|A)P(A)}{P(B)}\]
+\[Q(A|B) = \frac{Q(B|A)Q(A)}{Q(B)}\]
+
+From our assumption, either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\).
+
+Let's take the first case, \(P(A|B) \neq Q(A|B)\), which means:
+\[\frac{P(B|A)P(A)}{P(B)} \neq \frac{Q(B|A)Q(A)}{Q(B)}\]
+
+From our assumption's second part:
+\[\frac{Q(A | B) Q(B | A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)}\]
+\[Q(B|A) = \frac{P(A)P(B)}{Q(A)}\]
+
+But this leads to a contradiction.
+
+
+
+
+Let's assume there exist probability distributions \(P\) and \(Q\), and for some values of random variables \(A\) and \(B\), we have either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\) and yet for all values of \(A\) and \(B\):
+
+\[ \frac{Q(A | B) Q(B | A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)} \] (1)
+
+From Bayes' theorem, we have:
+
+\[ P(A|B) = \frac{P(B|A)P(A)}{P(B)} \]
+\[ Q(A|B) = \frac{Q(B|A)Q(A)}{Q(B)} \]
+
+Plug these into equation (1):
+
+\[ \frac{\frac{Q(B|A)Q(A)}{Q(B)} \times Q(B|A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)} \]
+
+Rearrange and simplify:
+
+\[ Q(B|A)^2 \times \frac{Q(A)}{Q(B)} = \frac{P(A, B)^2}{P(A) P(B)} \] \[ (2) \]
+
+Now, from our assumption, if \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\), then there must be some change in the marginal probabilities of A or B (or both) between P and Q to maintain the relationship in equation (1). 
+
+Consider the first case, \(P(A|B) \neq Q(A|B)\):
+
+From equation (2), if \(Q(B|A)\) remains constant, then the ratio \(\frac{Q(A)}{Q(B)}\) must change. This indicates that the marginals \(Q(A)\) and/or \(Q(B)\) have changed between P and Q.
+
+Now consider the second case, \(P(B|A) \neq Q(B|A)\):
+
+From equation (2), if the ratio \(\frac{Q(A)}{Q(B)}\) remains constant, then \(Q(B|A)\) itself must change. This also indicates a change in the marginals.
+
+However, this contradicts our assumption in equation (1) that claims the relationship holds for all \(A\) and \(B\). The changing marginals would disrupt this relationship for other values of \(A\) and \(B\).
+
+Thus, by contradiction, the statement is proven: for all \(P, Q\), if there exists \(A, B\) such that either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\), then for those \(P, Q\) and for all \(A, B\), we must have \(\frac{Q(A | B) Q(B | A)}{P(A, B)} \neq \frac{P(A, B)}{P(A) P(B)}\).
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% References:
+%%
+% If you include some work not referenced in the main text (e.g. using \nocite{}), consider changing "References" to "Bibliography".
+%
+
+% \renewcommand to change default "Bibliography" to "References"
+% \renewcommand{\bibname}{References}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+% \bibliographystyle{plainnat}
+\printbibliography
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Appendix:
+%%
+
+%\appendix
+
+%\chapter{Extra Information}
+
+\end{document}

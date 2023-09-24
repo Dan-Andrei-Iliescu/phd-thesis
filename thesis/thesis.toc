@@ -1,12 +1,42 @@
 \thispagestyle {empty}
 \contentsline {chapter}{\numberline {1}Introduction}{11}{chapter.1}%
-\contentsline {paragraph}{What is new here?}{11}{section*.5}%
-\contentsline {paragraph}{What is wrong with the existing paradigm?}{11}{section*.6}%
-\contentsline {paragraph}{What is an example of this?}{11}{section*.7}%
-\contentsline {paragraph}{But what is the population?}{11}{section*.8}%
-\contentsline {paragraph}{So how do we know if a group is useful?}{12}{section*.9}%
-\contentsline {paragraph}{What is the difference between a population and a feature?}{12}{section*.10}%
-\contentsline {paragraph}{What is an example of a group problem?}{12}{section*.11}%
-\contentsline {paragraph}{When is it useful to talk about groups?}{12}{section*.12}%
-\contentsline {paragraph}{Let's define some terms.}{13}{section*.13}%
-\contentsline {chapter}{References}{15}{section*.14}%
+\contentsline {section}{\numberline {1.1}Why hierarchical variables?}{12}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem formulation}{13}{section.1.2}%
+\contentsline {section}{\numberline {1.3}When is the group logic useful?}{14}{section.1.3}%
+\contentsline {paragraph}{Identifying groups}{14}{section*.5}%
+\contentsline {paragraph}{Determining the utility of group logic}{14}{section*.6}%
+\contentsline {chapter}{\numberline {2}Background}{17}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Statistical models of grouped data}{17}{section.2.1}%
+\contentsline {paragraph}{Mixed-effects models.}{17}{section*.7}%
+\contentsline {paragraph}{Gaussian processes.}{18}{section*.8}%
+\contentsline {subsection}{\numberline {2.1.1}Similarities and differences}{19}{subsection.2.1.1}%
+\contentsline {paragraph}{Uncertainty.}{19}{section*.9}%
+\contentsline {paragraph}{Hierarchical data.}{19}{section*.10}%
+\contentsline {paragraph}{Parametrisation.}{19}{section*.11}%
+\contentsline {paragraph}{Interpretability.}{19}{section*.12}%
+\contentsline {subsection}{\numberline {2.1.2}Real-world applications}{20}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Limitations of statistical models for grouped data}{20}{subsection.2.1.3}%
+\contentsline {paragraph}{Computational complexity.}{21}{section*.13}%
+\contentsline {paragraph}{Kernel choice.}{21}{section*.14}%
+\contentsline {paragraph}{Lack of intepretability.}{21}{section*.15}%
+\contentsline {paragraph}{High-dimensional data.}{21}{section*.16}%
+\contentsline {paragraph}{Assumptions of normal errors.}{21}{section*.17}%
+\contentsline {paragraph}{Fixed functional form.}{21}{section*.18}%
+\contentsline {chapter}{\numberline {3}Missing data imputation}{23}{chapter.3}%
+\contentsline {paragraph}{What is this chapter about?}{23}{section*.19}%
+\contentsline {section}{\numberline {3.1}Background: Missing data imputation with Conditional Variational Autoencoders}{23}{section.3.1}%
+\contentsline {paragraph}{What is the probabilistic model?}{23}{section*.20}%
+\contentsline {paragraph}{What is the Machine Learning model?}{24}{section*.21}%
+\contentsline {section}{\numberline {3.2}Technical contribution: Turning structured data into exchangeable groups}{24}{section.3.2}%
+\contentsline {paragraph}{What is the motivation behind this technique?}{25}{section*.22}%
+\contentsline {section}{\numberline {3.3}Case study: Controlling generated prosody}{25}{section.3.3}%
+\contentsline {paragraph}{What is a problem where this helps?}{25}{section*.23}%
+\contentsline {paragraph}{What is the problem with existing control methods?}{25}{section*.24}%
+\contentsline {paragraph}{So what do you propose?}{26}{section*.25}%
+\contentsline {paragraph}{What are the empirical results?}{26}{section*.26}%
+\contentsline {paragraph}{So what's the upshot of all of this?}{27}{section*.27}%
+\contentsline {chapter}{\numberline {4}Personalised predictions}{29}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Controlling generation}{31}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Causal inference}{33}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Conclusion}{35}{chapter.7}%
+\contentsline {chapter}{References}{37}{section*.28}%

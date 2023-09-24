@@ -2,47 +2,50 @@ This is BibTeX, Version 0.99d (TeX Live 2021)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: thesis.aux
 The style file: plainnat.bst
-I found no \citation commands---while reading file thesis.aux
 Database file #1: thesis.bib
-You've used 0 entries,
+Warning--empty booktitle in Cressie2011StatisticsFS
+Warning--empty booktitle in Raudenbush1992HierarchicalLM
+Warning--empty booktitle in Train2003DiscreteCM
+Warning--empty booktitle in Zuur2009MixedEM
+You've used 10 entries,
             2773 wiz_defined-function locations,
-            591 strings with 4824 characters,
-and the built_in function-call counts, 33 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 2
-:= -- 10
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
-chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 1
+            651 strings with 6929 characters,
+and the built_in function-call counts, 4748 in all, are:
+= -- 381
+> -- 352
+< -- 8
++ -- 118
+- -- 108
+* -- 361
+:= -- 752
+add.period$ -- 30
+call.type$ -- 10
+change.case$ -- 66
+chr.to.int$ -- 10
+cite$ -- 24
+duplicate$ -- 210
+empty$ -- 365
+format.name$ -- 132
+if$ -- 980
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 0
-newline$ -- 8
-num.names$ -- 0
-pop$ -- 0
+missing$ -- 10
+newline$ -- 58
+num.names$ -- 40
+pop$ -- 149
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 56
 quote$ -- 0
-skip$ -- 1
+skip$ -- 173
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
+substring$ -- 68
+swap$ -- 11
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
-warning$ -- 0
-while$ -- 0
+type$ -- 110
+warning$ -- 4
+while$ -- 32
 width$ -- 0
-write$ -- 7
-(There was 1 error message)
+write$ -- 127
+(There were 4 warnings)

@@ -1,0 +1,151 @@
+\documentclass[a4paper]{article}
+
+\usepackage{booktabs}
+% \usepackage{parskip}
+
+\usepackage{libertinust1math}
+\usepackage{tgpagella}
+
+\title{Third-year report}
+\author{Dan Andrei Iliescu}
+\date{May 2023}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    This report presents an overview of my PhD progress at the conclusion of my third year. It outlines the work I've completed since my second-year report and walks through each chapter of my thesis, highlighting what's finished. Finally, I provide a schedule of the remaining work.
+\end{abstract}
+
+\section{Thesis progress}
+
+During my third year, my research has focused on investigating machine learning methods for grouped data --- a research question that I've discussed as in both my first-year and second-year reports. Since then, the structure of my thesis has evolved to reflect this new emphasis.
+
+\subsection{Introduction}
+
+This chapter introduces and defines the scope of problems I am considering --- learning from grouped data. Since my last report, I've formulated a mathematical definition of data groups from the perspective of probabilistic machine learning. I've also crafted examples illustrating the advantages of group-level representations in overcoming the trade-off between training a single model for all data and training separate models for each group. What remains to be done is to define the space of problems for which group learning is the appropriate framework.
+
+\paragraph{Status.} \textit{Writing is \textbf{3/4} complete.} 
+
+\subsection{Background}
+
+This chapter places my work in the broader context of methods for learning from grouped data. I first provide an explanation of the fundamentals of probabilistic machine learning. I then perform a literature review of how different scientific communities confront the problem of grouped data, including statistical learning (mixed-effects models and Gaussian processes), causal inference, and deep learning (domain adaptation, unsupervised translation). The remaining work involves finishing this literature review by discussing topics that are currently left out, such as meta-learning, fair representations, and federated learning.
+
+\paragraph{Status.} \textit{Writing is \textbf{2/3} complete.}
+
+\subsection{Multiple-instance learning}
+
+This chapter features the first case study on learning group-level representations --- learning to make predictions that apply to multiple datapoints, otherwise known as multiple-instance learning. 
+
+My key innovation here is proposing the framework of multiple-instance learning as a solution to the problem of controlling large generative models. For this, I have developed a deep learning method for controlling speech audio intonation in text-to-speech synthesis. The method involves treating sparse controlling inputs as elements of a group, which can be represented as a latent vector that can then be used to condition the generative model. The results are contained in a research paper currently under review for NeurIPS 2023. 
+
+The remaining work involves writing a presentation of the advantages of framing the problem of control as a multiple-instance learning problem.
+
+\paragraph{Status.} \textit{Research is fully complete. Writing is \textbf{1/3} complete.}
+
+\subsection{Disentangling between group and instance}
+
+In this case study, I aim to separate data representations into group-level information and instance level information. My technical innovation here is developing a group-level Variational Autoencoder with a fully Bayesian latent posterior and regularisation loss term that encourages disentanglement.
+
+Since my second-year report, I've refined the narrative of this project and extended the evaluation of my method. The method has been tested on a range of real-world problems, including the famous 8-Schools problem and the Causal3dIdent dataset.
+
+What remains is to complete the chapter and associated paper, which I plan to submit to ICLR 2024 in September.
+
+\paragraph{Status.} \textit{Research is fully complete. Writing is \textbf{1/3} complete.}
+
+\subsection{Causal inference for high-dimensional data}
+
+This project explores the problem of confounding in high-dimensional data, where unseen factors distort the relationship between a treatment variable and an outcome variable. Unlocking this is still an unexplored frontier in high-dimensional data, where many of the standard causal inference techniques are ineffective. I have developed a framing of causal inference as a group-learning problem, and I am currently working on a method for causal inference in high-dimensional grouped data. The results will be written up for ICLR 2024 submission in September.
+
+\paragraph{Status.} \textit{Research is partly complete. Writing is \textbf{1/3} complete.}
+
+\section{Submission schedule}
+
+I intend to submit my completed thesis between September and November 2023. My third-year end date is 30 May 2023 and my final submission date is 30 May 2024, as I took an 8-month intermission during which I interned as a Machine Learning Scientist with a London-based startup called Papercup Technologies.
+
+\vspace{1em}
+
+\noindent\begin{minipage}[t]{0.33\textwidth}
+    \textbf{June --- July 2023}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.66\textwidth}
+    Write a complete thesis draft with the research I have so far. This comprises Chapters 1--4. 
+\end{minipage}
+
+\vspace{1em}
+
+\noindent\begin{minipage}[t]{0.33\textwidth}
+    \textbf{August --- Sept. 2023}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.66\textwidth}
+    Finish the research for Chapter 5. Submit paper to ICLR 2024 containing the research from this chapter. Write Chapter 5.
+\end{minipage}
+
+\vspace{1em}
+
+\noindent\begin{minipage}[t]{0.33\textwidth}
+    \textbf{Oct. --- Nov. 2023}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.66\textwidth}
+    Final editing of thesis draft. Submission.
+\end{minipage}
+
+
+
+% This report summarises the progress of my PhD at the end of my third-year. The first section summarises the work that I've completed since my second-year report. The second section goes through each chapter of my thesis, mentioning what I've already completed and what is left to be done. The third section, includes a short timetable of the work that remains to be done.
+
+% \section{Thesis progress}
+
+% This section details the current progress in each chapter and how much is still left to complete. Since my second-year report, my PhD has focused on one particular problem from the set of problems I discussed in my second-year report: namely how to learn from groups of data. Therefore, the work that I've completed and the structure of my thesis has changed accordingly. In this section, I give an outline of my thesis, chapter by chapter. I summarise each chapter and then give an estimate of how much of the work is already completed.
+
+% \subsection{Introduction}
+
+% This chapter introduces and defines the scope of problems I am considering. These are problems of grouped data. I define mathematically what a group of data is from a probabilistic perspective. My claim in this thesis is that groups should be represented as random variables whose values can, and should be inferred from data. I give an example of how group-level representations are useful in the real-world.
+
+% \paragraph{Status.} \textit{Writing is \textbf{3/4} complete.}
+
+% Since last year, I have written an introduction to the problem of grouped data. I have formulated a mathematical definition of groups from the perspective of probabilistic machine learning. I have also written a descriptive example of how group-level representations can overcome the tradeoff between using a single model for all the data and training separate models for each group. What remains to be done is to write an outline of what are the situations in which group-level representations are useful. 
+
+% \subsection{Background}
+
+% This chapter explains the fundamentals of probabilistic machine learning and gives the reader a necessary understanding of the field. It places my work in the broader context of people who have developed methods to deal with grouped data. This work touches many scientific communities, including statistical learning, causal infernence, 
+
+% \paragraph{Status.} \textit{Writing is \textbf{2/3} complete.}
+
+% Since last year, I have written the part of the background section that explains the main concepts of Probabilistic Machine Learning necessary to understand the claim of the paper. I have also written a literature review of statistical methods for learning from grouped-data, namely mixed-effects models and Gaussian Processes. What is left to be completed is writing the literature review of the machine learning communities that haven't been addressed in my first-year report, including meta-learning and learning fair representations.
+
+% \subsection{Group-level predictions}
+
+% This chapter comprises the first case study for learning group-level representations. In this problem, we want to make a single prediction for multiple datapoints. This is called multiple-instance learning. My approach is to use a deep representation common to the entire group. The innovation is extending this framework to cases where the data isn't exchangeable. My technical contribution is proposing a way of making data within groups exchangeable by concatenating a learned positional embedding to it. This work was submitted in a paper that is currently under review at NeurIPS 2023.
+
+% \paragraph{Status.} \textit{Research is fully complete. Writing is \textbf{1/3} complete.}
+
+% Since last year, I have completed a new and entirely original piece of research in collaboration with a London-based startup called Papercup Technologies. The project consists of developing a deep learning method to control the intonation of speech audio in the context of text-to-speech synthesis. The method I've developed revolves around representing a matrix of sparse control features as a single latent representation that can be used to condition the text-to-speech model. The insights gathered from this work have made their way into a research paper currently under review at NeurIPS 2023 since May. What still needs to be completed is writing the chapter in the thesis. This includes framing the problem of controlling the text-to-speech generative model as a problem of making group-level predictions.
+
+% \subsection{Disentangling between group and instance}
+
+% This is the second case study of my thesis. The goal of this work is to learn to split the representations of data between factors of variation that corresponding to the group and factors of variation which correspond to the element within the group. My technical contribution in this area extends the methods for achieving disentangled representations to a previously ignored special case of this problem: namely conditional shift. Conditional shift occurs when, conditional on the data, the group and instance latent variables are no longer independent (otherwise known as a collider). Conditional shift is common across datasets, but not universal, which is why this case has not been identified before. My technical contribution here comprises implementing the full Bayesian latent posterior and a cleverly-designed regularisation term in the loss function.
+
+% \paragraph{Status.} \textit{Research is fully complete. Writing is \textbf{1/3} complete.}
+
+% Since the second-year report, I have made progress on this front both in terms of developing the scientific narrative and in terms of evaluation. I have refined the narrative, I have identified that the problem case I am addressing is this situation called conditional shift. I have also extended the evaluation of my method, performing experiments on a range of real-world problems, including the famous 8 schools problem (disentangling between student aptitude and the effectiveness of the schools' prep programme when looking at SAT scores) and the Causal3dIdent dataset --- where we want to separately represent lighting colour and object colour. What is still left to be done in this project is to finish writing up the chapter and the associated paper, which I will submit to ICLR 2024 in September.
+
+% \subsection{Causal inference for personalised predictions}
+
+% This project addresses the problem of dealing with confounding in high-dimensional data. The problem is that an unseen confounder is distorting the relationship between a treatment variable and an outcome variable. Our data is grouped by the values of the confounder. So how can we use the grouping to estimate the causal parameter mapping treatment to outcome.
+
+% \paragraph{Status.} \textit{Research is partly complete. Writing is \textbf{1/3} complete.}
+
+% Since last year, I have developed a framing of causal inference as a group-learning problem.
+
+% I am currently developing a method for causal inference in high-dimensional grouped data. This method uses the property of causal invariance to learn the causal relationship between treatment and outcome. I am aiming to write-up the outcome of this work to ICLR 2024 in September.
+
+% \section{Submission schedule}
+
+% My intended submission date is September --- November 2023. My third-year end date is 30 May 2023 and my final submission date is 30 May 2024. This is because I took an 8-month intermission for doing an internship with a London-based startup called Papercup Technologies.
+
+\end{document}

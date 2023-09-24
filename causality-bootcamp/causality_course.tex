@@ -1,0 +1,105 @@
+\documentclass[a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{hyperref}
+
+\usepackage{libertinust1math}
+\usepackage{tgpagella}
+
+\title{Causality Course}
+\author{Dan Andrei Iliescu}
+\date{May 2022 --- May 2023}
+
+\begin{document}
+
+\maketitle
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{files/2023_03_24.pdf}
+    \caption{\textbf{The Potential Outcomes Framework.}}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{files/2023_04_28.pdf}
+    \caption{\textbf{The Backdoor Criterion.}}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{files/2023_05_26.pdf}
+    \caption{\textbf{Covariate Adjustment and Frontdoor Adjustment.}}
+\end{figure}
+
+\section{Frontdoor Adjustment --- 2023--06--01}
+
+\paragraph{Theorem 6.1} If $(T, M, Y)$: 
+
+\begin{enumerate}
+    \item Satisfy the frontdoor criterion.
+    \item We have positivity. Positivity means that $0 < P(t | x) < 1, ~ \forall x, t$.
+\end{enumerate}
+
+then 
+
+\begin{equation}
+    P(y | \mathrm{do} (t)) = \sum_{m} P(m | t) \sum_{t'} P(y | m, t') P(t')    
+\end{equation}
+
+So what is the frontdoor criterion?
+
+\paragraph{Definition 6.1} A set of variables $M$ satisfy the frontdoor criterion relative to $T, Y$ if:
+
+\begin{enumerate}
+    \item All causal paths $T \to Y$ pass through $M$.
+    \item There is no unblocked backdoor path $T \to M$.
+    \item All backdoor paths $M \to Y$ are blocked when conditioning on $T$.
+\end{enumerate}
+
+\paragraph{Reminder.} A backdoor path $A \to B$ is a non-direct causal association from $A$ to $B$. In my interpretation, a backdoor path is any chain of variables that connect $A$ to $B$ and that make $P(B | A) \neq P(B | \mathrm{do}(A))'$. 
+
+\paragraph{Do-Calculus} The rules of do-calculus:
+
+\begin{enumerate}
+    \item Rule 1: $P(y | do(t), z, w) = P(y | do(t), w)$, if $Y \perp_{\overline{T}} Z | T, W$.
+    \item Rule 2: $P(y | do(t), do(z), w) = P(y | do(t), z, w)$, if $Y \perp_{\overline{T}, \underline{Z}} Z | T, W$.
+    \item Rule 3: $P(y | do(t), do(z), w) = P(y | do(t), w)$, if $Y \perp_{\overline{T}, \overline{Z(W)}} Z | T, W$.
+\end{enumerate}
+
+\paragraph{Proof 6.1} First, let's establish what $P(m | \mathrm{do}(t))$ and $P(y | \mathrm{do}(m))$ are.
+
+\begin{enumerate}
+    \item What is $P(m | \mathrm{do}(t))$? Are there any backdoors $T \to M$? No, therefore $P(m | \mathrm{do}(t)) = P(m | t)$.
+    \item What is $P(y | \mathrm{do}(m))$? Are there any backdoors $M \to Y$? Yes, $M \leftarrow T \leftarrow W \rightarrow Y$. This path can be blocked by $T$, which is observed. Therefore $P(y | \mathrm{do}(m)) = \sum_{t} P(y, t | m) = \sum_{t} P(y | t, m) P(t)$.
+\end{enumerate}
+
+At this point, we know that
+
+\begin{equation}
+    \sum_{m} P(m | t) \sum_{t'} P(y | m, t') ~ P(t') = \sum_{m} P(m | \mathrm{do} (t)) ~ P(y | \mathrm{do} (m))
+\end{equation}
+
+Also, by the law of total probability, we know that
+
+\begin{equation}
+    P(y | \mathrm{do} (t)) = \sum_{m} P(y, m | \mathrm{do} (t)) = \sum_m P(y | m, \mathrm{do} (t)) ~ P(m | \mathrm{do} (t))
+\end{equation}
+
+So all we have to do is prove that
+
+\begin{equation}
+    \sum_m P(y | m, \mathrm{do} (t)) ~ P(m | \mathrm{do} (t)) = \sum_{m} P(y | \mathrm{do} (m)) ~ P(m | \mathrm{do} (t))
+    \label{eq:frontdoor}
+\end{equation}
+
+We will now prove that $P(y | m, \mathrm{do} (t)) = P(y | \mathrm{do} (m))$. If we do that, then we're done. We apply the first two rules of do-calculuts to the termo on the left.
+
+\begin{align}
+    P(y | m, \mathrm{do} (t)) &= P(y | m, \mathrm{do} (t), \mathrm{do} (m)) \\
+    &= P(y | \mathrm{do} (m))
+\end{align}
+
+And we're done! Therefore Equation~\ref{eq:frontdoor} is true.
+
+\end{document}

@@ -1,8 +1,70 @@
-\begin{thebibliography}{0}
+\begin{thebibliography}{10}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Cressie and Wikle(2011)]{Cressie2011StatisticsFS}
+Noel Cressie and Christopher~K. Wikle.
+\newblock Statistics for spatio-temporal data.
+\newblock 2011.
+
+\bibitem[Durrant and Kab{\'a}n(2010)]{Durrant2010CompressedFL}
+Robert~J. Durrant and Ata Kab{\'a}n.
+\newblock Compressed fisher linear discriminant analysis: classification of
+  randomly projected data.
+\newblock \emph{Proceedings of the 16th ACM SIGKDD international conference on
+  Knowledge discovery and data mining}, 2010.
+
+\bibitem[Min and Wynter(2011)]{Min2011RealtimeRT}
+Wanli Min and Laura Wynter.
+\newblock Real-time road traffic prediction with spatio-temporal correlations.
+\newblock \emph{Transportation Research Part C-emerging Technologies},
+  19:\penalty0 606--616, 2011.
+
+\bibitem[Neuhaus and McCulloch(2006)]{Neuhaus2006SeparatingBA}
+John~M. Neuhaus and Charles~E. McCulloch.
+\newblock Separating between‐ and within‐cluster covariate effects by using
+  conditional and partitioning methods.
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 68, 2006.
+
+\bibitem[Pinheiro and Bates(2001)]{Pinheiro2001MixedEffectsMI}
+Josae~C. Pinheiro and Douglas~M. Bates.
+\newblock Mixed-effects models in s and s-plus.
+\newblock \emph{Technometrics}, 43:\penalty0 113 -- 114, 2001.
+
+\bibitem[Rasmussen and Williams(2003)]{Rasmussen2003GaussianPF}
+Carl~Edward Rasmussen and Christopher K.~I. Williams.
+\newblock Gaussian processes for machine learning.
+\newblock In \emph{Adaptive computation and machine learning}, 2003.
+
+\bibitem[Raudenbush and Bryk(1992)]{Raudenbush1992HierarchicalLM}
+Stephen Raudenbush and Anthony Bryk.
+\newblock Hierarchical linear models: Applications and data analysis methods.
+\newblock 1992.
+
+\bibitem[Train(2003)]{Train2003DiscreteCM}
+Kenneth~E. Train.
+\newblock Discrete choice methods with simulation.
+\newblock 2003.
+
+\bibitem[Tran et~al.(2019)Tran, Vu, Ha, Vuong, Ho, Vuong, La, Ho, Nghiem,
+  Nguyen, Latkin, Tam, Cheung, Nguyen, Ho, and Ho]{Tran2019GlobalEO}
+Bach~Xuan Tran, Giang~Thu Vu, Giang~Hai Ha, Quan-Hoang Vuong, Manh-Tung Ho,
+  Thu-Trang Vuong, Viet-Phuong La, Manh-Toan Ho, Kien-Cuong~P. Nghiem, Huong
+  Lan~Thi Nguyen, Carl~A. Latkin, Wilson~W.S. Tam, Ngai-Man Cheung, Hong
+  Kong~To Nguyen, Cyrus S.~H. Ho, and Roger C.~M. Ho.
+\newblock Global evolution of research in artificial intelligence in health and
+  medicine: A bibliometric study.
+\newblock \emph{Journal of Clinical Medicine}, 8, 2019.
+
+\bibitem[Zuur et~al.(2009)Zuur, Ieno, Walker, Saveliev, and
+  Smith]{Zuur2009MixedEM}
+Alain~F. Zuur, Elena~N. Ieno, Neil~J. Walker, Anatoly~A. Saveliev, and
+  Graham~M. Smith.
+\newblock Mixed effects models and extensions in ecology with r.
+\newblock 2009.
 
 \end{thebibliography}

@@ -1,0 +1,70 @@
+\documentclass[a4paper]{article}
+
+\usepackage{imfellEnglish}
+\usepackage{libertinust1math}
+
+\usepackage{fbb}
+
+\title{We Are Wasting The Context Set}
+\author{Andrei Iliescu}
+\date{25 May 2023}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    I propose a project to increase the amount of information that Transformers/Neural Processes can extract from the context set in the case of time-series with exogenous variables. I claim that there is unused information in the context set about the relationship between the exogenous variable $X$ and the outcome $Y$.
+\end{abstract}
+
+\section{Introduction}
+
+Raghul pointed out something very interesting today: an ARIMA model can do something that a Neural Process cannot: it can adapt to the context set. The ARIMA model is personalisable because it is completely retrained for every context set on which it's applied. It's true that this makes it fragile. But it is able to adjust to the specificities of the context set more than a Transformer / Neural Process / RNN.
+
+This paper also recognises this fact. 
+
+\section{Motivating example}
+
+It's very easy to see why some information in the context set remains unused. Imagine that you are a meteorologist wanting the predict the temperature in the next 4 days based on the temperature in the past 4 days. You have a Transformer / RNN / Neural Process trained on many other time-series. Now imagine that within the context set of the last 4 days, you choose the first 2 days to be the virtual context set, and the next 2 days to be the virtual testing set. You use the virtual context set to predict temperature for the virtual testing set. The error between the predicted temperatures and the real ones contains a lot of information. However, it is unused by the model. If the model makes a systematic mistake for the virtual testing set, it will make the same systematic mistake for the real testing set, and there is nothing we can do about it (yet).
+
+
+
+You are a young climate researcher with extensive experience in machine learning. Write a research proposal for your research colleagues. Focus on writing a coherent and informed research project. Think creatively, and take the rest of my advice as guidance rather than condition. The project should focus on finding ways to improve the prediction of extreme weather events using machine learning. You should focus on predicting heatwaves in Nigeria and predicting coastal flooding in the UK. You should think deeply about the challenges involved in making accurate predictions of extreme events. The data consists of measurements of different features at different locations and at different times. You should think about the disproportionate cost of false negatives and the difficulty in modelling extreme events using probability distributions. You should use all your expertise to write this proposal. The proposal must be detailed and coherent, including examples. You should also propose an initial solution to the problem, namely predicting extreme weather events based on sets of observations rather than at the level of a single observation. You should propose a first step in this project, namely a hackathon that would investigate what is the best way to organise into groups the datasets of measurements. Think about what this means and what impact this will have on the prediction models.
+
+Title: Leveraging Machine Learning to Improve the Prediction of Extreme Weather Events: Reducing False Negatives in Heatwave Prediction for Nigeria and Coastal Flooding in the UK
+
+Introduction
+
+Extreme weather events, such as heatwaves and coastal flooding, pose significant risks to human life, ecosystems, and infrastructure. Accurate predictions of these events are crucial for developing effective mitigation and adaptation strategies. This research project aims to leverage machine learning (ML) techniques to improve the prediction of extreme weather events, focusing on heatwaves in Nigeria and coastal flooding in the UK, with an emphasis on reducing false negatives.
+
+    Challenges
+
+a. False negatives: The cost of failing to predict an extreme event (false negative) is disproportionately high compared to the cost of false positives. A missed prediction can lead to inadequate preparedness, resulting in potentially devastating consequences. For instance, failing to predict a heatwave in Nigeria can lead to crop failure, water scarcity, and increased mortality rates, while an unpredicted coastal flood in the UK may cause substantial property damage and loss of life.
+
+b. Modelling extreme events with probability distributions: Climate models often struggle to capture the frequency of extreme events such as heatwaves and coastal flooding because these events are highly non-linear functions of their driving factors. For example, a climate model may capture the average temperature well but fail to accurately predict heatwaves because the latter depend on various interconnected factors. Similarly, the relationship between sea level and coastal flooding is complex and challenging to model, as it involves interactions between tides, storm surges, and local topography.
+
+    Proposed Solution
+
+To address these challenges, we propose predicting extreme weather events based on sets of observations rather than single observations. This approach will allow us to leverage the spatial and temporal relationships between measurements, enhancing the predictive capabilities of our models and reducing the risk of false negatives.
+
+Predicting based on sets of observations decreases the risk of false negatives for the following reasons:
+
+a. Capturing complex relationships: Sets of observations can help capture the underlying complex relationships between the driving factors of extreme events, such as the interplay between temperature, humidity, and atmospheric pressure in the case of heatwaves, or the interactions between sea level, tides, and storm surges in coastal flooding.
+
+b. Incorporating spatial dependencies: Sets of observations can reveal spatial dependencies that are crucial for predicting extreme events. For instance, considering a set of neighboring coastal regions in the UK can improve flood predictions by accounting for the spatial propagation of storm surges and tidal effects.
+
+c. Exploiting temporal patterns: By analyzing sets of temporally correlated observations, our models can better capture the dynamics leading to extreme events, such as the build-up of heat leading to a heatwave or the development of a storm system that eventually causes coastal flooding.
+
+    Hackathon: Identifying the Best Way to Segment Datasets into Sets of Observations
+
+As the first step in this project, we propose organizing a hackathon focused on identifying the best way to segment the dataset into sets of observations across the temporal and spatial dimensions. This event will bring together researchers, data scientists, and domain experts to explore various techniques for organizing data, such as:
+
+a. Time windows: Dividing the dataset into time windows of varying lengths, such as daily, weekly, or monthly periods, to capture different temporal patterns leading to extreme events.
+
+b. Geographic regions: Grouping observations based on geographic regions or areas with similar characteristics, such as coastal zones, urban centers, or agricultural areas, to account for spatial dependencies.
+
+c. Adaptive segmentation: Developing algorithms that dynamically adjust the size and shape of the sets of observations based on the underlying patterns in the data, allowing for a more flexible and robust representation of the relationships between measurements.
+
+In conclusion, this research project aims to harness the power of machine learning
+
+\end{document}

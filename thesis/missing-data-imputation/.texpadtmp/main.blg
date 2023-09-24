@@ -1,0 +1,15 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/missing-data-imputation/.texpadtmp/main.blg'
+[101] biber-darwin:340> INFO - === Sat Sep 23, 2023, 20:33:23
+[140] Biber.pm:419> INFO - Reading '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/missing-data-imputation/.texpadtmp/main.bcf'
+[261] Biber.pm:979> INFO - Found 39 citekeys in bib section 0
+[281] Biber.pm:4419> INFO - Processing section 0
+[301] Biber.pm:4610> INFO - Looking for bibtex file '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/missing-data-imputation/../bibliography.bib' for section 0
+[317] bibtex.pm:1713> INFO - LaTeX decoding ...
+[453] bibtex.pm:1519> INFO - Found BibTeX data source '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/missing-data-imputation/../bibliography.bib'
+[1006] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1006] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1006] Biber.pm:4239> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[1006] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[1065] bbl.pm:660> INFO - Writing '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/missing-data-imputation/.texpadtmp/main.bbl' with encoding 'UTF-8'
+[1126] bbl.pm:763> INFO - Output to /Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/missing-data-imputation/.texpadtmp/main.bbl

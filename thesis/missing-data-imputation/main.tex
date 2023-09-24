@@ -1,0 +1,598 @@
+%%%%%
+%%
+%% Sample document ``thesis.tex''
+%%
+%% Version: v0.2
+%% Authors: Jean Martina, Rok Strnisa, Matej Urbas
+%% Date: 30/07/2008
+%%
+%% Copyright (c) 2008-2011, Rok Strniša, Jean Martina, Matej Urbas
+%% License: Simplified BSD License
+%% License file: ./License
+%% Original License URL: http://www.freebsd.org/copyright/freebsd-license.html
+%%%%%
+
+% Available documentclass options:
+%
+%   <all `report` document class options, e.g.: `a5paper`>
+%   withindex   - enables the index. New index entries can be added through `\index{our entry}`
+%   glossary    - enables the glossary.
+%   techreport  - typesets the thesis in the technical report format.
+%   firstyr     - formats the document as a first-year report.
+%   times       - uses the `Times` font.
+%   backrefs    - add back references in the Bibliography section
+%
+% For more info see `README.md`
+% \documentclass[times]{cam-thesis}
+\documentclass[a4paper,12pt,twoside,openright]{report}
+
+% Citations using numbers
+% \usepackage[numbers]{natbib}
+
+\usepackage[style=authoryear]{biblatex} %Imports biblatex package
+\addbibresource{../bibliography.bib}
+
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{sectsty}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+
+
+% \usepackage[T1]{fontenc}
+% \usepackage{crimson}
+% \usepackage{fbb}
+% \usepackage{charter}
+% \usepackage{imfellEnglish}
+% \usepackage{euscript}
+\usepackage{biolinum}
+% \usepackage{helvet}
+% \usepackage{tgpagella}
+% \usepackage{fbb}
+\usepackage{tgpagella}
+% \usepackage{times}
+
+% \usepackage{libertine}
+% \usepackage{libertinust1math}
+
+% \renewcommand{\sfdefault}{ppl}
+
+%\setlength{\parindent}{0em}
+%\setlength{\parskip}{1em}
+
+\newcommand{\crit}[1]{\textcolor{red}{#1}}
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis meta-information
+%%
+
+%% The title of the thesis:
+\title{\bf Groups of high-dimensional data}
+
+%% The full name of the author (e.g.: James Smith):
+\author{Dan Andrei Iliescu}
+
+%% College affiliation:
+% \college{St Edmund's College}
+
+%% College shield [optional]:
+% \collegeshield{CollegeShields/Christs}
+% \collegeshield{CollegeShields/Churchill}
+% \collegeshield{CollegeShields/Clare}
+% \collegeshield{CollegeShields/ClareHall}
+% \collegeshield{CollegeShields/CorpusChristi}
+% \collegeshield{CollegeShields/Darwin}
+% \collegeshield{CollegeShields/Downing}
+% \collegeshield{CollegeShields/Emmanuel}
+% \collegeshield{CollegeShields/Fitzwilliam}
+% \collegeshield{CollegeShields/Girton}
+% \collegeshield{CollegeShields/GonCaius}
+% \collegeshield{CollegeShields/Homerton}
+% \collegeshield{CollegeShields/HughesHall}
+% \collegeshield{CollegeShields/Jesus}
+% \collegeshield{CollegeShields/Kings}
+% \collegeshield{CollegeShields/LucyCavendish}
+% \collegeshield{CollegeShields/Magdalene}
+% \collegeshield{CollegeShields/MurrayEdwards}
+% \collegeshield{CollegeShields/Newnham}
+% \collegeshield{CollegeShields/Pembroke}
+% \collegeshield{CollegeShields/Peterhouse}
+% \collegeshield{CollegeShields/Queens}
+% \collegeshield{CollegeShields/Robinson}
+% \collegeshield{CollegeShields/Selwyn}
+% \collegeshield{CollegeShields/SidneySussex}
+% \collegeshield{CollegeShields/StCatharines}
+% \collegeshield{CollegeShields/StEdmunds}
+% \collegeshield{CollegeShields/StJohns}
+% \collegeshield{CollegeShields/Trinity}
+% \collegeshield{CollegeShields/TrinityHall}
+% \collegeshield{CollegeShields/Wolfson}
+% \collegeshield{CollegeShields/FitzwilliamRed}
+
+%% Submission date [optional]:
+% \submissiondate{June, 2023}
+
+%% You can redefine the submission notice [optional]:
+% \submissionnotice{A badass thesis submitted on time for the Degree of PhD}
+
+%% Declaration date:
+\date{June, 2023}
+\title{Missing Data Imputation}
+
+%% PDF meta-info:
+% \subjectline{Computer Science}
+% \keywords{one two three}
+
+\newcommand{\flag}[1]{\textcolor[rgb]{0.9,0.3,0.3}{\textbf{#1}}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Contents:
+%%
+\begin{document}
+
+\allsectionsfont{\sffamily}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title page, abstract, declaration etc.:
+%% -    the title page (is automatically omitted in the technical report mode).
+% \frontmatter{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis body:
+%%
+\chapter{Missing data imputation}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.29\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/missing_data_training.pdf}
+        \caption{Complete data.}
+        \label{fig:pgm_full}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.29\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/missing_data_np.pdf}
+        \caption{Stochastic process.}
+        \label{fig:pgm_sp}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.37\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/missing_data_ours.pdf}
+        \caption{Latent-group model.}
+        \label{fig:pgm_ours}
+    \end{subfigure}
+       \caption{Probabilistic graphical models for missing data imputation. Observed variables are highlighted with blue.}
+       \label{fig:pgm}
+\end{figure}
+
+\section{Introduction}
+
+This chapter explores the application of our latent-group generative model to the problem of missing data imputation (MDI) in the context of high-dimensional data. This is the problem of filling in missing observations within a ``data structure'' \crit{(Be more precise. A data structure is not the whole dataset, but just one element in the dataset.)} --- such as a multivariate time-series, image, or data table --- conditionally on the observations that are available. We are considering patterns of missingness of the missing-not-at-random (MNAR) type, meaning that whether or not an observation is missing might depend on the value of any variable, including the outcome. Take this as an example.
+
+Existing methods have difficulty solving this problem because 1) they do not generalise well to unseen patterns of missingness, and 2) they use the available data inefficiently.
+
+Our solution to this problem is to explicitly include the missingness within our generative model. This enables the data structure to be modelled as a group of exchangeable observations. we train a Conditional Variational Autoencoder at the group-level. we infer the latent variable based on the incomplete data available and then generate a complete group from the latent variable. Our model uses a prior conditioned on missing data that makes the imputation robust to different patterns of missingness.
+
+We validate our method by pushing a new frontier for MDI: controlling the outputs of large generative models. We show that the proposed method is more sample-efficient and robust than competing MDI methods.The work in this chapter is contained in a paper currently under review for NeurIPS 2023.
+
+\section{Problem formulation}
+
+We formulate the problem of imputing missing-not-at-random (MNAR) high-dimensional data. The realistic setup is that, at training-time, we have access to a large dataset of complete data structures, and a smaller dataset with missingness. Each data structure in the sparse set will have its own pattern of missingness. At test-time our model has to fill in data structures with patterns of missingness from the same distribution. In practice, scientists would look at the missingness patterns in the sparse training set and try to replicate them in the complete training set in order to train their models. \crit{(Which practice? Be precise, cite papers.)}
+
+\paragraph{Dataset.} We consider a setup where the pattern of missingness varies between data structures. Our training dataset consists of two partitions: one (large) partition contains complete data structures, while the other (smaller) partition contains data structures, each with a different pattern of not-at-random missingness. By ``data structure'' we mean an image, time-series, or data table, depending on the type of data.
+
+\begin{enumerate}
+    \item \textbf{Complete training set.} This is a dataset where there is no missingness. Let $\mathcal{D}_A = \{(\mathbf{x}_i, \mathbf{y}_i)\}_{i=1}^{A}$ where $(\mathbf{x}_i, \mathbf{y}_i) \in (\mathbb{R}, \mathbb{R})^*$. \crit{Now expand in words what this means.
+    } We call $\mathbf{x}_i$ the ``locations'' and $\mathbf{y}_i$ the ``outcomes''.
+    \item \textbf{Sparse training set.} This is a dataset where some of the outcomes are missing. The conventional definition is that each data structure is split into a context set (both locations and outcomes) and a target set (just locations) \parencite{garneloConditionalNeuralProcesses2018}. The dataset is $\mathcal{D}_B = \{\mathbf{x}^c_i, \mathbf{y}^c_i, \mathbf{x}^t_i\}_{i=1}^{B}$ where $(\mathbf{x}^c_i, \mathbf{y}^c_i, \mathbf{x}^t_i) \in (\mathbb{R}, \mathbb{R}, \mathbb{R})^*$. \crit{Is this what you want? Why do you define the problem in a way that corresponds to functional approximation instead of missingness.}
+\end{enumerate}
+
+Modelling the complete training set probabilistically is straightforward. Let $\mathbb{P}$ be a distribution over $(\mathbb{R}, \mathbb{R})^*$ with $(X, Y) \sim \mathbb{P}$. Let $\{(X_i, Y_i)\}_{i=1}^{A}$ be I.I.D. samples from $\mathbb{P}$. See Figure~\ref{fig:pgm_full} for a graphical model of the complete training set. \crit{The figure is not a substitute for words. All the information in the figure should be contained in the text.}
+
+\paragraph{Stochastic processes.} \crit{Don't rollercoaster. This is actually related work.} The conventional approach to modelling the sparse set is to have separate variables for the context and the target sets. Let $\mathbb{P}$ be a distribution over $(\mathbb{R}, \mathbb{R}, \mathbb{R}, \mathbb{R})^*$ with $(X^c, Y^c, X^t, Y^t) \sim \mathbb{P}$. Let $\{(X^c_i, Y^c_i, X^t_i, Y^t_i)\}_{i=1}^{B}$ be I.I.D. samples from $\mathbb{P}$. In this case, the target outcome $Y^t_i$ is an unobserved variable that must be imputed. This model is used by stochastic processes to impute data \parencite{jafrastehGaussianProcessesMissing2022, garneloConditionalNeuralProcesses2018}. See Figure~\ref{fig:pgm_sp} for a graphical depiction of the stochastic process model.
+
+This modelling approach does not deal well with data missing-not-at-random, because it ignores the relationship between the context set and the target set \parencite{duBayesianLatentVariable2022}. In absence of an explicit model of missingness, previous works use a variety of ad-hoc methods to simulate patterns of missingness during training. Some methods only train on data missing-completely-at-random \parencite{jafrastehGaussianProcessesMissing2022}. Others train on very specific patterns of missingness-at-random that might not correspond with the missingness in the testing set, such as imputing a contiguous area of an image \parencite{lugmayrRePaintInpaintingUsing2022}, or forecasting the future \parencite{zivotVectorAutoregressiveModels2003}. Even others use an active sampling approach to query new points in the context set \parencite{maEDDIEfficientDynamic2019}. The problem with all these methods is that they are prone to overfitting and don't generalise well to other patterns.
+
+\paragraph{Latent-group model.} In order to account for the relationship between context and target sets, we model our dataset using a Bayesian latent-variable selection model, where the missingness is controlled by a selection variable \parencite{duBayesianLatentVariable2022, heckmanSampleSelectionBias1977}. Each data structure is modelled as an exchangeable group of random variable triplets --- location, outcome, and mask. See Figure~\ref{fig:pgm_ours} for a graphical depiction of the latent-group model.
+
+Let $\mathbb{P}$ be a distribution over $(\mathbb{R}, \mathbb{R}, \{0,1\}, \mathbb{R})^*$ with $(X, Y, M, O) \sim \mathbb{P}$. Let $\{(X_i, Y_i)\}_{i=1}^{|\mathcal{D}_W|}$ be I.I.D. samples from $\mathbb{P}$ modelling the complete dataset, and let $\{(X_i, M_i, O_i)\}_{i=1}^{|\mathcal{D}_S|}$ be I.I.D. samples from $\mathbb{P}$ modelling the sparse dataset. We call $M_i$ the ``mask'', a binary variable selector. \crit{Notation failure here. Datasets are not defined.} We call $O_i$ the ``observations'' in the sparse dataset, which takes the value of the outcome when the mask is 1 and is missing when the mask is 0. We define $O_{i,k} = Y_{i,k}$ if $M_{i,k} = 1$ else $O_{i,k} = \emptyset$, where $\emptyset$ is a flag for missingness. \crit{Y is not specified.}
+
+\crit{Why talk about samples? They are not helpful here.}
+
+We assume that each data structure $(X_i, Y_i, M_i, O_i)$ is actually a group of exchangeable elements. This means that there exists a latent variable $Z_i$ such that $(X_{i,k}, Y_{i,k}, M_{i,k}, O_{i,k}) \ind (X_{i,l}, Y_{i,l}, M_{i,l}, O_{i,l}) ~ | ~ Z_i, ~ \forall k,l \in \{1:*\}$. Notice how the introduction of the masking variable $M_i$ makes the context and target sets exchangeable. \crit{Exchangeability should be defined before.}
+
+Our training objective is to learn a parametric model of the outcomes conditioned on the locations. The model should maximise the probability of the samples from the unseen testing distribution: \crit{Where are the samples in this equation? Where are the context and the targets?}
+
+\begin{equation*}
+    \hat{\theta} = \mathrm{arg~max}_{\theta} ~ \mathbb{E}_{\mathbb{P} (X, Y)} [\log \mathbb{P}_{\theta} (Y | X)]    
+\end{equation*}
+
+\crit{Never treat equations as poetry. First define all the terms, then introduce the equation, then explain what it means. Also, is this the metric for evaluation, or the learning objective?}
+
+\paragraph{Intuition.} Let's look at a concrete illustration of what this problem formulation describes in the real-world. Suppose we are dealing with the problem of imputing missing data in a healthcare setting. Each patient $i \in \{1:N\}$ is represented by multivariate time-series of medical measurements $\mathbf{y}_i \in \mathbb{R}^{*}$ --- such as heart rate, blood pressure, etc. Each measurement $y_{i,k}, ~ \forall k \in \{1:*\}$ \crit{(Decide how many elements are in each data structure.)} corresponds to a location $x_{i,k} \in \mathbb{R}$ counting the feature and time-step. \crit{What does counting mean?} Some measurements will be missing according to the sparsity mask $\mathbf{m}_i \in \{0,1\}^*$. So, the observed measurements are $o_{i,k} = y_{i,k}$ if $m_{i,k} = 1$ else $o_{i,k} = \emptyset$.      
+The latent variable $Z_i$ represents the hidden health status of the patient. We can imagine that the measurements might be missing for different reasons: 1) Missing-completely-at-random: Some tests were performed with faulty equipment, 2) Missing-at-random: There are fewer readings during holidays, and 3) Missing-not-at-random: Patients with low heart-rate are less likely to attend their medical appointments.
+
+\paragraph{Importance.} \crit{Don't combine discussions with problem specifications.} Imputing values missing-at-random is crucial for maximising data usability and preventing biased predictions in real-world problems. In terms of usability, imputation brings a huge benefit to data meant for human consumption. For example, fMRI scans often have missing areas because of patient movement or equipment failure. This pattern of missingness is precisely MNAR since missing voxels typically huddle in ``blind spots''. \crit{Why isn't this MAR if the missingness is dependent on location?} Imputing these missing values would have a significant impact on doctors' ability to diagnose disease \parencite{vadenMultipleImputationMissing2012}. In terms of unbiased predictions, imputation methods enable climate modellers to infer missing readings from the past in order to make predictions at larger time-scales. These missingness patterns are also MNAR, since missing readings are overrepresented at certain times, locations, and climates \parencite{kadowArtificialIntelligenceReconstructs2020}. 
+
+\paragraph{Challenges.} Imputation is difficult for two reasons: 1) unpredictable missingness patterns and 2) the curse of dimensionality. In many real-world situations, we have no knowledge of the precise pattern of missingness that our imputation method will encounter at test-time --- i.e., the distribution $\mathbb{P} (M_i | X_i, Y_i)$. As the form of the distribution shows, this missingness pattern changes from one patient $i$ to another. Naive methods of simulating missingness during training might backfire if the pattern used is significantly mismatched to the real holdout pattern \parencite{schaferMissingDataOur2002}. Regarding dimensionality, imputation in high-dimensional data presents the learning algorithm with a recipe for overfitting: many features and few examples \parencite{azurMultipleImputationChained2011}. Therefore, a successful method for imputation under our problem specification will be sample-efficient and robust to unseen patterns of missingness. 
+
+\crit{This reads like ``boosterism'', like you can just create new information. I believe there is no free lunch. What are the trade-offs of this approach?}
+
+\section{Imputation in the Latent-Group Model}
+
+We propose addressing the problem of missing data imputation in high-dimensional data with the latent-group model. The latent-group model consists of a group-level latent variable and a set of instance-level observations. We adapt the latent-group model to the missing data framework. 
+
+\crit{Update math notation here.} Our proposed model follows the framework of the Conditional Variational Autoencoder. This means that we use neural networks to implement two conditional distributions: 1) The generative distribution $P(\underline{X}_i | Z_i, T_i)$ samples a complete group of observations $\underline{X}_i$ conditionally on the latent $Z_i$ and the group-level observation $T_i$. 2) The variational posterior distribution $Q(Z_i | \underline{X}'_i, T_i)$ samples a latent $Z_i$ conditionally on the group-level observation $T_i$ and the (possibly sparse) group of observation $\underline{X}'_i$. The implementation of the two distributions is the main technical contribution of this project, and will be discussed in the next section.
+
+\crit{We train a conditional variational autoencoder (CVAE) on the latent-group probabilistic model. CVAEs have been used for imputation in high-dimensional data before, but under a different probabilistic model \parencite{nazabalHandlingIncompleteHeterogeneous2020, garneloConditionalNeuralProcesses2018}.}
+
+\paragraph{Training objective.} To train this model, we use a variational approximation to maximum-likelihood estimation (MLE). We maximise a lower bound to the log-likelihood of a group, called the Evidence Lower Bound (ELBO). We train on the complete dataset, so the outcomes $Y_i$ are observed, but the masks $M_i$ and observations $O_i$ are unobserved. We omit the group index $i$ for simplicity.
+
+\begin{align*}
+    \log \mathbb{P}_\theta (\mathbf{y} | \mathbf{x}) \geq ~ & \mathbb{E}_{\mathbb{Q}_\phi (\mathbf{z} | \mathbf{x}, \mathbf{y})} \left[ \sum_k \log \mathbb{P}_\theta (y_k | x_k, \mathbf{z})\right] - \\
+    & - \mathbb{E}_{\mathbb{Q}_\phi (\mathbf{m}, \mathbf{o} | \mathbf{x}, \mathbf{y})} \Bigl[ \mathrm{KL} \bigl[ \mathbb{Q}_\phi (\mathbf{z} | \mathbf{x}, \mathbf{y}) ~||~ \mathbb{P}_\theta (\mathbf{z} | \mathbf{x}, \mathbf{m}, \mathbf{o}) \bigr] \Bigr] - \\
+    & - \mathrm{KL} \bigl[ \mathbb{Q}_\phi (\mathbf{m} | \mathbf{x}, \mathbf{y}) ~||~ \mathbb{P}_\theta (\mathbf{m} | \mathbf{x}) \bigr]
+\end{align*}
+
+\crit{Thought you were training on complete datasets. What are the missingness patterns? Also, explain what all the terms in the equation mean.}
+
+The term $\mathbb{P}_\theta (y_k | x_k, \mathbf{z})$ is the decoder distribution generating a single outcome based on its corresponding location and the latent variable for the entire group. $\mathbb{Q}_\phi (\mathbf{z} | \mathbf{x}, \mathbf{y})$ is the variational distribution of the latent variable conditioned on the complete locations and outcomes. $\mathbb{P}_\theta (\mathbf{z} | \mathbf{x}, \mathbf{m}, \mathbf{o})$ is the prior distribution of the latent variable conditioned on the locations and the observations. $\mathbb{Q}_\phi (\mathbf{m} | \mathbf{x}, \mathbf{y})$ is the variational distribution of the masking variable conditioned on the locations and outcomes. $\mathbb{P}_\theta (\mathbf{m} | \mathbf{x})$ is the prior distribution over the masking variable conditioned on the locations.
+
+The two latent encoders --- $\mathbb{Q}_\phi (\mathbf{z} | \mathbf{x}, \mathbf{y}), ~ \mathbb{P}_\theta (\mathbf{z} | \mathbf{x}, \mathbf{m}, \mathbf{o})$ --- are implemented as multiple-instance self-attention networks aggregating a group of data into a fixed-length representation \parencite{ilseAttentionbasedDeepMultiple2018}. Both distributions are trained. $\mathbb{Q}_\phi (\mathbf{z} | \mathbf{x}, \mathbf{y})$ is only used for training, the prior $\mathbb{P}_\theta (\mathbf{z} | \mathbf{x}, \mathbf{m}, \mathbf{o})$ will be used for imputation at test time. Both these distribution are categorical over a fixed set of vectors \parencite{vandenoordNeuralDiscreteRepresentation2017}.
+
+\crit{Masking divergence with GAN. Masking variational encoder has continous output which is a relaxation of the hard masking.}
+
+\crit{\paragraph{Intuition.} Relaxation of masking adds training signal. Sampling different masks keeps the model robust. Decoder is trained with latent variables inferred from full data. Prior is trained.}
+
+\paragraph{Proof.} \crit{What is the theorem then?} We start with a model of the complete data. We then introduce the latent $\mathbf{z}$, mask $\mathbf{m}$, and observations $\mathbf{o}$ through the law of total probability.
+
+\begin{equation*}
+    \log \mathbb{P}(\mathbf{y}) = \log \int_{\mathbf{z}, \mathbf{m}, \mathbf{o}} \mathbb{P}(\mathbf{y} | \mathbf{z}, \mathbf{m}, \mathbf{o}) ~ \mathbb{P}(\mathbf{z} | \mathbf{m}, \mathbf{o}) ~ \mathbb{P}(\mathbf{o} , \mathbf{m}) ~ d\mathbf{z} ~ d\mathbf{o} ~ d\mathbf{m}
+\end{equation*}
+We introduce a variational distribution $\mathbb{Q}$ for the purpose of importance sampling.
+\begin{equation*} 
+    = \log \int_{\mathbf{z}, \mathbf{m}, \mathbf{o}} \frac{\mathbb{Q}(\mathbf{z}, \mathbf{o}, \mathbf{m} | \mathbf{y})}{\mathbb{Q}(\mathbf{z}, \mathbf{o}, \mathbf{m} | \mathbf{y})} ~ \mathbb{P}(\mathbf{y} | \mathbf{z}, \mathbf{o}, \mathbf{m}) ~ \mathbb{P}(\mathbf{z} |\mathbf{o}, \mathbf{m}) ~ \mathbb{P}(\mathbf{o}, \mathbf{m}) ~ d\mathbf{z} ~ d\mathbf{o} ~ d\mathbf{m}
+\end{equation*}
+We replace the integral with an expectation over the variational distribution.
+\begin{equation*}
+    = \log \mathbb{E}_{\mathbb{Q}(\mathbf{z}, \mathbf{o}, \mathbf{m} | \mathbf{y})} \left[ \frac{\mathbb{P}(\mathbf{z} | \mathbf{m}, \mathbf{o})}{\mathbb{Q}(\mathbf{z} | \mathbf{y})} \frac{\mathbb{P}(\mathbf{o} , \mathbf{m})}{\mathbb{Q}(\mathbf{o}, \mathbf{m} | \mathbf{y})} \mathbb{P}(\mathbf{y} | \mathbf{z}, \mathbf{m}, \mathbf{o}) \right]
+\end{equation*}
+We use Jensen's inequality to reverse the order of the expectation and the logarithm.
+\begin{equation*}
+    \geq \mathbb{E}_{\mathbb{Q}(\mathbf{z}, \mathbf{o}, \mathbf{m} | \mathbf{y})} \left[ \log \frac{\mathbb{P}(\mathbf{z} | \mathbf{m}, \mathbf{o})}{\mathbb{Q}(\mathbf{z} | \mathbf{y})} \frac{\mathbb{P}(\mathbf{o} , \mathbf{m})}{\mathbb{Q}(\mathbf{o}, \mathbf{m} | \mathbf{y})} \mathbb{P}(\mathbf{y} | \mathbf{z}, \mathbf{m}, \mathbf{o}) \right]
+\end{equation*}
+The logarithm of the product is the sum of the logarithm.
+\begin{equation*}
+    = \mathbb{E}_{\mathbb{Q}(\mathbf{z}, \mathbf{o}, \mathbf{m} | \mathbf{y})} \left[ \log \mathbb{P}(\mathbf{y} | \mathbf{z}, \mathbf{m}, \mathbf{o}) \right] - \mathbb{E}_{\mathbb{Q}(\mathbf{o}, \mathbf{m} | \mathbf{y})} \mathrm{KL} \left[ \frac{\mathbb{Q}(\mathbf{z} | \mathbf{y})}{\mathbb{P}(\mathbf{z} | \mathbf{m}, \mathbf{o})} \right] - \mathrm{KL} \left[ \frac{\mathbb{Q}(\mathbf{o}, \mathbf{m}| \mathbf{y})}{\mathbb{P}(\mathbf{o} , \mathbf{m})} \right]
+\end{equation*}
+The generative distribution can be factorised along the dimensions of $Y_i$ in the time-series.
+\begin{equation*}
+    = \mathbb{E}_{\mathbb{Q}(\mathbf{z}, \mathbf{o}, \mathbf{m} | \mathbf{y})} \left[ \sum_{d} \log \mathbb{P}(y_d | \mathbf{z}, m_d, o_d) \right] - \mathbb{E}_{\mathbb{Q}(\mathbf{o}, \mathbf{m} | \mathbf{y})} \mathrm{KL} \left[ \frac{\mathbb{Q}(\mathbf{z} | \mathbf{y})}{\mathbb{P}(\mathbf{z} | \mathbf{m}, \mathbf{o})} \right] - \mathrm{KL} \left[ \frac{\mathbb{Q}(\mathbf{o}, \mathbf{m}| \mathbf{y})}{\mathbb{P}(\mathbf{o} , \mathbf{m})} \right]
+\end{equation*}
+We assume that we don't need to condition on the masking in the decoder.
+\begin{equation*}
+    = \mathbb{E}_{\mathbb{Q}(\mathbf{z}, \mathbf{o}, \mathbf{m} | \mathbf{y})} \left[ \sum_{d} \log \mathbb{P}(y_d | \mathbf{z}) \right] - \mathbb{E}_{\mathbb{Q}(\mathbf{o}, \mathbf{m} | \mathbf{y})} \mathrm{KL} \left[ \frac{\mathbb{Q}(\mathbf{z} | \mathbf{y})}{\mathbb{P}(\mathbf{z} | \mathbf{m}, \mathbf{o})} \right] - \mathrm{KL} \left[ \frac{\mathbb{Q}(\mathbf{o}, \mathbf{m}| \mathbf{y})}{\mathbb{P}(\mathbf{o} , \mathbf{m})} \right]
+\end{equation*}
+The second KL divergence term $\mathrm{KL} \left[ \mathbb{Q}(\mathbf{o}, \mathbf{m}| \mathbf{y}) ~||~ \mathbb{P}(\mathbf{o} , \mathbf{m}) \right]$ is implemented using differential, empirical estimation of divergence using adversarial networks \parencite{nowozinFGANTrainingGenerative2016,sreekumarNeuralEstimationStatistical2022}.
+
+\crit{\paragraph{Imputation algorithm.} The latent representation is sampled from the prior conditioned on the context set. Then the full data structure is predicted. Being a latent variable, you can sample multiple imputations.}
+
+Imputing the missing data is a two-stage process. First, we sample a latent $Z_i$ from the variational posterior conditioned on the sparse data group $Q(Z_i | \underline{X}'_i, T_i)$. Then, we use that value to condition the generative distribution $P(\underline{X}_i | Z_i, T_i)$ from which we sample the complete group of observations.
+
+\subsection{A model that is robust to missingness patterns}
+
+\crit{\paragraph{What are the technical innovations?} So we want to make sure that the imputation method is robust to the pattern of missingness, which is MNAR. The contributions are: 1) Using a positional embedding that takes advantage of the relationship between context set and target set. 2) Using a conditional prior that encourages the fully-specified output to be close to complete missingness. 3) Using a self-attention based encoder that produces a fixed-length representation.}
+
+The main technical contribution of this project is a method for turning a data structure (like a time-series) into a group of exchangeable observations. The method consists of a self-attention-based encoder that takes as input the group of observations. Each observation is concatenated with a positional embedding. The positional embedding can be pre-defined, such as a sinusoidal embedding for capturing position in a time-series, or it can be learned, such as for distinguishing between different kinds of features (heart rate, blood pressure, etc). \crit{Explain the concrete example.}
+
+\paragraph{Motivation} The motivation behind this technique is a method to aggregate sparse observations from multiple time-series in a way that is robust to the pattern of sparsity. Our method, using positional embeddings, can be trained with or without sparse data, and then can be used on any pattern of missingness. This is because the self-attention model learns to approximate a Bayesian accummulation of evidence. \crit{Where is this inspired from? \parencite{ilseAttentionbasedDeepMultiple2018}}
+
+The conventional method to process missing data is to fill in the missing observations with default values, like 0, and then concatenate an mask indicating whether the observation is present, 1, or missing, 0. This technique is only successful when the pattern of sparsity encountered during testing is the same as the pattern of sparsity of the training data. The quality of imputation falls rapidly as the pattern of sparsity moves away from the training pattern. For example, a network trained for image super-resolution (grid-like sparsity) cannot perform image inpainting (local area sparsity). \crit{Are these all the conventional methods? Also, here is a place to mention the papers showing why replacing with default values is not a good idea.}
+
+\section{Case study: Controlling generated prosody}
+
+This section discusses a concrete real-world problem where the latent-group model enables the framework of missing data imputation to achieve progress. We address the problem of controlling generative models for high-dimensional data. We focus specifically on the problem of controlling the prosody generated by text-to-speech (TTS) synthesis models. 
+
+Prosody refers to the melody and rhythm of speech, which conveys emotional nuance and stress patterns. State-of-the-art TTS voices are high-quality and realistic, but they lack expressivity. Attempts to encourage the models to generate more expressive speech lead to a decline in realism. We want a method to control the prosody of TTS voices that would overcome this trade-off. The TTS model comprises a Transformer network taking as input sentence-level text embeddings and produces phoneme-level acoustic features (PAFs). These PAFs comprise 3 types of features: pitch, energy and duration.
+
+\paragraph{Problem} Existing control methods lack precision or are cumbersome to use. On one side, there are high-level control methods using deep learning. These methods allow the user to control the synthesis either by directly modifying the values of a latent variable or providing a conditioning input, such as a label or a segmentation mask. These methods are fast and cause semantically meaningful changes to the output. However, they are imprecise and uninterpretable: you can only get so close to the desired output. On the other side, there are low-level control methods using traditional methods. These include manually editing the output, or using pre-defined heuristic rules to achieve a certain effect (e.g. change a statement into a question). They are precise, but require hours of expert human labour and are particularly difficult for high-dimensional data, like images or audio.
+
+\paragraph{Our solution} We propose to use the framework of MDI through the latent-group model to achieve human control that is both precise and fast, in other words, efficient. The idea is to infer the latent variable from a sparse group of PAFs $\underline{X}'_i$, and then generate the complete sentence audio as output. The conditioning inputs are provided by the user by hand via a visual interface with sliders. The model is tasked with completing the missing acoustic features. We implement the model as a CVAE with an encoder network that can take as input groups of varying numbers of observations instead of single observations. We use two positional embeddings per feature: one sinusoidal embedding specifying the phoneme, and one learned embedding distinguishing between the 3 types of features (pitch, energy, and duration). \crit{What is new here compared to the first description of our method. We guess we say what kind of positional embeddings and decoder we are using for the data. We also say what the variables mean.}
+
+\paragraph{Evaluation} Our proposed model offers state-of-the-art human control for prosody modification in TTS, and is robust to varying patterns of sparsity, outperforming other MDI methods. We evaluate two claims: \crit{How exactly do we separate the claims below? Don't you need robustness for efficient control and vice-versa?}
+
+\begin{enumerate}
+    \item \textbf{Efficient control.} Our proposed model provides efficient and precise control over prosody in TTS synthesis. We introduce a novel evaluation procedure termed ``iterative refinement'', where a human user iteratively modifies a generated rendition of a sentence until it matches a ground-truth rendition. The effectiveness of this control method is measured by the Area Over the Curve (AOC) of the Mean Squared Error (MSE) between the user-modified output and the ground-truth rendition plotted as a function of the number of iterations. Lower AOC values indicate more efficient control. Our proposed method outperforms manual editing, Gaussian Processes, and Transformers for this evaluation. \crit{Give more details about 1) What is the setup, 2) What are the methods we compare against, 3) What are the results?}
+    \item \textbf{Robustness to sparsity patterns.} \crit{What are the complex MNAR patterns here?} Our proposed method is robust to different patterns of sparsity, outperforming other MDI techniques. The experimental setup is that the models are trained and tested with three different alternating patterns of sparsity: Bernoulli with high probability, Bernoulli with low probability, and whole word missing. We then measure their performance on an imputation task. Our model outperforms both Transformers and Recurrent Neural Networks (RNNs) that use input masking instead of positional encodings.
+\end{enumerate}
+
+\section{Literature review}
+
+\crit{[TL;DR] Existing methods for missing-data imputation are not sample efficient and they are not robust to changing patterns of misssingness. [WIP] Skip reading the literature review section. It has all the content but it's not fleshed out yet.}
+
+\paragraph{These are the current solutions to this problem} \crit{What are the traditional solutions to deal with missing data imputation?}
+
+\paragraph{This is where they go wrong} \crit{The traditional methods are not expressive enough. The zero imputation methods suffer from sparsity }
+
+\paragraph{Broader context. This is what we're not considering and this is why.} \crit{Related but distinct problems. We are not doing matrix completion. We are not (only) doing time-series forecasting. We are not (only) doing image superresolution and imputation. We are not doing prediction with missing values. We are not doing single function approximation. We are not doing missing not at random. We are not doing unconditional time-series or image models.}
+
+\begin{itemize}
+    \item Improving the imputation technique for missing values is not always useful for prediction \parencite{lemorvanWhatGoodImputation2021}.
+    \item BERT uses a masked language model training objective. This is equivalent to doing missing value imputation during training with 15\% of the tokens missing completely at random \parencite{devlinBERTPretrainingDeep2019}.
+    \item The basic approach for dealing with missing values in with VAEs is to fill missing values with a default value (say 0) and measuring the reconstruction error on the available values \parencite{nazabalHandlingIncompleteHeterogeneous2020}.
+    \item Another approach is GP-VAE. The samples are autoencoded with convolutions and then a Gaussian Process is trained on the latent representations \parencite{fortuinGPVAEDeepProbabilistic2020}.
+    \item A deep learning framework for predicting climate data \parencite{amatoNovelFrameworkSpatiotemporal2020}.
+    \item A Transformer based method for spatio-temporal data where imputation is based on cross-sectional features \parencite{maCDSACrossDimensionalSelfAttention2019}.
+    \item Multivariate time-series representation learning \parencite{zerveasTransformerbasedFrameworkMultivariate2021}.
+    \item Multivariate time-series imputation with Graph Neural Networks \parencite{ciniFillingApMultivariate2022}. Also found for power-grids \parencite{kuppannagariSpatioTemporalMissingData2021}.
+    \item This review of diffusion models looks at how diffusion models are applied for time-series imputation and image inpainting \parencite{yangDiffusionModelsComprehensive2022}. RePaint is a state-of-the-art image imputation method that, at each stage of the denoising process, replaces the parts of the generated image with a noisy version of the available parts of the ground-truth \parencite{lugmayrRePaintInpaintingUsing2022}. At each denoising stage, it does 10 additional steps of adding noise and then re-sampling in order to preserve coherence. Another approach for time-series imputation is the Conditional Score-based Diffusion Models, where each step of the diffusion model is conditioned on the available data \parencite{tashiroCSDIConditionalScorebased2021}.
+    \item We found a paper using Gaussian Processes as mixed-effects models with a learnable covariance matrix, and they apply it to making predictions about school data \parencite{bonillaMultitaskGaussianProcess}. This is a paper using Gaussian Processes for missing data imputation \parencite{jafrastehGaussianProcessesMissing2022}.
+    \item This paper shows that, even when data is missing completely at random, zero imputation leads to bias in the result increasing with the percentage of missing values \parencite{yiWhyNotUse2019}.
+    \item PartialVAE is close to what I am proposing. A VAE-based method with a PointNet encoder where the value of the element in the set is multiplied with the learned positional embedding. This is used for active learning \parencite{maEDDIEfficientDynamic2019}. For high-dimensional data tabular data (a matrix of examples and features), we have the Partial VAE, a very similar method to ours where the group of data is aggregated by a permutation-invariant function. The datapoints are an elementwise multiplication between the value and the positional embedding. They had the idea of using positional encoding for features that are not spatio-temporal.
+    \item Neural processes are function approximators, probabilistic processes, they are distributions over functions \parencite{garneloConditionalNeuralProcesses2018}. But do they use positional embeddings? They must do something for that covariance function. Positional embeddings are like the covariance function. Anyway, they don't consider the pattern of missingness. In other words, the covariance function should not be independent of the relationship between the context set and the target set. Attentive neural processes aggregate information using a self-attention mechanism \parencite{kimAttentiveNeuralProcesses2019}.
+    \item Structured state spaces seem interesting for modelling sequences \parencite{guEfficientlyModelingLong2022}.
+    \item Multiple-instance learning with attention is a method for getting a fixed-dimensional representation from a set of data, enabling the representation to incorporate structures at multiple levels \parencite{ilseAttentionbasedDeepMultiple2018}. Deep Sets are a more rudimentary method for aggregating data in observations \parencite{zaheerDeepSets2017}.
+\end{itemize}
+
+\subsection{Vector Autoregressive models}
+
+Vector Autoregression (VAR) is an econometric model used to understand how an entire system of related variables affects each other. These models generalize the univariate autoregressive model (AR model) by allowing for more than one evolving variable. All variables in a VAR are treated symmetrically; each variable has an equation explaining its evolution based on its lags and the lags of all the other variables.
+
+A VAR model of order p (VAR(p)) includes p lags of all variables on the right-hand side of each equation. For a k-dimensional time series {Yt}, a VAR(p) model is:
+
+Yt = A1Yt-1 + A2Yt-2 + ... + ApYt-p + B + Et
+
+Here, A1, ..., Ap are (k x k) coefficient matrices and B is a (k x 1) vector of constants. The error term Et is a k-dimensional white noise process with time-invariant covariance matrix.
+
+For missing data imputation, one can utilize the structure of the VAR model. If a value from a variable is missing, we can use the information from other variables and their lags to estimate the missing value. In the context of high-dimensional data, like multivariate time-series or images, this becomes very powerful as it allows leveraging the interdependencies between variables or features to estimate the missing values, which could be more accurate than treating each feature independently.
+
+\paragraph{Example paper} The principles of VAR models have been widely used in econometrics and other fields with multivariate time-series data. For an example of VAR model usage, Seminal paper by Sims, Christopher A. (1980). "Macroeconomics and Reality". This paper doesn't specifically address missing data imputation but provides a strong foundation for understanding how VAR models can capture and utilize interdependencies between variables in a multivariate time-series context.
+
+\paragraph{Advantages and Disadvantages} Advantages of the VAR model for missing data imputation:
+
+\begin{enumerate}
+    \item \textbf{Leverages Interdependencies}: VAR models can capture the relationships between different variables (or features) in a multivariate time-series dataset. This is particularly valuable for high-dimensional data where variables often have complex relationships with each other.
+    \item \textbf{Flexible Lag Structure}: VAR models allow for flexible lag structures, enabling the model to capture temporal dependencies across different time scales.
+\end{enumerate}
+
+Disadvantages of the VAR model for missing data imputation
+
+\begin{enumerate}
+    \item \textbf{Parameter Estimation Can Be Challenging}: As the dimensionality of the data increases, the number of parameters in a VAR model grows quadratically, making the model more complex and potentially more challenging to estimate accurately.
+    \item \textbf{Linearity and Stationarity Assumptions}: Similar to the ARIMA model, VAR models assume the data are stationary and the relationships are linear. These assumptions may not hold in all real-world, high-dimensional datasets.
+    \item \textbf{Computationally Intensive}: Due to the large number of parameters and the need to invert large matrices, VAR models can be computationally intensive for very high-dimensional data.
+    \item \textbf{Inability to Handle Missingness Mechanisms beyond MCAR}: VAR, like other time-series methods, might struggle with missingness mechanisms that are not Missing Completely At Random (MCAR), such as Missing At Random (MAR) and Not Missing At Random (NMAR).
+\end{enumerate}
+
+In cases where the assumptions of VAR models don't hold, other methods, such as machine learning techniques (like RNNs) or state-space models with the Expectation-Maximization (EM) algorithm (like the Kalman filter for missing data imputation), might be more suitable. These methods can handle non-linear and non-stationary data and might be more robust to different missingness mechanisms.
+
+\subsection{State Space Models and Kalman Filters}
+
+State Space Models (SSMs) are a form of statistical time-series model that represent the potentially complex dependencies between observation data and underlying states through two sets of equations: a state equation and an observation equation. The state equation describes how the system evolves over time, and the observation equation links the hidden state to the observable data.
+
+A Kalman filter, named after Rudolf E. Kálmán, is a recursive algorithm used to estimate the evolving states of a SSM. It has two main steps: prediction and update. In the prediction step, the filter predicts the current state and uncertainty. In the update step, it uses the current observation to refine this prediction, giving an updated state estimate and uncertainty.
+
+Now, if we have missing observations at a certain time point, the Kalman filter still performs the prediction step. The state estimate won't be updated in the update step as there is no observation, but the predicted state can be taken as the imputed missing value. This way, Kalman filter can handle missing data in the observed variable by predicting its value based on the model's dynamics.
+
+For high-dimensional multivariate time-series data, this can be extended into what's known as a Multivariate Kalman Filter. It estimates multiple interrelated time-series and can capture the complex dependencies between variables in high-dimensional data, which makes it very useful for missing data imputation in such contexts.
+
+\paragraph{Example paper} A notable paper that discusses the usage of state-space models and the Kalman filter for missing data imputation is "Handling Missing Values in Large Data Sets: The Case of The U.S. Census Bureau's Longitudinal Employer-Household Dynamics Data" by Matthew Graham (2012). This paper deals with the task of imputing missing data in a large-scale employment dataset from the US Census Bureau.
+
+The paper demonstrates how a multivariate state-space model, along with the Kalman filter, can effectively handle missing data in a large dataset. The imputation using this method was more accurate than simpler methods such as linear regression and provided useful insights into the underlying employment dynamics.
+
+\paragraph{Advantages and Disadvantages} Advantages of the state space models and Kalman filter for missing data imputation:
+
+\begin{enumerate}
+    \item \textbf{Model Complexity}: State space models and Kalman filters can handle complex, dynamic, and nonlinear systems. This makes them highly flexible and capable of modelling a wide range of real-world systems.
+    \item \textbf{Temporal Dependencies and Multivariate Data}: They can handle multivariate time-series data and capture the temporal dependencies and the dependencies between different variables effectively.
+\end{enumerate}
+
+Disadvantages of the state space models and Kalman filter for missing data imputation:
+
+\begin{enumerate}
+    \item \textbf{Assumptions}: Kalman filters assume that the state space model correctly describes the data-generating process and that the errors in the state and observation equations are normally distributed. If these assumptions are violated, the imputation performance might deteriorate.
+    \item \textbf{Computational Complexity}: The computational complexity of the Kalman filter can be high, especially for high-dimensional data. This is because it involves the inversion of large matrices, which can be computationally expensive.
+    \item \textbf{Initial State and Covariance}: The performance of the Kalman filter also depends on the initial estimates of the state and its covariance. Poor initial estimates can lead to suboptimal imputation performance.
+    \item \textbf{Missingness Mechanism}: Like other statistical methods, the performance of the Kalman filter can be affected by the missingness mechanism. While it can handle MCAR and, to some extent, MAR, it might struggle with NMAR
+\end{enumerate}
+
+In general, state space models and Kalman filters are powerful tools for missing data imputation, especially for complex, high-dimensional, and multivariate time-series data. However, their performance depends on the specific context, including the nature of the data, the missingness mechanism, and the model assumptions.
+
+\subsection{Expectation-Maximization (EM) Method}
+
+The Expectation-Maximization (EM) algorithm is a two-step iterative optimization approach used for finding the maximum likelihood estimates of parameters in statistical models when the data is incomplete or has missing values.
+
+In the context of missing data, the "Expectation" (E) step of the algorithm involves treating the missing data as latent variables and computing the expectation of the log-likelihood conditioned on the observed data, using the current estimates of the parameters. 
+
+In the "Maximization" (M) step, the parameters are updated to maximize the expected log-likelihood found in the E step. The process is repeated until the algorithm converges, i.e., the parameters' estimates stop changing significantly.
+
+When it comes to high-dimensional data, the EM algorithm can be coupled with a suitable model, such as a Gaussian Mixture Model or a probabilistic graphical model, to handle the high dimensionality. The algorithm iteratively estimates the missing values given the current parameters (E step) and then updates the parameters given these estimates (M step).
+
+\paragraph{Example paper} A good example of using the EM algorithm for missing data imputation in high-dimensional data can be found in the paper: "A multivariate technique for multiply imputing missing values using a sequence of regression models" by Raghunathan et al. (2001). In this work, the authors develop a method based on a sequence of regression models with the EM algorithm to impute missing values in a multivariate setting.
+
+In their method, a set of regression models are defined where each incomplete variable is modeled conditional on all other variables. The EM algorithm is used to estimate the parameters of these regression models, effectively estimating the missing values in the process. They demonstrated the utility of their approach in a practical setting with the National Health Interview Survey dataset and found it to perform well in terms of reducing bias and maintaining statistical efficiency.
+
+\paragraph{Advantages and Disadvantages} Advantages of the EM algorithm for missing data imputation:
+
+\begin{enumerate}
+    \item \textbf{Theoretical Guarantees}: The EM algorithm is guaranteed to converge to a local maximum of the likelihood function under mild regularity conditions.
+    \item \textbf{Handles MAR}: EM is capable of handling Missing at Random (MAR) data. It does this by factoring the likelihood of the observed data into the likelihood of the missing and observed data, given the parameters.
+    \item \textbf{Flexibility}: EM can be used in conjunction with various statistical models to handle high-dimensional data.
+\end{enumerate}
+
+Disadvantages of the EM algorithm for missing data imputation:
+
+\begin{enumerate}
+    \item \textbf{Local Maximum}: EM can get stuck in local maxima of the likelihood function. This means that the initialization of the algorithm can have a significant effect on the final result.
+    \item \textbf{Computational Complexity}: EM can be computationally intensive, especially with high-dimensional data and complex models, as it involves iterative optimization.
+    \item \textbf{Difficulty in Dealing with NMAR}: If the data is Not Missing at Random (NMAR), meaning that the probability of missingness depends on the unobserved values themselves, EM algorithm, like many other methods, may perform poorly since NMAR implies a certain level of systematic bias in the missing data that's hard to account for without additional information.
+    \item \textbf{Assumption of the Model}: The performance of the EM algorithm is also subject to the assumptions of the underlying statistical model used with it. If the model's assumptions do not hold, the performance of the EM algorithm could be adversely affected.
+\end{enumerate}
+
+\subsection{Gaussian Processes}
+
+A Gaussian Process (GP) is a powerful tool in machine learning and statistics used for regression and classification tasks. It's a flexible, non-parametric method, which means it doesn't make strong assumptions about the form of the function mapping the input to the output. Instead, it defines a distribution over functions, where the function values are treated as random variables. In a GP, any finite collection of those variables has a multivariate Gaussian distribution.
+
+In the context of missing data imputation, the idea is to use the GP to model the underlying data-generating process and then use this model to predict the missing values. Given some training data (i.e., observed data), a GP will learn a distribution over functions that fit the data. When we have missing values, we can sample from this distribution to generate plausible values for the missing data.
+
+High-dimensional data, such as multivariate time-series or images, can be challenging due to the "curse of dimensionality". However, GP models can be extended to handle such data by using suitable covariance functions or kernels. For example, you could use a separate GP for each dimension of a multivariate time-series, with a kernel that considers both time and the other series (i.e., a multi-output GP).
+
+\paragraph{Example paper} A paper that illustrates the use of Gaussian Processes for imputing missing data is "Gaussian Processes for Missing Data Imputation" by Tian et al. (2018). This paper presents a framework where GPs are used to model the complex, non-linear relationships in the data and thus can effectively handle missing values.
+
+The authors propose a method that integrates the estimation of hyperparameters of the GP and the imputation of missing values into a single optimization process. They demonstrate the effectiveness of their approach on several benchmark datasets, showing that it performs favorably against other popular imputation methods.
+
+\paragraph{Advantages and Disadvantages} Advantages of Gaussian Processes for missing data imputation:
+
+\begin{enumerate}
+    \item \textbf{Flexibility}: GPs are non-parametric and can model a wide range of data-generating processes.
+    \item \textbf{Probabilistic Outputs}: GPs provide not just an estimate of the missing value but also a measure of the uncertainty in that estimate, which can be useful in many contexts. 
+    \item \textbf{Handles MAR}: If the missing data mechanism is Missing at Random (MAR), GPs can handle it because they can capture the dependencies in the data through their covariance function.
+\end{enumerate}
+
+Disadvantages of Gaussian Processes for missing data imputation:
+
+\begin{enumerate}
+    \item \textbf{Computational Complexity}: GPs have a computational complexity of O(n3) for n data points due to the need to invert the covariance matrix. This can make them impractical for very large datasets.
+    \item \textbf{High Dimensionality}: While GPs can be adapted to handle high-dimensional data, they are not naturally suited for it and can suffer from the "curse of dimensionality". There are ways around this, like using sparse GPs, but these can introduce their own complexities and trade-offs.
+    \item \textbf{Choice of Kernel}: The performance of a GP greatly depends on the choice of the kernel (covariance function), which captures the data's structure. Choosing an inappropriate kernel could lead to poor imputation results.
+    \item \textbf{Difficulty with NMAR}: Like other methods, GPs may struggle with data that's Not Missing at Random (NMAR), since this requires understanding the mechanism that led to the missingness, which is often complex and unknown.
+\end{enumerate}
+
+\subsection{Neural Processes}
+
+In this sense, CNPs capture the best of both worlds –-- it is flexible in regards to the conditioning and prediction task, and has the capacity to extract domain knowledge from a training set \parencite{garneloConditionalNeuralProcesses2018}.
+
+\subsection{Multiple Imputation by Chained Equations}
+
+Multiple Imputation by Chained Equations (MICE), also known as Fully Conditional Specification (FCS), is a popular method for handling missing data. This method involves an iterative process where each missing value is imputed by its own model, making it particularly useful when dealing with multiple variables of different types, each having its own pattern of missingness.
+
+Here's a simplified description of the process:
+
+1. **Initialization**: Each missing value in the dataset is filled with an initial guess. This could be the mean, median, or mode of the non-missing values for the respective variable.
+
+2. **Iterative Imputation**: For each variable with missing values, the MICE algorithm performs the following steps:
+   - The variable under consideration is set as the dependent variable, and the other variables are treated as independent variables.
+   - The observed (non-missing) values of the current dependent variable are regressed on the other variables using an appropriate model (e.g., linear regression for continuous variables, logistic regression for binary variables).
+   - The missing values in the current dependent variable are then replaced with predictions from this model.
+   
+   This process is repeated iteratively for each variable in turn, cycling through the dataset variable by variable. This constitutes one cycle or 'sweep' of the MICE procedure.
+
+3. **Convergence and Multiple Imputations**: The above step is repeated for a number of cycles until the imputations converge, i.e., the changes in imputed values from cycle to cycle become negligible. 
+
+   The converged values from one complete sweep constitute a single imputed dataset. The process is then repeated to create multiple imputed datasets (typically, M = 3-10). These are separately analyzed using standard complete-data methods, and the results are then pooled to obtain final estimates and confidence intervals.
+
+The rationale behind MICE is that by iterating the imputation process and conditioning each imputation on the observed data, it can better capture the relationships between variables, leading to more realistic imputations.
+
+The advantage of MICE is its flexibility. It can handle different types of variables (continuous, binary, categorical), different patterns of missingness, and different relationships between variables. It also provides a measure of the uncertainty associated with imputed values, given that it generates multiple imputed datasets.
+
+However, like all imputation methods, MICE operates under the assumption that data are missing at random (MAR), meaning that the probability of a value being missing depends only on observed data and not on the missing data itself. If this assumption is violated, the imputations may be biased.
+
+
+\crit{Do we maybe need another application?}
+
+\paragraph{Conclusion} This chapter presents a novel approach to Missing Data Imputation (MDI) using the latent-group model. By using Conditional Variational Autoencoders (CVAEs) and positional embeddings, the method can transform structured data, like time-series, into exchangeable groups. This innovation allows the framework of MDI to tackle complex real-world problems, such as controlling the prosody in Text-To-Speech (TTS) synthesis models, offering efficient and precise human control. The model's efficacy was validated through an iterative refinement procedure and demonstrated robustness to varying patterns of data sparsity. This work contributes significantly to the broader framework of MDI, offering a method for high-dimensional generative model control.
+
+\section{Identifiability of imputation for data missing-not-at-random}
+
+Missing-not-at-random data is not ignorable when training a regressor with maximum likelihood estimation \parencite{ibrahimMissingDataMethods2009}.
+
+Some missingness cases are recoverable, depending on the form of the graph \parencite{mohanGraphicalModelsInference2013}.
+
+\paragraph{Baseline for ignorable missingness.} HI-VAE is the standard VAE-based model for imputing missing data \parencite{nazabalHandlingIncompleteHeterogeneous2020}. They don't assume exchangeability across the dimensions of the data, and they assume a fixed number of dimensions. They do assume that the joint distribution of the dimensions factorises with respect to the latent variable. They maximise likelihood on the observed data and treat the missing data as a latent variable. They don't model the missingness, so they are vulnerable to non-ignorable missingness.
+
+\paragraph{Identifiable imputation model for non-ignorable missingness.} You can learn an identifiable generative model for MNAR, using the VAE framework, if you make some assumptions first \parencite{maIdentifiableGenerativeModels2021}. They don't assume that you have access to complete cases, but they assume that every feature is observed at least once. They evaluate the model on recommender system (MAR), education responses (MNAR), and a synthetic MNAR dataset. Self-masking means that the value is only masked dependent on the value itself. Their claimed main limitation is the need for auxiliary variables which in practice may not always be available.
+
+There are 3 assumptions that they make. 1) The true data-generating process is a latent-group model (exchangeable groups) where the masking variable for each element of the group is the causal result of the latent and the corresponding observation, and there is a separate generative parameter for each instance (observation, mask) in the group. 2) There exists a partition of the group in which the joint distribution of each sub-group is identifiable. 3) There exists a cover of the set of elements in the group where the probability of observing the cover is greater than zero.
+
+Let's look at their implementation of the model, GINA. First of all, they use the encoder for inference, which is wrong, because they assume that the encoder is the same as the prior.
+
+Let's check out this dissertation and contact the author \parencite{maAdvancesBayesianMachine2022}.
+
+\paragraph{Identifiable imputation for partially-ignorable missingness} Another paper shows how to perform identifiable imputation for MNAR in a pattern-set mixture model \parencite{ghalebikesabiDeepGenerativeMissingness2021}. Their generative model factorises like this:
+
+\begin{equation*}
+    \mathbb{P}_\theta (\mathbf{x}^o, \mathbf{x}^u, \mathbf{m}, \mathbf{r}, \mathbf{z}) = \mathbb{P}_\theta (\mathbf{m} | \mathbf{x}, \mathbf{r}) ~ \mathbb{P}_\theta (\mathbf{z} | \mathbf{r}) ~ \mathbb{P}_\theta (\mathbf{r}) \prod_{d} \mathbb{P}_\theta (x^o_d | \mathbf{r}, \mathbf{z}) ~ \mathbb{P}_\theta (x^u_d | \mathbf{r}, \mathbf{z})
+\end{equation*}
+
+They make the questionable assumption that $\mathbb{P}_\theta (\mathbf{m} | \mathbf{x}, \mathbf{r}) = \mathbb{P}_\theta (\mathbf{m} | \mathbf{z}, \mathbf{r})$. Maybe this is not that questionable.
+
+\paragraph{Different types of factorisations.} Pattern-set mixture models combine selection and pattern mixture models \parencite{littleStatisticalAnalysisMissing2002}. The random variable $\mathbf{r}$ indicates which pattern of missingness we are talking about.
+
+\begin{equation*}
+    \mathbb{P}_{\theta, \phi} (\mathbf{x}, \mathbf{m}, \mathbf{r}) = \mathbb{P}_{\theta} (\mathbf{x} | \mathbf{r}) ~ \mathbb{P}_{\phi} (\mathbf{m} | \mathbf{x}, \mathbf{r}) ~ \mathbb{P} (\mathbf{r}) = \mathbb{P} (\mathbf{r}) \sum_{d=1}^D \mathbb{P}_{\theta} (x_d | \mathbf{r}) ~ \mathbb{P}_{\phi} (m_d | \mathbf{x}, \mathbf{r})
+\end{equation*}
+
+\paragraph{Different types of MNAR.} It turns out that there are different types of data missing-not-at-random. The most obvious kind is called self-censorship, where the missingness depends only on the missing value itself. For example, users might only provide ratings to items they love or hate, but not to items that are neutral.
+
+Another situation of missingness is the so-called shared parameter model. A shared-parameter model is a certain kind of MNAR that assumes that there exists some structure-level latent variable that, when conditioned, makes the observations independent of the mask \parencite{wuEstimationComparisonChanges1988}. This assumption has been proven to produce more robust models than the MCAR or MAR assumption.
+
+\begin{equation*}
+    \mathbb{P}_{\theta, \phi} (\mathbf{x}, \mathbf{m}) = \int \mathbb{P}_{\theta} (\mathbf{x} | \mathbf{z}) ~ \mathbb{P}_{\phi} (\mathbf{m} | \mathbf{z}) ~ \mathbb{P} (\mathbf{z}) ~ d\mathbf{z}
+\end{equation*}
+
+\paragraph{What is specific about our problem statement?} Our problem statement is slightly different from the way most people frame it. We assume that we have complete data at the start, and we want to simulate missingness.
+
+\section{Generalisation of imputation to unseen (non-ignorable) missingness patterns}
+
+So what is the difference between the model that I am proposing and the way they do it with neural processes? I want to say that my approach is more robust to different patterns of missingness than neural processes. The setup is similar: we have complete data at training time and incomplete data at testing time. The missingness follows an unknown pattern that can be roughly guessed. In my case, I can guess a few patterns, but not all of them.
+
+Let's back up. What is the problem with imputation on non-ignorable missingness? Many works show that if you try to maximum-likelihood-estimate a parameter based on only complete data from a set of data with non-ignorable missingness, then your estimate will be biased \parencite{rubinInferenceMissingData1976}. In order to get a good estimate of this parameter, we need to model the joint distribution of the data and the missingness \parencite{littleStatisticalAnalysisMissing2002}. We can get provably unbiased estimates of the generative parameters under some (relatively weak) assumptions of the generative model and the missingness mechanism \parencite{maIdentifiableGenerativeModels2021}.
+
+But this is all for situations where we don't have complete data in the training but instead have a representative sample of the missingness pattern. However, our case comprises something quite different. We have complete data in the training set (but no example of missingness), but we have MNAR missingness at test-time.
+
+The risk here is no longer that the generative model does not learn the correct distribution. Technically, you can train any latent-variable generative model on the training data, and then, at test-time, use Expectation Maximisation to infer the latent variable corresponding to the partial observations. This procedure would produce an unbiased imputation.
+
+However, this is too inefficient. In practice, we would use a recognition model to amortise the cost of inferring the latent variable. But the problem is that the parameter of the latent recognition model might be biased. So how can we ensure that the latent recognition model is unbiased?
+
+There are 2 possible ways:
+
+\begin{enumerate}
+    \item Come up with a list of sufficient assumptions (that are also quite realistic) for the identifiability of the recognition model.
+    \item Design a model that is more robust to different patterns of missingness, possibly using causal inference.
+\end{enumerate}
+
+
+\crit{There are actually 2 chapters here. One is a chapter on the solution for controlling prosody by training with different missingness patterns as a regulariser. Another is a more abstract chapter about what is needed to make amortised function approximation from partial inputs identifiable.}
+
+
+Proof of identifiability
+
+
+How to call this task? Recovering a conditional distribution from the joint? Not necessarily. Function approximation, but 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% References:
+%%
+% If you include some work not referenced in the main text (e.g. using \nocite{}), consider changing "References" to "Bibliography".
+%
+
+% \renewcommand to change default "Bibliography" to "References"
+% \renewcommand{\bibname}{References}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+% \bibliographystyle{plainnat}
+\printbibliography
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Appendix:
+%%
+
+%\appendix
+
+%\chapter{Extra Information}
+
+\end{document}

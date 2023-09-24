@@ -1,0 +1,23 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'main.blg'
+[137] biber-darwin:340> INFO - === Sun Sep 24, 2023, 18:07:09
+[177] Biber.pm:419> INFO - Reading 'main.bcf'
+[348] Biber.pm:979> INFO - Found 24 citekeys in bib section 0
+[370] Biber.pm:4419> INFO - Processing section 0
+[388] Biber.pm:4610> INFO - Looking for bibtex file '../bibliography.bib' for section 0
+[408] bibtex.pm:1713> INFO - LaTeX decoding ...
+[559] bibtex.pm:1519> INFO - Found BibTeX data source '../bibliography.bib'
+[573] Biber.pm:4610> INFO - Looking for bibtex file 'main.bib' for section 0
+[601] bibtex.pm:1713> INFO - LaTeX decoding ...
+[724] bibtex.pm:1519> INFO - Found BibTeX data source 'main.bib'
+[897] Biber.pm:4610> INFO - Looking for bibtex file 'zack_thesis.bib' for section 0
+[944] bibtex.pm:1713> INFO - LaTeX decoding ...
+[1795] bibtex.pm:1519> INFO - Found BibTeX data source 'zack_thesis.bib'
+[2069] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[2069] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[2069] Biber.pm:4239> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[2070] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[2137] bbl.pm:660> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[2168] bbl.pm:763> INFO - Output to main.bbl
+[2169] Biber.pm:131> WARN - BibTeX subsystem: /var/folders/03/0_6kc2qn6p788cj4h77f3n0m0000gq/T/biber_tmp_xNZH/76341aaf8250651ac760979ba4db1d29_13786.utf8, line 1422, warning: 84 characters of junk seen at toplevel
+[2169] Biber.pm:133> INFO - WARNINGS: 1

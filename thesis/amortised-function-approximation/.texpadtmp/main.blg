@@ -1,0 +1,23 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/.texpadtmp/main.blg'
+[106] biber-darwin:340> INFO - === Sun Sep 24, 2023, 18:17:19
+[151] Biber.pm:419> INFO - Reading '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/.texpadtmp/main.bcf'
+[268] Biber.pm:979> INFO - Found 24 citekeys in bib section 0
+[293] Biber.pm:4419> INFO - Processing section 0
+[311] Biber.pm:4610> INFO - Looking for bibtex file '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/../bibliography.bib' for section 0
+[346] bibtex.pm:1713> INFO - LaTeX decoding ...
+[484] bibtex.pm:1519> INFO - Found BibTeX data source '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/../bibliography.bib'
+[498] Biber.pm:4610> INFO - Looking for bibtex file '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/main.bib' for section 0
+[509] bibtex.pm:1713> INFO - LaTeX decoding ...
+[632] bibtex.pm:1519> INFO - Found BibTeX data source '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/main.bib'
+[783] Biber.pm:4610> INFO - Looking for bibtex file '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/zack_thesis.bib' for section 0
+[813] bibtex.pm:1713> INFO - LaTeX decoding ...
+[1562] bibtex.pm:1519> INFO - Found BibTeX data source '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/zack_thesis.bib'
+[1802] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1802] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1802] Biber.pm:4239> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[1802] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[1860] bbl.pm:660> INFO - Writing '/Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/.texpadtmp/main.bbl' with encoding 'UTF-8'
+[1889] bbl.pm:763> INFO - Output to /Users/ailiescu/Library/CloudStorage/OneDrive-UniversityofCambridge/phd-thesis/thesis/amortised-function-approximation/.texpadtmp/main.bbl
+[1889] Biber.pm:131> WARN - BibTeX subsystem: /var/folders/03/0_6kc2qn6p788cj4h77f3n0m0000gq/T/biber_tmp_y35F/76341aaf8250651ac760979ba4db1d29_14432.utf8, line 1422, warning: 84 characters of junk seen at toplevel
+[1889] Biber.pm:133> INFO - WARNINGS: 1

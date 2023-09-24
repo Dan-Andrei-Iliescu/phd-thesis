@@ -34,18 +34,39 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{sectsty}
 
-\setlength{\parindent}{0em}
-\setlength{\parskip}{1em}
+\usepackage{booktabs}
+\usepackage{hyperref}
 
-\newcommand{\todo}[1]{\textcolor{red}{#1}}
+% \usepackage[T1]{fontenc}
+% \usepackage{crimson}
+% \usepackage{fbb}
+% \usepackage{charter}
+% \usepackage{imfellEnglish}
+% \usepackage{euscript}
+\usepackage{biolinum}
+% \usepackage{helvet}
+% \usepackage{tgpagella}
+% \usepackage{fbb}
+\usepackage{tgpagella}
+
+% \usepackage{libertine}
+\usepackage{libertinust1math}
+
+% \renewcommand{\sfdefault}{ppl}
+
+%\setlength{\parindent}{0em}
+%\setlength{\parskip}{1em}
+
+\newcommand{\crit}[1]{\textcolor{red}{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Thesis meta-information
 %%
 
 %% The title of the thesis:
-\title{Population-level representations}
+\title{\bf Groups of high-dimensional data}
 
 %% The full name of the author (e.g.: James Smith):
 \author{Dan Andrei Iliescu}
@@ -105,7 +126,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Abstract:
 %%
-\abstract{I am investigating how representation learning can help data analysts with limited computing or statistics experience to explore their datasets. My approach involves, firstly, understanding what data queries users would like to ask, but are unable to with the software tools currently available. Secondly, I am investigating which representation learning models are able to answer which kinds of queries. Thirdly, I am building a software tool that allows users to formulate queries and visualise outputs by manipulating views of the data.}
+\abstract{This dissertation explores the problems inherent in applying machine learning at the group level. My claim is that groups should be represented as random variables whose values should be inferred from data. This approach has the potential unlock solutions to many important problems, such as estimating causal parameters under confounding, making personalised predictions, and controlling the generation of data. But it also comes with challenges, especially when dealing with high-dimensional, unstructured, non-linear data. Addressing these limitations is the focus of the technical contributions of my PhD.}
 
 
 
@@ -114,7 +135,7 @@
 %%
 \begin{document}
 
-
+\allsectionsfont{\sffamily}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Title page, abstract, declaration etc.:
@@ -128,41 +149,308 @@
 %%
 \chapter{Introduction}
 
-The space of problems I am considering comprises machine learning tasks where the data can be split into separate groups. I want to sell the idea that using a group-level latent representation is useful for solving many of these problems.
+There is a discrepancy between the assumptions of machine learning and the nature of real-world data. Machine learning models assume that data is randomly sampled from independent and identically distributed sources. However, real-world training datasets often comprise data from several distinct environments, resulting in challenges when generalizing models to unseen environments. This phenomenon is widely known in the machine learning community as domain adaptation or dataset shift.
 
-\paragraph{What is new here?} We propose that the population itself is an additional feature to the collection of features comprising the individual. The existing paradigm is that each individual is independent and identically distributed. Most ML algorithms have an input and an output, and they treat each input as if it has been randomly extracted from a pool containing all possible inputs.
+The consequence of this discrepancy is that machine learning models often fail to generalise to new groups. Consider the case of health risk prediction models. A model predicting the risk for cardiovascular disease trained on white men from Alabama will need to be re-calibrated for application to black women on the US East Coast. This issue highlights the need for models that can account for variations between groups and adapt to different demographic groups.
 
-\paragraph{What is wrong with the existing paradigm?} The basic assumption that underpins learning is that data is independent and identically distributed. However, in practice
+Training separate models for each group is not ideal either. Firstly, re-calibration is often impractical due to limited data availability from certain minority groups. Secondly, the rigidity of this system makes it difficult to treat groups absent from the training set. For example, doctors from the Global South must routinely improvise combinations of publicly-available models in order to forecast outcomes for their patients. Finally, separate models leave us unable to measure similarities and differences between groups.
 
-\paragraph{What is an example of this?}
+To address this challenge, I propose representing groups as continuous random variables. Their values can be inferred from data and then used as additional input features for the prediction models. This solution combines the precision of a multi-model approach with the efficiency of a single-model approach. The group-level representation helps the model separate between what is global and what is local. Crucially, I believe this approach will enable us to transfer learning to new groups.
 
-\paragraph{But what is the population?} The good news is, finding the group is not hard. People are routinely inclined to spot population-level differences in dataset. This dataset comes from Stanford while this one comes from Harvard, this dataset has been collected 3 years ago, whereas this one is new, this dataset is outside whereas this one is inside. Not only can people routinely identify populations, but many of those population structures are causally connected to the way the data has been generated or collected. In fact, multiple overlapping population structures can be identified. For example, students can be grouped by school or by social class. The question is not ``which group structure is the correct one?'' but rather ``how can I make use of this group structure that I've identified?''
+Group-level representations have a long history in statistics under the umbrella of mixed-effects models and Gaussian processes. They take the form of models with both individual-level and group-level covariance. They are either used in sciences --- like economics and epidemiology --- to obtain accurate estimates of the treatment effects or used to generate new samples in small datasets.
 
-\paragraph{So how do we know if a group is useful?} There are many ways to divide datasets into groups. Sometimes the group is obvious, sometimes we can identify many candidate groups. Don't choose a group when the group can be easily expressed as a number.
+However, these statistical models have not been widely adopted into the kinds of data that have spurred the deep learning revolution, such as images, text, audio, or graphs. This is because the computational techniques used for training and inference in mixed-effects models are inefficient when dealing with complex data (non-linear, unstructured, high-dimensional). For example, in order to infer the value of the group-level variable once, we need to run many iterations of the Expectation Maximisation algorithm.
 
-\paragraph{What is the difference between a population and a feature?} Sometimes, it's not clear if a group-structure is actually just a feature. For example, in clinical studies, the individuals who received a treatment form one population, whereas the others form the reference population. But you could also represent the treatment as an indicator variable, whose value 1 denotes that the individual has taken the treatment, and value 0 denotes that the individual has taken a placebo. The question is not whether the treatment group is a valid population or not, the question is, when is the population-view useful? 
-
-For example, what if we have multiple treatments, each having taken a medicine with a different set of ingredients. Let's say we were interested in what would be the outcome if we had 200mg of salt in the treatment. No administered tratment actually has 200mg of salt, they all have less. But some have more salt than the others. Therefore, we can train a linear regression from salt to outcome, and extrapolate by querying a larger amount of salt.
-
-My hypothesis is that environments should be treated as random variables distributed according to a learnable density rather than as fixed parameters.
-
-This idea endows generative models with 3 new abilities. 
-
-\paragraph{What is an example of a group problem?} Throughout this thesis, we will follow the example of the quintessential group: the person. Our loosely defined task is to understand human behaviour.
-
-\paragraph{When is it useful to talk about groups?} The distinction between group and individual is not clear-cut. For example, sometimes a person can be a datapoint of features, sometimes they can be a group of observations. The key question is when is it useful to look at the group in order to learn more information about the individual?
-
-\paragraph{Let's define some terms.} A population is made from individuals. We assume that individuals are exchangeable. This means that, within each population, they are independent and identically distributed.
-
+The contributions presented in my thesis are, therefore, twofold. 
 \begin{enumerate}
-    \item \textbf{Generating individuals from a new population.} Generating high-dimensional samples is an important task. This includes translation and also random sampling. The counterfactual generative question.
-    \item \textbf{Inferring things about the population.} Sometimes, we want to learn from a set of observations rather than one single datapoint. The random variable of the group acts as an intermediary between the datapoints and the label. This setup is much more common than might be apparent at first glance. For example, we used it to learn the prosody of a sentence from sparse inputs. In order to make it work, we needed a way to transform sparse features into i.i.d.\ observations from an environment.
-    \item \textbf{Inferring things about individuals.} This is the task of estimating the true causal parameter $\theta$ that maximises the interventional density $\mathbb{P}_{\theta} (Y | \mathrm{do} (X))$. The target is $Y$, and $X$ is the source. We need the logic of groups in order to deal with the problem of confounding. 
+    \item Firstly, I propose a set of novel computational approaches for efficiently inferring group-level representations for different kinds of complex data. They comprise a range of deep learning techniques based on the Variational Autoencoder. These approaches build upon state-of-the-art techniques in semi-supervised representation learning.
+    \item Secondly, I expand the scope of group modelling to include problems that have not been conventionally approached using this framework, such as image-to-image translation, text-to-speech synthesis, and climate modelling.
 \end{enumerate}
 
+\section{Why hierarchical variables?}
 
-What are the advantages of modelling groups as random variables?
+In order to examine the advantages of hierarchical models in more detail, let us perform a case study. Imagine that we are trying to model the relationship between temperature and air pollution across Africa. We are given a dataset of readings ---temperature, air pollution level--- grouped by country. These readings are indexed by timestamp.
 
+The simplest approach is to model the conditional distribution of pollution conditioned on temperature. 
+
+But there is a problem. Pollution is higher in poorer countries, which are overwhelmingly in warmer climates. The level of economic development of the country is a confounding variable, obscuring the true relationship between pollution and temperature. The model trained on the whole dataset will, therefore, learn the wrong relationship between the two variables.
+
+The conventional approach to deal with this problem is to train a separate model for each country. Within each country, the confounding effect of the climate is less pronounced.
+
+But this approach is also sub-optimal. Let's imagine, for example, that we do not have enough data about Ethiopia to train the model. How do we make predictions for Ethiopia, then? We could decide to combine the predictions produced by the models of the surrounding countries. But how? An arithmetic mean? What weighting would we assign to each country. Kenya, for instance, has a radically different climate, whereas Somalia's climate is very similar. This approach quickly becomes complicated and inefficient.
+
+Hierarchical models solve this problem. Instead of training a separate model for each country, we train a single model that has an additional group-level latent variable alongside the temperature. Crucially, at test time, the variable can be inferred from data coming from a new, unseen group, and then applied as inputs to the predictor model.
+
+\section{Problem formulation}
+
+We define a group as a subgroup of the dataset within which data is exchangeable. Exchangerability means that the joint distribution between the datapoints in a group remains identical regardless of the order of the datapoints. A group is associated with a group-level latent variable, which captures the shared characteristics of the individuals within the group.
+
+We propose the following generative model: Let $(X_{ij}, Y_{ij})$ denote the pair of observations $j$ from group $i$, with $i \in 1:N, ~ j \in 1:K_i$. We call $X_{ij}$ the ``treatment'' and $Y_{ij}$ the corresponding ``outcome''. A group-level latent variable $Z_i$ generates both the treatment $X_{ij}$ and the outcome $Y_{ij}$. The joint distribution can be factorised as: 
+
+\begin{equation}
+    \mathbb{P} (Z_i, (X_{i1}, Y_{i1}), \dots (X_{iK_i}, Y_{iK_i})) = \mathbb{P} (Z_i) ~ \prod_{j=1}^{K_i} \mathbb{P} (Y_{ij} | X_{ij}, Z_i) ~ \mathbb{P} (X_{ij} | Z_i)
+\end{equation}
+
+This formulation of the group probabilistic model is at once simple and also widely applicable to numerous real-world problems:
+
+\begin{enumerate}
+    \item \textbf{Academic Success.} In a study analysing the effect of different teaching methods on student performance across multiple schools, the group variable $Z_i$ represents the school, $X_{ij}$ represents the teaching method applied to student $j$ in school $i$, and $Y_{ij}$ represents the corresponding performance of the student~\citep{Raudenbush1992HierarchicalLM}.
+    \item \textbf{Clinical trials.} In a clinical trial to test the effectiveness of different dosages of a drug on patient health across multiple hospitals, $Z_i$ is the hospital, $X_{ij}$ represents the dosage given to patient $j$ in hospital $i$, and $Y_{ij}$ is the patient's health outcome~\citep{Pinheiro2001MixedEffectsMI}.
+    \item \textbf{Air pollution.} In a study of the impact of various pollution control measures on air quality across different cities, $Z_i$ represents the city, $X_{ij}$ represents the pollution control measure implemented at location $j$ in city $i$, and $Y_{ij}$ represents the air quality measurement at that location~\citep{Cressie2011StatisticsFS}.
+\end{enumerate}
+
+In each of these examples, the group-level latent variable $Z_i$ captures the shared characteristics within a group -- whether that's the overall educational environment of a school, the healthcare practices of a hospital, or the atmospheric conditions of a city -- thereby allowing for appropriate modelling of the shared context in which the treatments and outcomes are observed.
+
+% \paragraph{What is new here?} \crit{New as compared to what?} Our approach proposes incorporating the group itself as an additional feature, alongside the collection of features characterizing the individual. \crit{It's confusing to call it a feature, it's not a feature but a random variable.} The traditional paradigm assumes that each individual is independent and identically distributed (i.i.d.). Most ML algorithms have an input and an output, treating each input as if it has been randomly extracted from a pool containing all possible inputs. \crit{What do you mean by most ML algorithms?} In contrast, our approach leverages group-level information to improve generalization and adaptability to different groups.
+
+\section{When is the group logic useful?}
+
+\crit{[WIP] At the moment,  this section is just waffle. But I want it to be a discussion on how to recognise situations where it's justified to model the data as groups, as opposed to just modelling each instance individually.}
+
+\paragraph{Identifying groups} \crit{What is the point of this paragraph? This is not part of problem formulation, but rather a discussion.} Identifying the group is crucial for effective mixed-effects modeling. Researchers can often spot group-level differences in datasets based on various attributes like geographical location, time of data collection, or other factors. These group structures are often causally connected to the data generation or collection process. Multiple overlapping group structures can also be identified, such as grouping students by school or social class. The question is not "which group structure is the correct one?" but rather "how can I make use of this group structure that I've identified?"
+
+\paragraph{Determining the utility of group logic} \crit{This paragraph is just waffle.} One natural question that arises is why are groups not just another feature that can be added as input. In a way, they are. If a feature describing the group is available, then that might be preferrable to group modelling. However, much more common are situations where we can easily identify the group, but it is much harder to find a numeric representation. In fact, what we are proposing is precisely a way to turn groups into features.
+
+Sometimes, it's not clear if a feature is already available to characterise the group. Avoid choosing a group when it can be easily expressed as a numerical feature.
+
+For example, in clinical studies, the individuals who received a treatment form one group, whereas the ones who received a placebo form the reference group. But you could also represent the treatment as an indicator variable, whose value 1 denotes that the individual has taken the treatment, and value 0 denotes that the individual has taken a placebo. The question is not whether the treatment group is a valid group or not, the question is, when is the group-view useful? 
+
+For example, what if we have multiple treatments, each having taken a medicine with a different set of ingredients. Let's say we were interested in what would be the outcome if we had 200mg of salt in the treatment. No administered treatment actually has 200mg of salt, they all have less. But some have more salt than the others. Therefore, we can train a linear regression from salt to outcome, and extrapolate by querying a larger amount of salt.
+
+\chapter{Background}
+
+\crit{How about hierarchical Bayesian modelling more broadly, like Gibbs sampling? How about metalearning?}
+
+% This literature review explores the development of mixed-effects models, focusing on technical advancements, their impact on real-world problem-solving, and limitations at each stage.
+
+This literature review explores previous attempts at modelling grouped data. I point out their limitations when dealing with large datasets of high-dimensional data.
+
+% Learning from groups has a long history. Mixed-effects models are the standard approach to deal with group data by modelling groups as random variables. However, they have not been widely adopted for complex data. This is because they are usually simple linear models whose inference procedures, such as the EM algorithm, are too slow. This means that they are usually only used for estimating model coefficients rather than personalised predictions, or image, text, or audio data.
+
+% \paragraph{Early Developments (1950s-1960s)} The early mixed-effects models, introduced by Stein (1956) and Mandel (1961), primarily focused on simple linear relationships, using random effects to account for variability between different groups or experimental units (Laird \& Ware, 1982). These early models allowed researchers to estimate treatment effects while accounting for random variability in hierarchical or clustered data, such as agricultural experiments and educational research.However, early mixed-effects models were limited to simple linear relationships, which restricted their applicability to more complex, non-linear phenomena.
+
+% \paragraph{Linear Mixed-effects Models (1970s-1980s)} Linear mixed-effects models, pioneered by Henderson (1975), Laird and Ware (1982), and Harville (1977), incorporated both fixed and random effects, enabling simultaneous estimation of group-level and individual-level parameters. These models improved the handling of hierarchical data, enabling the analysis of longitudinal data in medical research and the estimation of animal breeding values in animal husbandry. Linear mixed-effects models still faced limitations in terms of computational efficiency and were unable to address non-linear relationships.
+
+% \paragraph{Non-linear Mixed-effects Models (1990s)} Non-linear mixed-effects models, introduced by Lindstrom and Bates (1990) and Pinheiro and Bates (1995), allowed for more complex relationships between variables by extending mixed-effects models to non-linear relationships and interactions. The ability to model non-linear relationships expanded the range of real-world problems solvable by mixed-effects models, such as analyzing dose-response relationships in pharmacokinetic and pharmacodynamic studies and modeling growth curves in biology.However, non-linear mixed-effects models still faced challenges in terms of computational efficiency, especially when dealing with high-dimensional data.
+
+% \paragraph{Bayesian Inference (2000s)} The advent of Bayesian approaches and computational advancements, such as Markov chain Monte Carlo (MCMC) methods, enabled more sophisticated mixed-effects model estimation and inference (Gelman \& Hill, 2006). Bayesian mixed-effects models provided more robust inferences and better understanding of uncertainty, finding applications in spatial statistics for disease mapping, small-area group parameter estimation in demography, and consumer preference modeling in marketing research. Although Bayesian techniques improved model estimation, they did not completely address the computational efficiency limitations, particularly for large-scale and high-dimensional data.
+
+% \paragraph{Gaussian Processes and Machine Learning (2010s)}Gaussian processes, providing a non-parametric approach to modeling non-linear relationships, were integrated with mixed-effects models (Rasmussen \& Williams, 2006). Furthermore, deep learning methods were explored for incorporating mixed-effects models into more complex and high-dimensional settings (Durante et al., 2021). These advancements enabled mixed-effects models to address problems in computer vision, such as object recognition with hierarchical structure, and text-to-speech synthesis, where speaker-specific variations could be modeled as random effects. Challenges remain in developing scalable algorithms for very large datasets and complex structures, and further improvements in computational efficiency are needed.
+
+\section{Statistical models of grouped data}
+
+This section focuses on two widely-used statistical approaches for modelling grouped data: Gaussian processes (GPs) and mixed-effects models.
+
+Consider the task of modelling heart-rate $y_{ij}$ as a function of age, sex, weight, height, fitness, contained in the vector $\mathbf{x}_{ij}$, for patients $j$ grouped by geographic regions $i$. In this scenario, the geographic region introduces group-specific variation into the heart-rate observations.
+
+\paragraph{Mixed-effects models.} These are a parametric approach where the model assumes a specific functional form and includes both fixed effects (variables that are constant across groups) and random effects (variables that vary across groups). The random effects enable the model to capture group-level variation, thus allowing for the clustered nature of the data. 
+
+Mixed-effects models incorporate both fixed and random effects. Fixed effects are common to all groups, while random effects vary across groups. In the given context, the mixed-effects model can be formulated as:
+
+\begin{equation}
+y_{ij} = \mathbf{x}_{ij}^\top\boldsymbol{\beta} + \mathbf{z}_{ij}^\top\boldsymbol{u}_i + \epsilon_{ij}
+\end{equation}
+
+Here, $i$ indexes individuals and $j$ indexes geographic regions. $\boldsymbol{\beta}$ represents the fixed effects vector, capturing the influence of the variables age, sex, weight, height, and fitness on the heart rate across all regions. The term $\boldsymbol{u}_i$ denotes the random effects for the $i$th region, represented by the vector $\mathbf{z}_{ij}$, and $\epsilon_{ij}$ is the individual-level residual error.
+
+Mixed-effects models are typically fitted using either Maximum Likelihood Estimation (MLE) or Restricted Maximum Likelihood (REML) approaches. 
+
+In the MLE approach, both the fixed effects parameters and the variance components of the random effects are estimated by maximizing the likelihood function based on the observed data. This involves optimizing a joint likelihood of the fixed and random effects. However, one drawback of the MLE estimation is that it can lead to biased estimates of the variance components, particularly in small samples, because it does not account for the fact that fixed effects are also estimated from the data.
+
+To remedy this, the REML approach is often used. REML estimates the variance components of the random effects by maximizing the likelihood of a transformed dataset in which the influence of the fixed effects has been "factored out". This results in less biased estimates of the variance components, especially for small sample sizes. REML, however, only provides estimates of the random effects and not the fixed effects, as it assumes the fixed effects are known. Therefore, if inference on the fixed effects is of interest, ML estimation is more appropriate. 
+
+Both MLE and REML involve numerical optimization methods due to the non-linear nature of the likelihood function in mixed-effects models, with the Expectation-Maximization (EM) algorithm being one commonly used method.
+
+\paragraph{Gaussian processes.} These are a class of nonparametric models that enable flexible regression, based on defining a distribution over functions. A GP is completely specified by its mean function and covariance function, with the latter capturing the dependence structure between data points. A key advantage of GPs is their ability to model non-linear relationships. Furthermore, the covariance function can incorporate group structure by allowing the covariance between data points to depend on the group they belong to.
+
+GPs extend the idea of Gaussian distributions from finite to infinite dimensions, making them a natural choice for functional data analysis. In the context of the grouped data, we can model each patient's feature vector $\mathbf{x}_{ij}$ with a GP, taking into account the group-level variation. We can define a covariance function, or kernel, that allows us to encode the grouped nature of the data:
+
+\begin{equation}
+k(\mathbf{x}_{ij}, \mathbf{x}_{i'j'}) = \sigma^2_f \exp\left(-\frac{1}{2l^2}||\mathbf{x}_{ij} - \mathbf{x}_{i'j'}||^2\right) + \delta_{ii'}\sigma^2_g,
+\end{equation}
+
+Here, $\mathbf{x}_{ij}$ and $\mathbf{x}_{i'j'}$ are input vectors, $\sigma^2_f$ is the signal variance, $l$ is the length scale, $\sigma^2_g$ is the group-specific variance, and $\delta_{ii'}$ is the Kronecker delta, which is 1 if $i = i'$ (i.e., both observations are from the same group), and 0 otherwise. This kernel function thus captures both individual-level variations and group-level variations in the data. 
+
+GPs are fitted by choosing the hyperparameters that maximize the marginal likelihood of the observed data. For prediction, we use the posterior mean function (for point estimates) or the entire posterior distribution (for uncertainty estimates).
+
+\subsection{Similarities and differences}
+
+Mixed-effects models and Gaussian Processes (GPs) are powerful statistical tools for dealing with grouped data. While they share certain similarities, these approaches also have fundamental differences that make them suitable for different types of problems.
+
+The main similarity between the mixed-effects approach and the GP approach is that both can account for the grouped nature of the data: the mixed-effects model through random effects, and the GP through the covariance function. 
+
+However, they also differ in several key ways. Mixed-effects models are parametric and assume a specific functional form for the relationship between the predictors and the outcome. They require specification of fixed and random effects, and the form of the random effects must be pre-specified (e.g., random intercepts, random slopes). 
+
+On the other hand, Gaussian Processes are non-parametric and can model non-linear relationships more flexibly. They require specification of a covariance function, but do not require pre-specification of the form of the relationship between predictors and the outcome. A key advantage of GPs is their ability to provide uncertainty estimates for predictions at unobserved points.
+
+\vspace{1em}
+
+\hspace*{-\parindent}
+\begin{minipage}[t]{0.48\textwidth}
+    \textsc{Similarities}
+
+    \vspace{1em}
+
+    \hrule
+
+    \paragraph{Uncertainty.} Both mixed-effects models and GPs are probabilistic models, capable of quantifying uncertainty in their predictions. They both use normal distributions over the errors.
+    \paragraph{Hierarchical data.} Both models can handle grouped data by accounting for group-level variations. They capture correlations within groups, and can allow for group-specific slopes and intercepts.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \textsc{Differences}
+
+    \vspace{1em}
+
+    \hrule
+
+    \paragraph{Parametrisation.} Mixed-effects models are parametric, with parameters divided into fixed and random effects. In contrast, GPs are non-parametric, making no explicit assumption about the functional form of the data.
+    \paragraph{Interpretability.} Mixed-effects models offer an interpretable way to model group-specific variations via random effects. However, in GPs, group-level variation is implicitly accounted for in the covariance structure.
+\end{minipage}
+
+\vspace{2em}
+
+Considering the advantages and disadvantages of each approach, one might prefer to use mixed-effects models when the assumption of a fixed functional form is reasonable, and computational efficiency is a concern, especially with larger datasets. On the other hand, GPs might be more suitable when flexibility is crucial, and we need to model non-linear dependencies.
+
+For example, in a study of tree growth where the measurements on the same tree are correlated, mixed-effects models could be more suitable due to their ability to model grouped data and handle potential imbalance in the number of measurements per tree.
+
+On the other hand, in a study trying to predict the temperature at various locations given sparse sensor readings, GPs might be a better choice. Here, the sensor locations could be treated as "groups", but the spatial nature of the data would likely violate the independence assumption of mixed-effects models, and the flexibility of GPs would allow for capturing the non-linearities and interactions that might be present.
+
+\subsection{Real-world applications}
+
+Mixed-effects models have been widely used in longitudinal data analysis and multi-level modelling. For example, in educational testing, they have been used to account for variations between different classrooms and schools~\citep{Raudenbush1992HierarchicalLM}. In medical research, mixed-effects models are often used to model patient data, where readings are taken over time for different patients within different treatment groups~\citep{Pinheiro2001MixedEffectsMI}.
+
+On the other hand, Gaussian Processes have found extensive application in machine learning and spatial statistics. In environmental science, GPs are often used to model spatial data, such as temperature or precipitation across different geographic regions~\citep{Cressie2011StatisticsFS}. In machine learning, GPs have been used for regression, classification, and even unsupervised learning tasks, often outperforming other methods in cases where the number of observations is relatively small~\citep{Rasmussen2003GaussianPF}.
+
+\subsection{Limitations of statistical models for grouped data}
+
+Both Gaussian processes and mixed-effects models face difficulties when dealing with large datasets of high-dimensional data. This section summarises the limitations of these models.
+
+% \crit{Make clear that this paragraph describes why it's difficult to solve this problem with mixed-effects models. However, most of the paragraph is just waffle. I should be much more specific about what the difficulties are.} However, mixed-effects models face significant limitations when dealing with high-dimensional data. The primary challenge with maximum likelihood estimation (MLE) in high-dimensional settings is the increased computational cost. \crit{I haven't introduced maximum likelihood estimation yet, which I should.} High-dimensional data can lead to a large number of parameters that need to be estimated, and these optimization techniques often involve iterative algorithms that require the inversion of large matrices. This matrix inversion step is computationally expensive, with a time complexity of $O(N^3)$ for an $N \times N$ matrix. Therefore, the computational cost can become prohibitive as the dimensionality of the data increases. Additionally, MLE may become sensitive to the choice of initial values or step sizes in high-dimensional settings. This sensitivity can lead to slow convergence, with the algorithms taking a considerable number of iterations to reach the optimal parameter values. Furthermore, Bayesian inference with Markov chain Monte Carlo (MCMC) methods can be slow and may struggle with convergence for high-dimensional data.
+
+% In theory, mixed-effects models could be used to address a variety of real-world problems with high-dimensional data, but these limitations have hindered their practical application. For instance, mixed-effects models could be applied to genome-wide association studies to account for group structure and relatedness among individuals, but the high dimensionality of genomic data makes their application challenging. Similarly, in the field of computer vision, mixed-effects models could be used to model hierarchical structure and individual variations in object recognition tasks. However, the high-dimensional nature of image data and the complex structures involved make it difficult for mixed-effects models to be efficiently applied in practice. Thus, further research is needed to develop scalable algorithms and techniques to overcome these limitations and extend the applicability of mixed-effects models to high-dimensional data in various domains.
+
+\vspace{1em}
+
+\hspace*{-\parindent}
+\begin{minipage}[t]{0.48\textwidth}
+    \textsc{Gaussian Processes}
+
+    \vspace{1em}
+
+    \hrule
+
+    \paragraph{Computational complexity.} GPs require the inversion of the covariance matrix, leading to a computational complexity of $\mathcal{O}(n^3)$ for $n$ data points. This makes GPs computationally intensive for large datasets. For instance, in genomics, dealing with thousands of genes across multiple individuals and groups can exceed the computational capacity of GPs~\citep{Durrant2010CompressedFL}.
+    \paragraph{Kernel choice.} The choice of kernel in GPs can significantly affect model performance. Finding the right kernel that accurately captures the structure in the data can be a challenging task. This is particularly true when dealing with complex data structures like the traffic flow in transportation networks~\citep{Min2011RealtimeRT}.
+    \paragraph{Lack of intepretability.} GPs are less interpretable compared to mixed-effects models. In many real-world applications, like in health policy, the interpretability of models is crucial for making policy decisions~\citep{Tran2019GlobalEO}.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \textsc{Mixed-Effects Models}
+
+    \vspace{1em}
+
+    \hrule
+
+    \paragraph{High-dimensional data.} A high number of effects can lead to a significant increase in the complexity of the optimisation. For example, educational data has a high number of school-level and student-level predictors, so \citet{Neuhaus2006SeparatingBA} had to adopt a stepwise approach and careful model simplification to achieve a stable estimate.
+    \paragraph{Assumptions of normal errors.} Mixed-effects models assume that group-level variations (random effects) are normally distributed. In reality, this assumption may not hold. In ecological studies, for example, the effect of different environments on species abundance often displays non-normal variation~\citep{Zuur2009MixedEM}.
+    \paragraph{Fixed functional form.} Mixed-effects models assume a fixed functional form (linear or non-linear) for the fixed effects. This could limit their flexibility in modeling complex data patterns. This limitation can be seen in econometric modeling where the relationship between variables may not follow any assumed functional form~\citep{Train2003DiscreteCM}.
+\end{minipage}
+
+\vspace{2em}
+ 
+\crit{[WIP] This chapter is missing a treatment of Machine Learning attempts at dealing with grouped data. Add a discussion of domain adaptation, transfer learning, group-disentanglement and unsupervised translation.}
+
+\chapter{Missing data imputation}
+
+\paragraph{What is this chapter about?} This chapter deals with the application of my claim (that groups of data should be treated as random variables whose values should be inferred from data) to the problem of missing data imputation (MDI). This is the problem of filling in missing datapoints based on the ground-truth observations that we see around them. My solution to this problem is to treat the sparse data as a group. I train a generative latent model for the whole group and infer the latent variable based on the sparse data available. I then generate a complete group from the latent variable. My technical innovation is a method that allows us to turn structured data, like a time-series, into an exchangeable group. The method consists of concatenating positional embeddings to the observations in the group. This allows us to expand the framework of MDI to new real-world problems, such as the problem of controlling the outputs of high-dimensional generative models. The work in this chapter is contained in a paper submitted to NeurIPS 2023. The probabilistic model I'm considering contains a group of observations $\{X_{ij}\}$ and a group-level representation $Z_i$. The problem is that the data is not always exchangeable. So is there a way to make the data exchangeable.
+
+\section{Background: Missing data imputation with Conditional Variational Autoencoders}
+
+\paragraph{What is the probabilistic model?} The probabilistic model considered here is an extension of the default latent-group model. In this context, we're looking at a group of exchangeable observations $\{X_{i,k}\}_{k=1}^{K_i}$ with a corresponding group-level representation or latent variable $Z_i$. Additionally, there is a group-level observation $T_i$, which encapsulates additional information known about the group. 
+
+Here is a concrete example of what these variables can describe. Suppose we are dealing with the real-world problem of predicting patient outcomes in a healthcare setting. Each group corresponds to a patient, and $X_{i,k}$ represent individual medical observations (like heart rate, blood pressure, etc.) for patient $i$ at time point $k$. $Z_i$ is a latent variable that represents the hidden health status of the patient, and $T_i$ encapsulates information such as the patient's age, sex, and medical history.
+
+\paragraph{What is the Machine Learning model?} Our proposed model follows the framework of the Conditional Variational Autoencoder. This means that we use neural networks to implement two conditional distributions: 1) The generative distribution $P(\underline{X}_i | Z_i, T_i)$ samples a complete group of observations $\underline{X}_i$ conditionally on the latent $Z_i$ and the group-level observation $T_i$. 2) The variational posterior distribution $Q(Z_i | \underline{X}'_i, T_i)$ samples a latent $Z_i$ conditionally on the group-level observation $T_i$ and the (possibly sparse) group of observation $\underline{X}'_i$. The implementation of the two distributions is the main technical contribution of this project, and will be discussed in the next section.
+
+Imputing the missing data is a two-stage process. First, we sample a latent $Z_i$ from the variational posterior conditioned on the sparse data group $Q(Z_i | \underline{X}'_i, T_i)$. Then, we use that value to condition the generative distribution $P(\underline{X}_i | Z_i, T_i)$ from which we sample the complete group of observations.
+
+To train this model, we use a variational approximation to maximum-likelihood estimation (MLE). We train the model to maximise a lower bound to the log-likelihood of the observed data, called the Evidence Lower Bound (ELBO).
+
+\begin{equation}
+    \log (\underline{X}_i) \geq \mathbb{E}_{Q(Z_i | \underline{X}_i, T_i))} [\log P(\underline{X}_i | Z_i, T_i)] - \mathrm{KL} [Q(Z_i | \underline{X}_i, T_i) || P(Z_i)]
+\end{equation}
+
+The term $\mathbb{E}_{Q(Z_i | \underline{X}_i, T_i))} [\log P(\underline{X}_i | Z_i, T_i)]$ is the expected log likelihood of the data given the latent variables under the variational posterior $Q(Z_i | \underline{X}_i, T_i)$, and $\mathrm{KL} [Q(Z_i | \underline{X}_i, T_i) || P(Z_i)]$ is the Kullback-Leibler (KL) divergence between the variational posterior and the prior on $Z_i$.
+
+Significantly, training does not require sparse groups, it can be performed with complete groups. This is because of the network architecture, which we will describe in the next section.
+
+\section{Technical contribution: Turning structured data into exchangeable groups}
+
+The main technical contribution of this project is a method for turning a data structure (like a time-series) into a group of exchangeable observations. The method consists of a self-attention-based encoder that takes as input the group of observations. Each observation is concatenated with a positional embedding. The positional embedding can be pre-defined, such as a sinusoidal embedding for capturing position in a time-series, or it can be learned, such as for distinguishing between different kinds of features (heart rate, blood pressure, etc).
+
+\paragraph{What is the motivation behind this technique?} The motivation behind this technique is a method to aggregate sparse observations from multiple time-series in a way that is robust to the pattern of sparsity. Our method, using positional embeddings, can be trained with or without sparse data, and then can be used on any pattern of missingness. This is because the self-attention model learns to approximate a Bayesian accummulation of evidence.
+
+The conventional method to process missing data is to fill in the missing observations with default values, like 0, and then concatenate an mask indicating whether the observation is present, 1, or missing, 0. This technique is only successful when the pattern of sparsity encountered during testing is the same as the pattern of sparsity of the training data. The quality of imputation falls rapidly as the pattern of sparsity moves away from the training pattern. For example, a network trained for image super-resolution (grid-like sparsity) cannot perform image inpainting (local area sparsity). 
+
+\section{Case study: Controlling generated prosody}
+
+\paragraph{What is a problem where this helps?} This section discusses a concrete real-world problem where the latent-group model enables the framework of missing data imputation to achieve progress. We address the problem of controlling generative models for high-dimensional data. We address the problem of controlling the prosody generated by text-to-speech (TTS) models. Prosody is the part of speech that conveys intonation and emotion. State-of-the-art TTS voices are high-quality and realistic, but they lack expressivity. Attempts to encourage the models to generate more expressive speech lead to a decline in realism. We want a method to control the prosody of TTS voices that would overcome this trade-off. The TTS model comprises a Transformer network taking as input sentence-level text embeddings and produces phoneme-level mel-spectrograms (MFBs).
+
+\paragraph{What is the problem with existing control methods?} Existing control methods lack precision or are cumbersome to use. On one side, there are high-level control methods using deep learning. These methods allow the user to control the synthesis either by directly modifying the values of a latent variable or providing a conditioning input, such as a label or a segmentation mask. These methods are fast and cause semantically meaningful changes to the output. However, they are imprecise and uninterpretable: you can only get so close to the desired output. On the other side, there are low-level control methods using traditional methods. These include manually editing the output, or using pre-defined heuristic rules to achieve a certain effect (e.g. change a statement into a question). They are precise, but require hours of expert human labour and are particularly difficult for high-dimensional data, like images or audio.
+
+\paragraph{So what do you propose?} I propose the framework of MDI to achieve human control that is both precise and fast, in other words, efficient. The idea is to infer the latent variable from a sparse group of conditioning inputs, and then generate the complete audio as output. We treat one rendition of a sentence as a group of phoneme-level acoustic features $\underline{X}_i$. The conditioning inputs are provided by the user by hand via a visual interface with sliders. The model is tasked with completing the missing acoustic features. We implement the model as a Variational Autoencoder (VAE) with an encoder network that can take as input groups of varying numbers of observations instead of single observations. The technical innovation we present is how to turn a time-series of phoneme-level features into a group of exchangeable observations. We achieve this by concatenating learned positional embeddings to each observation.
+
+I contributed a method for aggregating features as if they were exchangeable elements of a group. I achieve this by attaching a different positional embedding to each feature. I applied this method to the problem of missing data imputation in speech audio data in the context of text-to-speech synthesis. I achieved an improvement in the controllability of the speech synthesis. The framing of this problem as group-level latent variable lends it the advantage of being a more robust imputation procedure to different missingness patterns.
+
+My contribution is that we extend the concept of grouped data to cases where the elements of the groups are not exchangeable. For example, if we want to control audio generation, we might want to provide a few values and let the model fill-in the rest. What if we treat each value as a separate datapoint with its own positional embedding. This is a way of inpainting data that is independent to the pattern of missingness. We treat the audio as a group of values.
+
+\paragraph{What are the empirical results?} Our model achieves efficient control over competing control methods. We measure efficiency using a novel evaluation procedure called iterative refinement. In this evaluation step, a human user is tasked with iteratively modifying a generated rendition A until it matches a ground-truth rendition B. In each iteration, the user makes a change and then the output is measured against the ground-truth B in terms of mean squared error (MSE). The area-over-the-curve (AOC) of the error plotted as a function of the number of iterations of modifications by the user measures the efficiency of the control method. By this metric, our method outperforms a variety of low-level and high-level control methods: manual editing, Gaussian Processes and Transformers. We also show that our latent-group method is robust to varying patterns of missingness. We compare with other MDI methods, Transformers and RNNs with input masking.
+
+\paragraph{So what's the upshot of all of this?} In conclusion, we show that the method of group-level latent variables can bring the framework of MDI to solve new problems, namely the problem of control in generative models for high-dimensional data. Our technical innovation revolves around using positional embeddings to turn structured data into exchangeable groups. Using this, we show state-of-the-art human control for prosody modification in TTS. We design a novel evaluation procedure to measure efficiency of control. We also show that our method has advantages over other MDI methods because it is more robust to varying patterns of missingness.
+
+\chapter{Personalised predictions}
+
+\crit{[WIP] Needs re-writing. The structure of each case study is wrong. Start with a summary of the method and problem. Follow with motivating application. Follow with the observation that ``Wrong tech gives wrong answers''. By wrong tech, we mean the wrong model. Then we compare with existing approaches to that problem. ML, statistical, Bayesian.}
+
+In order to make accurate predictions at the individual level, it is essential to consider the group-level information. Researchers have found that prediction models, particularly in fields like medicine and climate modeling, are most accurate when they take into account the characteristics of the group. In this section, we discuss how using amortized inference with deep learning can improve mixed-effects models for personalized medicine by inferring group-level variables.
+
+Many scientists recognize the importance of calibrating health risk prediction models when applied to different socio-economic or ethnic backgrounds. Traditionally, this involves re-training the model coefficients for each group. However, an alternative approach is to use the same parameters and infer a separate feature to model the group itself. This concept is also applicable to other domains such as climate modeling and image recognition.
+
+The key innovation in this approach is learning the latent group-level variable using amortized inference. By incorporating a conditional predictor, we can efficiently infer the group-level variable, even in cases of nonlinear models with high-dimensional data.
+
+Let's consider an example in personalized medicine: calibrating health risk prediction models. These statistical models take a set of patient measurements as input and return an assessment of the risk the individual has of developing a disease or experiencing a specific medical outcome. However, these models often do not generalize well across different groups, necessitating calibration or retraining for each new group.
+
+The issue with this traditional approach is that it may not be expressive enough, or it might be missing important covariates. Obtaining these covariates can be challenging, as there could be thousands of genetic and environmental differences between groups, many of which are unmeasured. To address this, we introduce a group-level variable in the mixed-effects model.
+
+In scenarios with linear models and low-dimensional input features, the group-level variable can be inferred directly using expectation maximization. However, for nonlinear models with high-dimensional data, expectation maximization becomes computationally expensive and slow. This is where amortized inference with deep learning, using a neural network, can significantly improve the process.
+
+Leveraging deep learning to extend mixed-effects models and infer group-level variables holds the potential to unlock a new era of personalized medicine. By incorporating group-level information, health risk prediction models can be better calibrated and more accurately predict individual outcomes. This improved accuracy can contribute to the development of more targeted and effective treatments and interventions, ultimately enhancing patient care and outcomes.
+
+\chapter{Controlling generation}
+
+\crit{[WIP] Needs re-writing.}
+
+
+Generating high-dimensional samples is a crucial task in various applications, including image translation, style transfer, and text-to-speech synthesis. Amortized inference with deep learning, when applied to mixed-effects models, can facilitate controllable generation by inferring group-level variables. This approach has significant potential for applications in fields such as economics, medicine, and computer vision.
+
+Controllable generation involves combining individual-level features of one datapoint with the group-level features of another. This process is akin to asking the counterfactual question, "What if this point came from another group?" By inferring instance variables conditioned on group variables, we can achieve more accurate inference in cases of conditional shift.
+
+For instance, in style transfer, the goal is to merge the style of one image with the content of another image. In counterfactual economics, we aim to reproduce history except for an intervention in one variable. Similarly, in climate prediction, we want to combine past data from a specific location with future data from a simulation.
+
+To address these challenges, we can frame the problem in terms of groups and individuals. We aim to combine the group variable (group) with the instance variable (individual) to generate new datapoints that exhibit desired characteristics from multiple sources. By using deep learning to extend mixed-effects models, we can efficiently infer group-level variables and facilitate controllable generation.
+
+\chapter{Causal inference}
+
+\crit{[WIP] Needs re-writing.}
+
+Finally, we can use group-level variables to perform causal inference. The confounder might be a hidden variable, but it usually manifests as a group. Alternatively, an instrumental variable might be the group itself, independent of the original confounder. We innovate by proposing an inference procedure for weighted maximum likelihood based on inferring the group-level variable to perform either instrumental variable inference and inverse probability weighting. We apply this procedure to estimating the causal effect of temperature or air pollution.
+
+This is the task of estimating the true causal parameter $\theta$ that maximises the interventional density $\mathbb{P}_{\theta} (Y | \mathrm{do} (X))$. The target is $Y$, and $X$ is the source. We need the logic of groups in order to deal with the problem of confounding
+
+\chapter{Conclusion}
+
+In conclusion, we show how and why groups should be modelled as random variables, especially of complex data.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -178,8 +466,6 @@ What are the advantages of modelling groups as random variables?
 \addcontentsline{toc}{chapter}{References}
 \bibliographystyle{plainnat}
 \bibliography{thesis}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Appendix:
