@@ -1,0 +1,150 @@
+\documentclass[../thesis.tex]{subfiles}
+% \graphicspath{{\subfix{../images/}}}
+
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+
+% modification to natbib citations
+\setcitestyle{authoryear,round,citesep={;},aysep={,},yysep={;}}
+
+% My math notation
+% \newcommand{\myscal}[1]{#1}
+% \newcommand{\myvect}[1]{\bm{#1}}
+% \newcommand{\myrv}[1]{\MakeUppercase{#1}}
+% \newcommand{\mycnt}[1]{#1}
+% \newcommand{\mydim}[1]{{d_{\MakeUppercase{#1}}}}
+% \newcommand{\myfunc}[1]{#1}
+% \newcommand{\mylik}[1]{\mathrm{\MakeUppercase{#1}}}
+% \newcommand{\myexp}[3]{\mathbb{E}^{\mylik{#1}}_{#2 \sim #3}}
+
+\begin{document}
+
+\allsectionsfont{\sffamily}
+
+\chapter{Introduction}
+
+\epigraph{History does not repeat,\\ but it rhymes.}{Folk saying}
+
+The theoretical foundations of machine learning are shaky. There is a mismatch between the way researchers conceptualise data and the way data actually behaves.
+
+On the one hand, an assumption that underpins machine learning is that data are created as a result of identically repeating processes. Statisticians call such data \textit{independent and identically distributed} (i.i.d.). To understand this property, we can imagine data behaving like a sequence of coin tosses. We repeatedly toss the coin and compile the list of outcomes into a dataset. Crucially, the outcomes of previous coin tosses do not influence future ones. This fact enables us to learn something about the process that created the data. For instance, to determine the probability that a coin toss will turn out heads, we count what fraction of coin tosses landed heads up. This fraction only reflects the true probability because every coin toss has the same chance of turning out heads.
+
+% We must assume that the result will remain the same even if we rep 
+
+On the other hand, real-world data are rarely independent or identically distributed. Past outcomes usually affect future outcomes, and the likelihood of specific outcomes changes in time and space. For instance, in our coin toss example, every time the coin lands heads up, the edges on the tail side become slightly eroded, raising the likelihood of the coin landing heads up again. Surprisingly, systematic biases in coin tosses have been shown empirically \citep{bartosFairCoinsTend2024}. The dynamic nature of data often prevents machine learning algorithms from learning rules that are general enough to be applied in the real world. The literature is replete with case studies of failures of generalisation. A simple example is an object-recognition algorithm that classifies images of tree branches as ``birds'' because birds are frequently depicted perching on tree branches \citep{wangCausalAttentionUnbiased2021a}.
+
+There are ways around the problem of changing probability distributions. Researchers have created modelling frameworks that more closely approximate the behaviour of real-world data while still allowing for enough repetition to enable learning. One example of such a framework is the Markov Chain. This model conceptualises events as sequences where the current event is affected by the previous event exclusively \citep{gagniucMarkovChainsTheory2017}. This framework gives machine learning algorithms enough expressivity to learn relationships between past and future events while restricting the space of those relationships to consecutive events. There are many other common frameworks for modelling non-i.i.d.\ data, such as \textit{relational machine learning}, where we assume specific spatial relationships between the data examples \citep{nickelReviewRelationalMachine2016}, or \textit{active learning}, where the machine learning algorithm can select from a set of candidates which data example to train on \citep{settlesActiveLearningLiterature2009a}.
+
+In this thesis, I will explore in depth one non-i.i.d.\ modelling framework, namely \textit{grouped data}. This framework models data that is organised into groups such that each data example is assigned to exactly one group. It assumes that data within each group are i.i.d.\ but that data from different groups have different probability distributions. The grouped-data framework was created to account for the systematic discrepancies empirically observed between data collected from different sources/environments. In the machine learning literature, these discrepancies are called \textit{dataset shifts} \citep{quinonero-candelaDatasetShiftMachine2008}.
+
+% However, real data are very rarely either independent or identically distributed. Past outcomes usually affect future outcomes and the likelihood of certain outcomes changes in time and space. What you learn today may no longer apply tomorrow. Researchers call these changes \textit{dataset shifts}.
+
+% There is a discrepancy between the common assumptions of machine learning and the nature of real-world data. Machine learning models assume that data is randomly sampled from independent and identically distributed sources. However, real-world training datasets often comprise data from several distinct environments, resulting in challenges when generalizing models to unseen environments. This phenomenon is widely known in the machine learning community as domain adaptation or dataset shift.
+
+The consequence of dataset shifts is that machine learning algorithms trained on one group often fail to generalise to new groups. Consider the case of health risk prediction models. A model for predicting the risk for cardiovascular disease trained on one demographic group must be re-calibrated to be applied to another demographic group \citep{mishraRecalibrationMethodsImproved2022}. This issue highlights the need for models that can account for variations between groups.
+
+Re-calibrating the model for each group is not ideal either. Firstly, re-calibration is often impractical due to limited data availability from certain minority groups. Secondly, the rigidity of this system makes it difficult to treat groups absent from the training set. For example, doctors from the Global South must routinely improvise combinations of publicly-available models in order to forecast outcomes for their patients. Finally, separate models leave us unable to measure similarities and differences between groups.
+
+To address this challenge, I propose representing groups as continuous, vector-valued random variables. Their values can be inferred from data and then used as additional input features for the prediction models. This solution combines the precision of a multi-model approach with the efficiency of a single-model approach. The group-level representation helps the model separate between what is global and what is local. Crucially, I believe this approach will enable us to transfer learning to new groups.
+
+% \draft{[This is background on group-level latent variables.]} 
+
+% They take the form of models with both individual-level and group-level covariance. They are either used in sciences --- like economics and epidemiology --- to obtain accurate estimates of the treatment effects or used to generate new samples in small datasets.
+
+\section{Illustration}
+
+In order to understand the advantages of group-level variables in more detail, let us examine a case study. Imagine that we are trying to model the relationship between temperature and air pollution across Africa. We are given a dataset of readings (temperature, air pollution level) grouped by country. These readings are indexed by timestamp.
+
+The simplest approach is to model the probability distribution of pollution conditioned on temperature. We could train a linear regression on the pairs of (temperature, air pollution level) data in our training set, and then use the slope of the regression as a reflection of the relationship. 
+
+%\crit{[How do you do this? Explain.]}
+
+But there is a problem. Pollution is higher in poorer countries, which are overwhelmingly in warmer climates. The level of economic development of the country is a confounding variable, obscuring the true relationship between pollution and temperature. The model trained on the whole dataset will, therefore, learn the wrong relationship between the two variables. \crit{[Add figure here.]}
+
+The conventional approach to deal with this problem is to train a separate model for each country. Within each country, the confounding effect of the climate is less pronounced.
+
+But this approach is also sub-optimal. Let's imagine, for example, that we do not have enough data about Ethiopia to train the model. How do we make predictions for Ethiopia, then? We could decide to combine the predictions produced by the models of the surrounding countries. But how? An arithmetic mean? What weighting would we assign to each country. Kenya, for instance, has a radically different climate, whereas Somalia's climate is very similar. This approach quickly becomes complicated and inefficient.
+
+Hierarchical models solve this problem. Instead of training a separate model for each country, we can train a single model that has an additional group-level latent variable alongside the temperature. Crucially, at test time, the variable can be inferred from data coming from a new, unseen group, and then applied as inputs to the predictor model.
+
+\section{Probabilistic formulation} 
+
+In this section, I give a preliminary definition of what group-level latent variables are. We define a group as a set of exchangeable observations. Exchangability means that the joint density between the observations in the group remains identical regardless of the order of the observations. A group has an associated with group-level latent variable, which captures the shared characteristics of the individuals within the group.
+
+We propose the following generative model: Let $(\myrv{x}_{k}, \myrv{y}_{k})$ be the random variable denoting the $k$-th data example from the group, with $k \in \{1:\mycnt{m}\}$. We call $\myrv{x}_{k}$ the ``observation'' and $\myrv{y}_{k}$ the corresponding ``outcome''. The group-level latent variable $\myrv{w}$ is a cause of the observations $\{\myrv{x}_{k}\}_{k=1}^{\mycnt{m}}$. The joint probability density over the variables in a group can be factorised as: 
+
+\[
+    \myfunc{p}_{\myrv{w}, \{\myrv{x}_{k}, \myrv{y}_{k}\}_{k=1}^{\mycnt{m}}} \equiv \myfunc{p}_{\myrv{w}} \, \prod_{k=1}^{\mycnt{m}} \myfunc{p}_{\myrv{y}_k | \myrv{x}_{k}, \myrv{w}} ~ \myfunc{p}_{\myrv{x}_{k} | \myrv{w}_k}
+\]
+
+This formulation of the group probabilistic model is at once simple and also widely applicable to numerous real-world problems. These are just a few examples:
+
+\begin{enumerate}
+    \item \textbf{Academic Success.} In a study analysing the effect of different teaching methods on student performance across multiple schools, the group variable $\myrv{w}$ represents the school, $\myrv{x}_{k}$ represents the teaching method applied to student $k$ and $\myrv{y}_{k}$ represents the corresponding academic performance of the student~\citep{brykHierarchicalLinearModels1992}.
+    \item \textbf{Clinical trials.} In a clinical trial to test the effectiveness of different dosages of a drug on patient health across multiple hospitals, $\myrv{w}$ is the hospital, $\myrv{x}_{k}$ represents the dosage given to patient $k$, and $\myrv{y}_{k}$ is the patient's health outcome~\citep{pinheiroMixedEffectsModelsSPLUS2001}.
+    \item \textbf{Air pollution.} In a study of the impact of various pollution control measures on air quality across different cities, $\myrv{w}$ represents the city, $\myrv{x}_{k}$ represents the pollution control measure implemented at location $k$ and $\myrv{y}_{k}$ represents the air quality measurement at that location~\citep{cressieStatisticsSpatioTemporalData2011}.
+\end{enumerate}
+
+In each of these examples, the group-level latent variable $\myrv{w}$ captures the shared characteristics within a group --- whether that is the overall educational environment of a school, the healthcare practices of a hospital, or the atmospheric conditions of a city --- thereby allowing for appropriate modelling of the shared context in which the treatments and outcomes are observed.
+
+The rest of this thesis will focus on applying group-latent variables to the task of \textit{representation learning} \citep{bengioRepresentationLearningReview2014}. So far, I have discussed problems that fall into the category of supervised learning (i.e., predicting a response, $\myrv{y}$, from a vector of covariates, $\myrv{x}$). The current state-of-the-art approach to supervised learning with high-dimensional data is to pre-train the network on an unsupervised (or self-supervised) representation learning task of mapping the high-dimensional covariates, $\myrv{x}$, to a low-dimensional latent representation, $\myrv{w}$. This low-dimensional representation can then be used as input for a variety of downstream supervised predictions tasks. My contributions in this thesis will explore a few different cases where group-level representations bring an advantage in the downstream tasks over singleton representations.  
+
+\section{Contributions} 
+
+Group-level representations have a long history in statistics under the umbrella of mixed-effects models \citep{pinheiroMixedEffectsModelsSPLUS2001}. However, these statistical models have not been widely adopted into the kinds of data that have spurred the deep learning revolution, such as images, text, audio, or graphs. This is because the computational techniques used for training and inference in mixed-effects models are inefficient when dealing with complex data (non-linear, unstructured, high-dimensional). 
+
+% For example, in order to infer the value of the group-level variable once, we need to run many iterations of the Expectation Maximisation algorithm.
+
+% The contributions presented in my thesis are, therefore, twofold. 
+% \begin{enumerate}
+%     \item Firstly, I propose a set of novel computational approaches for efficiently inferring group-level representations for different kinds of complex data. They comprise a range of deep learning techniques based on the Variational Autoencoder. These approaches build upon state-of-the-art techniques in semi-supervised representation learning.
+%     \item Secondly, I expand the scope of group modelling to include problems that have not been conventionally approached using this framework, such as image-to-image translation, text-to-speech synthesis, and climate modelling.
+% \end{enumerate}
+
+My contribution in this thesis is the application of the group-level representations to three grouped-data problems, namely \textit{style-content disentanglement}, \textit{missing data imputation}, and \textit{unsupervised domain adaptation}. I propose a set of novel computational approaches for efficiently inferring group-level representations for different kinds of complex data. They comprise a range of deep learning techniques based on the Variational Autoencoder. These approaches build upon state-of-the-art techniques in semi-supervised representation learning.
+
+Firstly, I propose a novel representation learning method called the Context-Aware Variational Autoencoder (CxVAE). This model can perform style-content disentanglement on datasets with conditional shift. Conditional shift occurs when the distribution of a outcome variable $\myrv{y}$ conditional on the input observation $\myrv{x}$ --- $\mylik{P}_{\myrv{y}|\myrv{x}}$ --- changes across data environments (i.e., $\mylik{P}^{(i)}_{\myrv{y}|\myrv{x}} \neq \mylik{P}^{(j)}_{\myrv{y}|\myrv{x}}$, where $i,j$ are two different environments). I introduce two novel style-content disentanglement datasets to show empirically that existing methods fail to disentangle under conditional shift. CxVAE overcomes this limitation by enforcing independence across the content variables inferred from each environment. My model presents two innovations: a context-aware encoder and a content adversarial loss. We use a specially designed experiment to show empirically that these design choices directly cause an improvement of our model's performance on datasets with conditional shift. This contribution was presented in \citet{iliescuStyleContentDisentanglementConditional2024}.
+
+Then, I address the problem of \textit{missing data imputation}. The task is to generate values for a set of missing dimensions of an observation $\myrv{X}$ conditioned on the set of observed dimensions. I consider a setup where, during training, we see complete observations but during testing the observations are incomplete, following an unknown pattern of missingness. I propose a method for imputation, the Multiple-Instance Conditional Variational Autoencoder (MICVAE), that can generalise well to unseen patterns of missingness. This method uses a group-level latent variable to represent the content of the incomplete observation. This contribution was presented in \citet{iliescuControllableProsodyGeneration2024a}.
+
+Finally, I explore the application of group-level latent variables to the problem of \textit{unsupervised domain adaptation}. This is the problem of training a predictor on a set of groups and evaluating on another set of groups. I discuss how \textit{invariant predictors} are the paradigm that is guaranteed to perform best across all possible groups, when the predictor takes as input a single observation. I then propose a new paradigm, \textit{contextual predictors}, whereby the group-level latent variable is concatenated to the observation in order to improve the accuracy of predictions beyond that achieved by invariant predictors.
+
+% \paragraph{What is new here?} \crit{New as compared to what?} Our approach proposes incorporating the group itself as an additional feature, alongside the collection of features characterizing the individual. \crit{It's confusing to call it a feature, it's not a feature but a random variable.} The traditional paradigm assumes that each individual is independent and identically distributed (i.i.d.). Most ML algorithms have an input and an output, treating each input as if it has been randomly extracted from a pool containing all possible inputs. \crit{What do you mean by most ML algorithms?} In contrast, our approach leverages group-level information to improve generalization and adaptability to different groups.
+
+\section{List of publications}
+
+These are the publications I have co-authored during my PhD:
+
+\begin{enumerate}
+    \item \textbf{Dan Andrei Iliescu} and Damon J Wischik. ``Style-Content Disentanglement Under Conditional Shift''. In \textit{Data-Centric Machine Learning Workshop, International Conference on Learning Representations}, 2024.
+    \item \textbf{Dan Andrei Iliescu}, Devang S Ram Mohan, Tian Huey Teh, and Zack Hodari. ``Controllable Prosody Generation With Partial Inputs''. In \textit{Proceedings of IEEE International Conference
+    on Acoustics, Speech and Signal Processing (ICASSP)}, 2024.
+    \item Aamir Mustafa, Aliaksei Mikhailiuk, \textbf{Dan Andrei Iliescu}, Varun Babber, and Rafal Mantiuk. ``Training a Task-Specific Image Reconstruction Loss''. In \textit{IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)}, 2022.
+    \item Andrew Webb, Charles Reynolds, Wenlin Chen, \textbf{Dan Andrei Iliescu}, Mikel Lujan, and Gavin Brown. In ``European Conference on Machine Learning (ECML)'', 2021.
+\end{enumerate}
+
+% \citep{mustafaTrainingTaskSpecificImage2022}
+% \citep{webbEnsembleNotEnsemble2021}
+% \section{When is the group logic useful?}
+
+% \crit{[We want to define the grouping as another kind of feature, just as numerical or categorical features. Why not use a categorical feature instead of a group? How can you choose which grouping to use?]}
+
+% \crit{[WIP] At the moment,  this section is just waffle. But I want it to be a discussion on how to recognise situations where it's justified to model the data as groups, as opposed to just modelling each instance individually.}
+
+% \paragraph{Identifying groups} \crit{What is the point of this paragraph? This is not part of problem formulation, but rather a discussion.} Identifying the group is crucial for effective mixed-effects modeling. Researchers can often spot group-level differences in datasets based on various attributes like geographical location, time of data collection, or other factors. These group structures are often causally connected to the data generation or collection process. Multiple overlapping group structures can also be identified, such as grouping students by school or social class. The question is not "which group structure is the correct one?" but rather "how can I make use of this group structure that I've identified?"
+
+% \paragraph{Determining the utility of group logic} \crit{This paragraph is just waffle.} One natural question that arises is why are groups not just another feature that can be added as input. In a way, they are. If a feature describing the group is available, then that might be preferrable to group modelling. However, much more common are situations where we can easily identify the group, but it is much harder to find a numeric representation. In fact, what we are proposing is precisely a way to turn groups into features.
+
+% \crit{[Why use a group instad of a numerical feature?]}
+
+% Sometimes, it's not clear if a feature is already available to characterise the group. \crit{[We are talking about whether the grouping explains more of the variation than the feature.]} Avoid choosing a group when it can be easily expressed as a numerical feature.
+
+% For example, in clinical studies, the individuals who received a treatment form one group, whereas the ones who received a placebo form the reference group. But you could also represent the treatment as an indicator variable, whose value 1 denotes that the individual has taken the treatment, and value 0 denotes that the individual has taken a placebo. The question is not whether the treatment group is a valid group or not, the question is, when is the group-view useful? 
+
+% For example, what if we have multiple treatments, each having taken a medicine with a different set of ingredients. Let's say we were interested in what would be the outcome if we had 200mg of salt in the treatment. No administered treatment actually has 200mg of salt, they all have less. But some have more salt than the others. Therefore, we can train a linear regression from salt to outcome, and extrapolate by querying a larger amount of salt.
+
+\biblio
+
+\end{document}

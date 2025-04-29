@@ -1,0 +1,483 @@
+\begin{thebibliography}{93}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Achille \& Soatto(2018)Achille and Soatto]{achille2018emergence}
+Achille, A. and Soatto, S.
+\newblock Emergence of invariance and disentanglement in deep representations.
+\newblock \emph{The Journal of Machine Learning Research}, 19\penalty0 (1):\penalty0 1947--1980, 2018.
+
+\bibitem[Alemi et~al.(2018)Alemi, Poole, Fischer, Dillon, Saurous, and Murphy]{alemi2018fixing}
+Alemi, A., Poole, B., Fischer, I., Dillon, J., Saurous, R.~A., and Murphy, K.
+\newblock Fixing a broken {{ELBO}}.
+\newblock In \emph{International Conference on Machine Learning}, pp.\  159--168. PMLR, 2018.
+
+\bibitem[Alemi et~al.(2016)Alemi, Fischer, Dillon, and Murphy]{alemi2016deep}
+Alemi, A.~A., Fischer, I., Dillon, J.~V., and Murphy, K.
+\newblock Deep variational information bottleneck.
+\newblock \emph{arXiv preprint arXiv:1612.00410}, 2016.
+
+\bibitem[Andrieu et~al.(2003)Andrieu, {de Freitas}, Doucet, and Jordan]{andrieuIntroductionMCMCMachine2003}
+Andrieu, C., {de Freitas}, N., Doucet, A., and Jordan, M.~I.
+\newblock An {{Introduction}} to {{MCMC}} for {{Machine Learning}}.
+\newblock \emph{Machine Learning}, 50\penalty0 (1):\penalty0 5--43, January 2003.
+\newblock ISSN 1573-0565.
+\newblock \doi{10.1023/A:1020281327116}.
+
+\bibitem[Anselmi et~al.(2016)Anselmi, Rosasco, and Poggio]{anselmi2016invariance}
+Anselmi, F., Rosasco, L., and Poggio, T.
+\newblock On invariance and selectivity in representation learning.
+\newblock \emph{Information and Inference: A Journal of the IMA}, 5\penalty0 (2):\penalty0 134--158, 2016.
+
+\bibitem[Arjovsky et~al.(2019)Arjovsky, Bottou, Gulrajani, and {Lopez-Paz}]{arjovskyInvariantRiskMinimization2019}
+Arjovsky, M., Bottou, L., Gulrajani, I., and {Lopez-Paz}, D.
+\newblock Invariant {{Risk Minimization}}.
+\newblock \emph{ArXiv}, July 2019.
+
+\bibitem[Bach \& Jordan(2005)Bach and Jordan]{bach2005probabilistic}
+Bach, F.~R. and Jordan, M.~I.
+\newblock A probabilistic interpretation of canonical correlation analysis.
+\newblock 2005.
+
+\bibitem[Bahadur et~al.()]{bahadur1954sufficiency}
+Bahadur, R.~R. et~al.
+\newblock Sufficiency and statistical decision functions.
+
+\bibitem[Beal(2003)]{bealVariationalAlgorithmsApproximate2003}
+Beal, M.~J.
+\newblock \emph{Variational Algorithms for Approximate {{Bayesian}} Inference}.
+\newblock PhD thesis, 2003.
+
+\bibitem[{Ben-David} et~al.(2010){Ben-David}, Blitzer, Crammer, Kulesza, Pereira, and Vaughan]{ben2010theory}
+{Ben-David}, S., Blitzer, J., Crammer, K., Kulesza, A., Pereira, F., and Vaughan, J.~W.
+\newblock A theory of learning from different domains.
+\newblock \emph{Machine learning}, 79\penalty0 (1-2):\penalty0 151--175, 2010.
+
+\bibitem[Benaim \& Wolf(2018)Benaim and Wolf]{benaim2018one}
+Benaim, S. and Wolf, L.
+\newblock One-shot unsupervised cross domain translation.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  2104--2114, 2018.
+
+\bibitem[Bengio et~al.(2014)Bengio, Courville, and Vincent]{bengioRepresentationLearningReview2014}
+Bengio, Y., Courville, A., and Vincent, P.
+\newblock Representation {{Learning}}: {{A Review}} and {{New Perspectives}}, April 2014.
+
+\bibitem[Bishop(2006)]{bishopPatternRecognitionMachine2006}
+Bishop, C.
+\newblock Pattern {{Recognition}} and {{Machine Learning}}.
+\newblock January 2006.
+
+\bibitem[Blei et~al.(2017)Blei, Kucukelbir, and McAuliffe]{bleiVariationalInferenceReview2017}
+Blei, D.~M., Kucukelbir, A., and McAuliffe, J.~D.
+\newblock Variational {{Inference}}: {{A Review}} for {{Statisticians}}.
+\newblock \emph{Journal of the American Statistical Association}, 112\penalty0 (518):\penalty0 859--877, April 2017.
+\newblock ISSN 0162-1459.
+\newblock \doi{10.1080/01621459.2017.1285773}.
+
+\bibitem[Bouchacourt et~al.(2017)Bouchacourt, Tomioka, and Nowozin]{bouchacourt2017multi}
+Bouchacourt, D., Tomioka, R., and Nowozin, S.
+\newblock Multi-level variational autoencoder: {{Learning}} disentangled representations from grouped observations.
+\newblock \emph{arXiv preprint arXiv:1705.08841}, 2017.
+
+\bibitem[Browne(1979)]{browne1979maximum}
+Browne, M.~W.
+\newblock The maximum-likelihood solution in inter-battery factor analysis.
+\newblock \emph{British Journal of Mathematical and Statistical Psychology}, 32\penalty0 (1):\penalty0 75--86, 1979.
+
+\bibitem[Bruna \& Mallat(2013)Bruna and Mallat]{bruna2013invariant}
+Bruna, J. and Mallat, S.
+\newblock Invariant scattering convolution networks.
+\newblock \emph{IEEE transactions on pattern analysis and machine intelligence}, 35\penalty0 (8):\penalty0 1872--1886, 2013.
+
+\bibitem[Burgess et~al.(2018)Burgess, Higgins, Pal, Matthey, Watters, Desjardins, and Lerchner]{burgess2018understanding}
+Burgess, C.~P., Higgins, I., Pal, A., Matthey, L., Watters, N., Desjardins, G., and Lerchner, A.
+\newblock Understanding disentangling in {{$\beta$}}-{{VAE}}.
+\newblock \emph{arXiv preprint arXiv:1804.03599}, 2018.
+
+\bibitem[Chen \& Batmanghelich(2020)Chen and Batmanghelich]{chenWeaklySupervisedDisentanglement2020}
+Chen, J. and Batmanghelich, K.
+\newblock Weakly {{Supervised Disentanglement}} by {{Pairwise Similarities}}.
+\newblock \emph{AAAI Conference on Artificial Intelligence}, 2020.
+
+\bibitem[Chen et~al.(2018)Chen, Li, Grosse, and Duvenaud]{chen2018isolating}
+Chen, T.~Q., Li, X., Grosse, R.~B., and Duvenaud, D.~K.
+\newblock Isolating sources of disentanglement in variational autoencoders.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  2610--2620, 2018.
+
+\bibitem[Choi et~al.(2018)Choi, Choi, Kim, Ha, Kim, and Choo]{choi2018stargan}
+Choi, Y., Choi, M., Kim, M., Ha, J.-W., Kim, S., and Choo, J.
+\newblock Stargan: {{Unified}} generative adversarial networks for multi-domain image-to-image translation.
+\newblock In \emph{Proceedings of the {{IEEE}} Conference on Computer Vision and Pattern Recognition}, pp.\  8789--8797, 2018.
+
+\bibitem[Cover(1999)]{cover1999elements}
+Cover, T.~M.
+\newblock \emph{Elements of Information Theory}.
+\newblock John Wiley \& Sons, 1999.
+
+\bibitem[Damianou et~al.(2016)Damianou, Lawrence, and Ek]{damianou2016multi}
+Damianou, A., Lawrence, N.~D., and Ek, C.~H.
+\newblock Multi-view learning as a nonparametric nonlinear inter-battery factor analysis.
+\newblock \emph{arXiv preprint arXiv:1604.04939}, 2016.
+
+\bibitem[Dempster et~al.(1977)Dempster, Laird, and Rubin]{dempsterMaximumLikelihoodIncomplete1977}
+Dempster, A.~P., Laird, N.~M., and Rubin, D.~B.
+\newblock Maximum {{Likelihood}} from {{Incomplete Data}} via the {{EM Algorithm}}.
+\newblock \emph{Journal of the Royal Statistical Society. Series B (Methodological)}, 39\penalty0 (1):\penalty0 1--38, 1977.
+\newblock ISSN 0035-9246.
+
+\bibitem[Dodwell(1983)]{dodwell1983lie}
+Dodwell, P.~C.
+\newblock The {{Lie}} transformation group model of visual perception.
+\newblock \emph{Perception \& Psychophysics}, 34\penalty0 (1):\penalty0 1--16, 1983.
+
+\bibitem[Ek et~al.(2008)Ek, Torr, and Lawrence]{ek2008gp}
+Ek, C.~H., Torr, P.~H., and Lawrence, N.~D.
+\newblock {{GP-LVM}} for data consolidation.
+\newblock 2008.
+
+\bibitem[Galanti et~al.(2018{\natexlab{a}})Galanti, Benaim, and Wolf]{galanti2018generalization}
+Galanti, T., Benaim, S., and Wolf, L.
+\newblock Generalization bounds for unsupervised cross-domain mapping with wgans.
+\newblock \emph{arXiv preprint arXiv:1807.08501}, 2018{\natexlab{a}}.
+
+\bibitem[Galanti et~al.(2018{\natexlab{b}})Galanti, Wolf, and Benaim]{galanti2018role}
+Galanti, T., Wolf, L., and Benaim, S.
+\newblock The role of minimal complexity functions in unsupervised learning of semantic mappings.
+\newblock In \emph{International Conference on Learning Representations}, 2018{\natexlab{b}}.
+
+\bibitem[Ganin \& Lempitsky(2015)Ganin and Lempitsky]{ganin2015unsupervised}
+Ganin, Y. and Lempitsky, V.
+\newblock Unsupervised domain adaptation by backpropagation.
+\newblock In \emph{International Conference on Machine Learning}, pp.\  1180--1189. PMLR, 2015.
+
+\bibitem[Ganin et~al.(2016)Ganin, Ustinova, Ajakan, Germain, Larochelle, Laviolette, Marchand, and Lempitsky]{ganin2016domain}
+Ganin, Y., Ustinova, E., Ajakan, H., Germain, P., Larochelle, H., Laviolette, F., Marchand, M., and Lempitsky, V.
+\newblock Domain-adversarial training of neural networks.
+\newblock \emph{The Journal of Machine Learning Research}, 17\penalty0 (1):\penalty0 2096--2030, 2016.
+
+\bibitem[Ghahramani \& Beal(2000)Ghahramani and Beal]{ghahramani2000variational}
+Ghahramani, Z. and Beal, M.~J.
+\newblock Variational inference for {{Bayesian}} mixtures of factor analysers.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  449--455, 2000.
+
+\bibitem[Gibson(2014)]{gibson2014ecological}
+Gibson, J.~J.
+\newblock \emph{The Ecological Approach to Visual Perception: Classic Edition}.
+\newblock Psychology Press, 2014.
+
+\bibitem[{Gonzalez-Garcia} et~al.(2018){Gonzalez-Garcia}, {van de Weijer}, and Bengio]{gonzalez2018image}
+{Gonzalez-Garcia}, A., {van de Weijer}, J., and Bengio, Y.
+\newblock Image-to-image translation for cross-domain disentanglement.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  1287--1298, 2018.
+
+\bibitem[Goodfellow et~al.(2014)Goodfellow, {Pouget-Abadie}, Mirza, Xu, {Warde-Farley}, Ozair, Courville, and Bengio]{goodfellow2014generative}
+Goodfellow, I., {Pouget-Abadie}, J., Mirza, M., Xu, B., {Warde-Farley}, D., Ozair, S., Courville, A., and Bengio, Y.
+\newblock Generative adversarial nets.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  2672--2680, 2014.
+
+\bibitem[Goodfellow et~al.(2016)Goodfellow, Bengio, and Courville]{goodfellowDeepLearning2016}
+Goodfellow, I., Bengio, Y., and Courville, A.
+\newblock \emph{Deep {{Learning}}}.
+\newblock MIT Press, 2016.
+
+\bibitem[Gretton et~al.(2007)Gretton, Borgwardt, Rasch, Sch{\"o}lkopf, and Smola]{gretton2007kernel}
+Gretton, A., Borgwardt, K., Rasch, M., Sch{\"o}lkopf, B., and Smola, A.~J.
+\newblock A kernel method for the two-sample-problem.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  513--520, 2007.
+
+\bibitem[Hardoon et~al.(2004)Hardoon, Szedmak, and {Shawe-Taylor}]{hardoon2004canonical}
+Hardoon, D.~R., Szedmak, S., and {Shawe-Taylor}, J.
+\newblock Canonical correlation analysis: {{An}} overview with application to learning methods.
+\newblock \emph{Neural computation}, 16\penalty0 (12):\penalty0 2639--2664, 2004.
+
+\bibitem[Hardt et~al.(2016)Hardt, Price, and Srebro]{hardt2016equality}
+Hardt, M., Price, E., and Srebro, N.
+\newblock Equality of opportunity in supervised learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  3315--3323, 2016.
+
+\bibitem[Higgins et~al.(2016)Higgins, Matthey, Pal, Burgess, Glorot, Botvinick, Mohamed, and Lerchner]{higgins2016beta}
+Higgins, I., Matthey, L., Pal, A., Burgess, C., Glorot, X., Botvinick, M., Mohamed, S., and Lerchner, A.
+\newblock Beta-vae: {{Learning}} basic visual concepts with a constrained variational framework.
+\newblock 2016.
+
+\bibitem[Higgins et~al.(2018)Higgins, Amos, Pfau, Racaniere, Matthey, Rezende, and Lerchner]{higginsDefinitionDisentangledRepresentations2018}
+Higgins, I., Amos, D., Pfau, D., Racaniere, S., Matthey, L., Rezende, D., and Lerchner, A.
+\newblock Towards a {{Definition}} of {{Disentangled Representations}}, December 2018.
+
+\bibitem[Hosoya(2019)]{hosoyaGroupbasedLearningDisentangled2019}
+Hosoya, H.
+\newblock Group-based {{Learning}} of {{Disentangled Representations}} with {{Generalizability}} for {{Novel Contents}}.
+\newblock In \emph{Proceedings of the {{Twenty-Eighth International Joint Conference}} on {{Artificial Intelligence}}}, pp.\  2506--2513, Macao, China, August 2019. International Joint Conferences on Artificial Intelligence Organization.
+\newblock ISBN 978-0-9992411-4-1.
+\newblock \doi{10.24963/ijcai.2019/348}.
+
+\bibitem[Hotelling(1992)]{hotelling1992relations}
+Hotelling, H.
+\newblock Relations between two sets of variates.
+\newblock In \emph{Breakthroughs in Statistics}, pp.\  162--190. Springer, 1992.
+
+\bibitem[Huang et~al.(2018)Huang, Liu, Belongie, and Kautz]{huang2018multimodal}
+Huang, X., Liu, M.-Y., Belongie, S., and Kautz, J.
+\newblock Multimodal unsupervised image-to-image translation.
+\newblock In \emph{Proceedings of the European Conference on Computer Vision ({{ECCV}})}, pp.\  172--189, 2018.
+
+\bibitem[Khemakhem et~al.(2020)Khemakhem, Kingma, Monti, and Hyvarinen]{khemakhemVariationalAutoencodersNonlinear2020}
+Khemakhem, I., Kingma, D., Monti, R., and Hyvarinen, A.
+\newblock Variational {{Autoencoders}} and {{Nonlinear ICA}}: {{A Unifying Framework}}.
+\newblock In \emph{Proceedings of the {{Twenty Third International Conference}} on {{Artificial Intelligence}} and {{Statistics}}}, pp.\  2207--2217. PMLR, June 2020.
+
+\bibitem[Kim \& Mnih(2018)Kim and Mnih]{kim2018disentangling}
+Kim, H. and Mnih, A.
+\newblock Disentangling by factorising.
+\newblock In \emph{Proceedings of the 35rd International Conference on Machine Learning}, volume~80, pp.\  2649--2658, 2018.
+
+\bibitem[Kim et~al.(2017)Kim, Cha, Kim, Lee, and Kim]{kim2017learning}
+Kim, T., Cha, M., Kim, H., Lee, J.~K., and Kim, J.
+\newblock Learning to discover cross-domain relations with generative adversarial networks.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine Learning-Volume 70}, pp.\  1857--1865. JMLR. org, 2017.
+
+\bibitem[Kingma \& Welling(2014)Kingma and Welling]{kingma2013auto}
+Kingma, D.~P. and Welling, M.
+\newblock Auto-encoding variational bayes.
+\newblock \emph{2nd International Conference on Learning Representations, ICLR 2019}, 2014.
+
+\bibitem[Klami et~al.(2013)Klami, Virtanen, and Kaski]{klami2013bayesian}
+Klami, A., Virtanen, S., and Kaski, S.
+\newblock Bayesian canonical correlation analysis.
+\newblock \emph{Journal of Machine Learning Research}, 14\penalty0 (Apr):\penalty0 965--1003, 2013.
+
+\bibitem[Kulkarni et~al.(2015)Kulkarni, Whitney, Kohli, and Tenenbaum]{kulkarniDeepConvolutionalInverse2015}
+Kulkarni, T.~D., Whitney, W.~F., Kohli, P., and Tenenbaum, J.~B.
+\newblock Deep {{Convolutional Inverse Graphics Network}}.
+\newblock In \emph{{{NIPS}}}, 2015.
+
+\bibitem[Kumar et~al.(2017)Kumar, Sattigeri, and Balakrishnan]{kumar2017variational}
+Kumar, A., Sattigeri, P., and Balakrishnan, A.
+\newblock Variational inference of disentangled latent concepts from unlabeled observations.
+\newblock \emph{arXiv preprint arXiv:1711.00848}, 2017.
+
+\bibitem[Lawrence(2004)]{lawrence2004gaussian}
+Lawrence, N.~D.
+\newblock Gaussian process latent variable models for visualisation of high dimensional data.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  329--336, 2004.
+
+\bibitem[Lee et~al.(2018)Lee, Tseng, Huang, Singh, and Yang]{lee2018diverse}
+Lee, H.-Y., Tseng, H.-Y., Huang, J.-B., Singh, M., and Yang, M.-H.
+\newblock Diverse image-to-image translation via disentangled representations.
+\newblock In \emph{Proceedings of the European Conference on Computer Vision ({{ECCV}})}, pp.\  35--51, 2018.
+
+\bibitem[Liu et~al.(2023)Liu, Wang, Cui, and Namkoong]{liuNeedLanguageDescribing2023}
+Liu, J., Wang, T., Cui, P., and Namkoong, H.
+\newblock On the {{Need}} for a {{Language Describing Distribution Shifts}}: {{Illustrations}} on {{Tabular Datasets}}.
+\newblock In \emph{Thirty-Seventh {{Conference}} on {{Neural Information Processing Systems Datasets}} and {{Benchmarks Track}}}, November 2023.
+
+\bibitem[Liu et~al.(2017)Liu, Breuel, and Kautz]{liu2017unsupervised}
+Liu, M.-Y., Breuel, T., and Kautz, J.
+\newblock Unsupervised image-to-image translation networks.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  700--708, 2017.
+
+\bibitem[Liu et~al.(2019)Liu, Huang, Mallya, Karras, Aila, Lehtinen, and Kautz]{liu2019few}
+Liu, M.-Y., Huang, X., Mallya, A., Karras, T., Aila, T., Lehtinen, J., and Kautz, J.
+\newblock Few-shot unsupervised image-to-image translation.
+\newblock In \emph{{{IEEE}} International Conference on Computer Vision ({{ICCV}})}, 2019.
+
+\bibitem[Locatello et~al.(2019)Locatello, Bauer, Lucic, Raetsch, Gelly, Sch{\"o}lkopf, and Bachem]{locatelloChallengingCommonAssumptions2019}
+Locatello, F., Bauer, S., Lucic, M., Raetsch, G., Gelly, S., Sch{\"o}lkopf, B., and Bachem, O.
+\newblock Challenging {{Common Assumptions}} in the {{Unsupervised Learning}} of {{Disentangled Representations}}.
+\newblock In \emph{Proceedings of the 36th {{International Conference}} on {{Machine Learning}}}, pp.\  4114--4124. PMLR, May 2019.
+
+\bibitem[Locatello et~al.(2020)Locatello, Poole, R{\"a}tsch, Scholkopf, Bachem, and Tschannen]{locatelloWeaklySupervisedDisentanglementCompromises2020}
+Locatello, F., Poole, B., R{\"a}tsch, G., Scholkopf, B., Bachem, O., and Tschannen, M.
+\newblock Weakly-{{Supervised Disentanglement Without Compromises}}.
+\newblock In \emph{International {{Conference}} on {{Machine Learning}}}, February 2020.
+
+\bibitem[Louizos et~al.(2016)Louizos, Swersky, Li, Welling, and Zemel]{louizos2016variational}
+Louizos, C., Swersky, K., Li, Y., Welling, M., and Zemel, R.~S.
+\newblock The variational fair autoencoder.
+\newblock In \emph{{{ICLR}}}, 2016.
+
+\bibitem[Ma(2022)]{maAdvancesBayesianMachine2022}
+Ma, C.
+\newblock Advances in {{Bayesian Machine Learning}}: {{From Uncertainty}} to {{Decision Making}}.
+\newblock November 2022.
+
+\bibitem[Magliacane et~al.(2018)Magliacane, {van Ommen}, Claassen, Bongers, Versteeg, and Mooij]{magliacane2018domain}
+Magliacane, S., {van Ommen}, T., Claassen, T., Bongers, S., Versteeg, P., and Mooij, J.~M.
+\newblock Domain adaptation by using causal inference to predict invariant conditional distributions.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  10846--10856, 2018.
+
+\bibitem[Makhzani et~al.(2015)Makhzani, Shlens, Jaitly, Goodfellow, and Frey]{makhzani2015adversarial}
+Makhzani, A., Shlens, J., Jaitly, N., Goodfellow, I., and Frey, B.
+\newblock Adversarial autoencoders.
+\newblock \emph{arXiv preprint arXiv:1511.05644}, 2015.
+
+\bibitem[Mathieu et~al.(2019)Mathieu, Rainforth, Siddharth, and Teh]{mathieu2019disentangling}
+Mathieu, E., Rainforth, T., Siddharth, N., and Teh, Y.~W.
+\newblock Disentangling disentanglement in variational autoencoders.
+\newblock In \emph{International Conference on Machine Learning}, pp.\  4402--4412, 2019.
+
+\bibitem[Mirza \& Osindero(2014)Mirza and Osindero]{mirza2014conditional}
+Mirza, M. and Osindero, S.
+\newblock Conditional generative adversarial nets.
+\newblock \emph{arXiv preprint arXiv:1411.1784}, 2014.
+
+\bibitem[Mita et~al.(2021)Mita, Filippone, and Michiardi]{mitaIdentifiableDoubleVAE2021}
+Mita, G., Filippone, M., and Michiardi, P.
+\newblock An {{Identifiable Double VAE For Disentangled Representations}}.
+\newblock In \emph{International {{Conference}} on {{Machine Learning}}}, 2021.
+
+\bibitem[Nemeth(2020)]{nemethAdversarialDisentanglementGrouped2020}
+Nemeth, J.
+\newblock Adversarial {{Disentanglement}} with {{Grouped Observations}}.
+\newblock In \emph{Proceedings of the {{AAAI Conference}} on {{Artificial Intelligence}}}, volume~34, pp.\  10243--10250, April 2020.
+\newblock \doi{10.1609/aaai.v34i06.6586}.
+
+\bibitem[Pavlou et~al.(2015)Pavlou, Ambler, Seaman, Guttmann, Elliott, King, and Omar]{pavlouHowDevelopMore2015}
+Pavlou, M., Ambler, G., Seaman, S.~R., Guttmann, O., Elliott, P., King, M., and Omar, R.~Z.
+\newblock How to develop a more accurate risk prediction model when there are few events.
+\newblock \emph{BMJ}, 351:\penalty0 h3868, August 2015.
+\newblock ISSN 1756-1833.
+\newblock \doi{10.1136/bmj.h3868}.
+
+\bibitem[Pearl(2009)]{pearl2009causality}
+Pearl, J.
+\newblock \emph{Causality}.
+\newblock Cambridge university press, 2009.
+
+\bibitem[Peters et~al.(2016)Peters, B{\"u}hlmann, and Meinshausen]{petersCausalInferenceUsing2016}
+Peters, J., B{\"u}hlmann, P., and Meinshausen, N.
+\newblock Causal {{Inference}} by using {{Invariant Prediction}}: {{Identification}} and {{Confidence Intervals}}.
+\newblock \emph{Journal of the Royal Statistical Society Series B: Statistical Methodology}, 78\penalty0 (5):\penalty0 947--1012, November 2016.
+\newblock ISSN 1369-7412.
+\newblock \doi{10.1111/rssb.12167}.
+
+\bibitem[Reed et~al.(2015)Reed, Zhang, Zhang, and Lee]{reedDeepVisualAnalogyMaking2015}
+Reed, S.~E., Zhang, Y., Zhang, Y., and Lee, H.
+\newblock Deep {{Visual Analogy-Making}}.
+\newblock In \emph{{{NIPS}}}, 2015.
+
+\bibitem[Rezende et~al.(2014)Rezende, Mohamed, and Wierstra]{rezende2014stochastic}
+Rezende, D.~J., Mohamed, S., and Wierstra, D.
+\newblock Stochastic backpropagation and approximate inference in deep generative models.
+\newblock In \emph{Proceedings of the 31st International Conference on Machine Learning}, volume~32, pp.\  1278--1286. PMLR, 2014.
+
+\bibitem[Ronneberger et~al.(2015)Ronneberger, Fischer, and Brox]{ronneberger2015u}
+Ronneberger, O., Fischer, P., and Brox, T.
+\newblock U-net: {{Convolutional}} networks for biomedical image segmentation.
+\newblock In \emph{International {{Conference}} on {{Medical}} Image Computing and Computer-Assisted Intervention}, pp.\  234--241. Springer, 2015.
+
+\bibitem[Royer et~al.(2020)Royer, Bousmalis, Gouws, Bertsch, Mosseri, Cole, and Murphy]{royer2020xgan}
+Royer, A., Bousmalis, K., Gouws, S., Bertsch, F., Mosseri, I., Cole, F., and Murphy, K.
+\newblock Xgan: {{Unsupervised}} image-to-image translation for many-to-many mappings.
+\newblock In \emph{Domain Adaptation for Visual Understanding}, pp.\  33--49. Springer, 2020.
+
+\bibitem[Sch{\"o}lkopf et~al.(2012)Sch{\"o}lkopf, Janzing, Peters, Sgouritsa, Zhang, and Mooij]{scholkopfCausalAnticausalLearning2012}
+Sch{\"o}lkopf, B., Janzing, D., Peters, J., Sgouritsa, E., Zhang, K., and Mooij, J.
+\newblock On causal and anticausal learning.
+\newblock In \emph{Proceedings of the 29th {{International Coference}} on {{International Conference}} on {{Machine Learning}}}, {{ICML}}'12, pp.\  459--466, Madison, WI, USA, June 2012. Omnipress.
+\newblock ISBN 978-1-4503-1285-1.
+
+\bibitem[Shon et~al.(2006)Shon, Grochow, Hertzmann, and Rao]{shon2006learning}
+Shon, A., Grochow, K., Hertzmann, A., and Rao, R.~P.
+\newblock Learning shared latent structure for image synthesis and robotic imitation.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  1233--1240, 2006.
+
+\bibitem[Shu et~al.(2019)Shu, Chen, Kumar, Ermon, and Poole]{shuWeaklySupervisedDisentanglement2019}
+Shu, R., Chen, Y., Kumar, A., Ermon, S., and Poole, B.
+\newblock Weakly {{Supervised Disentanglement}} with {{Guarantees}}.
+\newblock In \emph{{{ArXiv}}}, October 2019.
+
+\bibitem[{Shwartz-Ziv} \& Tishby(2017){Shwartz-Ziv} and Tishby]{shwartz2017opening}
+{Shwartz-Ziv}, R. and Tishby, N.
+\newblock Opening the black box of deep neural networks via information.
+\newblock \emph{arXiv preprint arXiv:1703.00810}, 2017.
+
+\bibitem[Soatto \& Chiuso(2014)Soatto and Chiuso]{soatto2014visual}
+Soatto, S. and Chiuso, A.
+\newblock Visual representations: {{Defining}} properties and deep approximations.
+\newblock \emph{arXiv preprint arXiv:1411.7676}, 2014.
+
+\bibitem[Sohn et~al.(2019)Sohn, Shang, Yu, and Chandraker]{sohn2018unsupervised}
+Sohn, K., Shang, W., Yu, X., and Chandraker, M.
+\newblock Unsupervised domain adaptation for distance metric learning.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+
+\bibitem[Stojanov et~al.(2021)Stojanov, Li, Gong, Cai, Carbonell, and Zhang]{stojanovDomainAdaptationInvariant2021}
+Stojanov, P., Li, Z., Gong, M., Cai, R., Carbonell, J., and Zhang, K.
+\newblock Domain {{Adaptation}} with {{Invariant Representation Learning}}: {{What Transformations}} to {{Learn}}?
+\newblock In \emph{Advances in {{Neural Information Processing Systems}}}, volume~34, pp.\  24791--24803. Curran Associates, Inc., 2021.
+
+\bibitem[Sundaramoorthi et~al.(2009)Sundaramoorthi, Petersen, Varadarajan, and Soatto]{sundaramoorthi2009set}
+Sundaramoorthi, G., Petersen, P., Varadarajan, {\relax VS}., and Soatto, S.
+\newblock On the set of images modulo viewpoint and contrast changes.
+\newblock In \emph{2009 {{IEEE}} Conference on Computer Vision and Pattern Recognition}, pp.\  832--839. IEEE, 2009.
+
+\bibitem[Taigman et~al.(2017)Taigman, Polyak, and Wolf]{taigman2016unsupervised}
+Taigman, Y., Polyak, A., and Wolf, L.
+\newblock Unsupervised cross-domain image generation.
+\newblock In \emph{5th International Conference on Learning Representations, {{ICLR}}}, 2017.
+
+\bibitem[Tenenbaum \& Freeman(2000)Tenenbaum and Freeman]{tenenbaum2000separating}
+Tenenbaum, J.~B. and Freeman, W.~T.
+\newblock Separating style and content with bilinear models.
+\newblock \emph{Neural computation}, 12\penalty0 (6):\penalty0 1247--1283, 2000.
+
+\bibitem[Tipping \& Bishop(1999)Tipping and Bishop]{tipping1999probabilistic}
+Tipping, M.~E. and Bishop, C.~M.
+\newblock Probabilistic principal component analysis.
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical Methodology)}, 61\penalty0 (3):\penalty0 611--622, 1999.
+
+\bibitem[Tishby \& Zaslavsky(2015)Tishby and Zaslavsky]{tishby2015deep}
+Tishby, N. and Zaslavsky, N.
+\newblock Deep learning and the information bottleneck principle.
+\newblock In \emph{2015 {{IEEE}} Information Theory Workshop ({{ITW}})}, pp.\  1--5. IEEE, 2015.
+
+\bibitem[Tishby et~al.(2000)Tishby, Pereira, and Bialek]{tishby2000information}
+Tishby, N., Pereira, F.~C., and Bialek, W.
+\newblock The information bottleneck method.
+\newblock \emph{arXiv preprint physics/0004057}, 2000.
+
+\bibitem[Tolstikhin et~al.(2017)Tolstikhin, Bousquet, Gelly, and Schoelkopf]{tolstikhin2017wasserstein}
+Tolstikhin, I., Bousquet, O., Gelly, S., and Schoelkopf, B.
+\newblock Wasserstein auto-encoders.
+\newblock \emph{arXiv preprint arXiv:1711.01558}, 2017.
+
+\bibitem[Tschannen et~al.(2018)Tschannen, Bachem, and Lucic]{tschannenRecentAdvancesAutoencoderBased2018}
+Tschannen, M., Bachem, O., and Lucic, M.
+\newblock Recent {{Advances}} in {{Autoencoder-Based Representation Learning}}.
+\newblock \emph{ArXiv}, December 2018.
+
+\bibitem[Tucker(1958)]{tucker1958inter}
+Tucker, L.~R.
+\newblock An inter-battery method of factor analysis.
+\newblock \emph{Psychometrika}, 23\penalty0 (2):\penalty0 111--136, 1958.
+
+\bibitem[Ver~Steeg \& Galstyan(2014)Ver~Steeg and Galstyan]{ver2014discovering}
+Ver~Steeg, G. and Galstyan, A.
+\newblock Discovering structure in high-dimensional data through correlation explanation.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  577--585, 2014.
+
+\bibitem[{von K{\"u}gelgen} et~al.(2021){von K{\"u}gelgen}, Sharma, Gresele, Brendel, Sch{\"o}lkopf, Besserve, and Locatello]{vonkugelgenSelfSupervisedLearningData2021}
+{von K{\"u}gelgen}, J., Sharma, Y., Gresele, L., Brendel, W., Sch{\"o}lkopf, B., Besserve, M., and Locatello, F.
+\newblock Self-{{Supervised Learning}} with {{Data Augmentations Provably Isolates Content}} from {{Style}}.
+\newblock In \emph{Advances in {{Neural Information Processing Systems}}}, volume~34, pp.\  16451--16467. Curran Associates, Inc., 2021.
+
+\bibitem[Zemel et~al.(2013)Zemel, Wu, Swersky, Pitassi, and Dwork]{zemel2013learning}
+Zemel, R., Wu, Y., Swersky, K., Pitassi, T., and Dwork, C.
+\newblock Learning fair representations.
+\newblock In \emph{International Conference on Machine Learning}, pp.\  325--333, 2013.
+
+\bibitem[Zhang et~al.(2013)Zhang, Sch{\"o}lkopf, Muandet, and Wang]{zhangDomainAdaptationTarget2013}
+Zhang, K., Sch{\"o}lkopf, B., Muandet, K., and Wang, Z.
+\newblock Domain adaptation under target and conditional shift.
+\newblock In \emph{Proceedings of the 30th {{International Conference}} on {{International Conference}} on {{Machine Learning}} - {{Volume}} 28}, {{ICML}}'13, pp.\  III--819--III--827, Atlanta, GA, USA, June 2013. JMLR.org.
+
+\bibitem[Zhu et~al.(2017)Zhu, Park, Isola, and Efros]{zhu2017unpaired}
+Zhu, J.-Y., Park, T., Isola, P., and Efros, A.~A.
+\newblock Upaired image-to-image translation using cycle-consistent adversarial networks.
+\newblock In \emph{Proceedings of the {{IEEE}} International Conference on Computer Vision}, pp.\  2223--2232, 2017.
+
+\end{thebibliography}

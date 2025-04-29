@@ -24,13 +24,15 @@
 %
 % For more info see `README.md`
 % \documentclass[times]{cam-thesis}
-\documentclass[a4paper,12pt,twoside,openright]{report}
+\documentclass[a4paper,12pt]{article}
 
 % Citations using numbers
 % \usepackage[numbers]{natbib}
 
 \usepackage[style=authoryear]{biblatex} %Imports biblatex package
-\addbibresource{../bibliography.bib}
+\addbibresource{bibliography.bib}
+\addbibresource{main.bib}
+\addbibresource{zack_thesis.bib}
 
 \usepackage{xcolor}
 \usepackage{caption}
@@ -43,6 +45,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{graphicx}
+\usepackage{parskip}
 
 
 % \usepackage[T1]{fontenc}
@@ -68,6 +71,7 @@
 
 \newcommand{\crit}[1]{\textcolor{red}{#1}}
 \newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand{\fzero}{F\textsubscript{0}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Thesis meta-information
@@ -77,7 +81,7 @@
 \title{\bf Groups of high-dimensional data}
 
 %% The full name of the author (e.g.: James Smith):
-\author{Dan Andrei Iliescu}
+\author{}
 
 %% College affiliation:
 % \college{St Edmund's College}
@@ -123,8 +127,8 @@
 % \submissionnotice{A badass thesis submitted on time for the Degree of PhD}
 
 %% Declaration date:
-\date{June, 2023}
-\title{Missing Data Imputation}
+\date{}
+\title{Why does amortised imputation fail?}
 
 %% PDF meta-info:
 % \subjectline{Computer Science}
@@ -149,82 +153,91 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Thesis body:
 %%
-\chapter{Function approximation}
 
-\section{Identifiability of amortised function approximation}
+\maketitle
 
-\paragraph{Theorem.} Let $P$ be a distribution over $Y \in \mathbb{R}^D$, $O \in \mathbb{R}^D$, $M \in \{0,1\}^D$. Let $Q$ be an equivalent distribution $Y, O, O' \in \mathbb{R}^D$, $M \in \{0,1\}^D$. 
+\begin{abstract}
+   This is an example problem illustrating that training an imputation network with maximum likelihood estimation on Bernoulli random missingness won't converge to the correct solution when the capacity of the network is limited; i.e., the imputation network won't generalise well to different patterns of missingness. Instead, I propose an alternative training objective to maximum likelihood that encourages good generalisation across all patterns of missingness even when the network capacity is limited.
+\end{abstract}
 
-If 
+\section{Setup} 
 
-$$\forall y, o, o', ~ Q_{Y|O}(y|o) ~ Q_{Y|O}(y|o') = \frac{P_{Y|O,O'}(y | o, o') P_Y (y) P_{O, O'} (o, o')}{P_{O} (o) ~ P_{O'} (o')}$$
+Suppose we want to transmit a 2-bit message $Y \in \{A,B\}^2$ through a 1-bit channel $Z$. Below is a table recording the probability of every possible message. The entry $P_{ij}$ records the probability $P(Y_1 = i, Y_2 = j)$.
 
-Another way to say this is $\forall o, o', ~ \frac{Q(o' | o) Q(o | o')}{P(o, o')} = \frac{P(o, o')}{P(o) P(o')}$
+\begin{tabular}{c c c}
+   & A & B \\
+   A & 0.4 & 0.1 \\
+   B & 0.2 & 0.3
+\end{tabular}
 
-and 
+Additionally, suppose that the message always has 1 missing bit (not necessarily the same one). Below is a table recording the conditional probability of the full message $Y$ given a partial observation $X \in \{A,B,?\}^2$ controlled by the missingness pattern $M \in \{0,1\}$.
 
-if $\forall y, ~ Q_Y (y) = P_Y (y)$, 
+\begin{tabular}{c c c c}
+   $M$ & $X$ & $Y$ & $P(Y | X)$ \\ \hline
+   $0$ & $(A,?)$ & $(A,A)$ & 0.8 \\
+    &  & $(A,B)$ & 0.2 \\
+    & $(B,?)$ & $(B,A)$ & 0.4 \\
+    & & $(B,B)$ & 0.6 \\
+   $1$ & $(?,A)$ & $(A,A)$ & 0.67 \\
+    &  & $(B,A)$ & 0.33 \\
+    & $(?,B)$ & $(A,B)$ & 0.25 \\
+    & & $(B,B)$ & 0.75 \\
+\end{tabular}
 
-then $\forall y,o, ~ Q_{Y|O = o} (y) = P_{Y | O = o} (y)$.
+We assume that $M$ and $Y$ are independent (missing at random), but we make no other assumptions about $P(M)$ at this stage.
 
-\paragraph{Proof.} We prove this by contradiction, let's start by assuming the opposite: Assume there exists some distributions \(P\) and \(Q\), and random variables \(A\) and \(B\) such that:
-\begin{enumerate}
-    \item For some values of \(A\) and \(B\), either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\).
-    \item Yet, for all values of \(A\) and \(B\), we have \(\frac{Q(A | B) Q(B | A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)}\).
-\end{enumerate}
+If we had a 2-bit channel $Z$, we could perfectly transmit any partial message:
 
-From Bayes theorem, we have:
-\[P(A|B) = \frac{P(B|A)P(A)}{P(B)}\]
-\[Q(A|B) = \frac{Q(B|A)Q(A)}{Q(B)}\]
+$$Z(X,M) = \left\{
+\begin{array}{ll}
+   (M, X_1), & \textrm{if } M=0 \\
+   (M, X_2), & \textrm{if } M=1
+\end{array} \right.$$
 
-From our assumption, either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\).
+Unfortunately, $Z$ only has 1 bit.
 
-Let's take the first case, \(P(A|B) \neq Q(A|B)\), which means:
-\[\frac{P(B|A)P(A)}{P(B)} \neq \frac{Q(B|A)Q(A)}{Q(B)}\]
+\section{Conventional approach} 
 
-From our assumption's second part:
-\[\frac{Q(A | B) Q(B | A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)}\]
-\[Q(B|A) = \frac{P(A)P(B)}{Q(A)}\]
+We want to find a $Z$ that maximises the likelihood of $Y$. Firstly, we have to assume a distribution on $M$. Assume that $P(M=1) = 0.5$. 
 
-But this leads to a contradiction.
+\begin{tabular}{c c}
+   $X$ & $P(X)$ \\ \hline
+   $P(A,?)$ & 0.25 \\
+   $P(B,?)$ & 0.25 \\
+   $P(?,A)$ & 0.3 \\
+   $P(?,B)$ & 0.2 
+\end{tabular}
 
+The entropy of the partial message is $H(X) = - \sum_{x} P(X=x) \log P(X=x) = \frac{1}{10} (13 + 5 \log_2 5 - 3 \log_2 3)$.
 
+We want $Z$ to maximise the information gain $\mathbb{E}_{P(Y,M,Z)} \log P(Y | Z)$:
 
+\begin{align*}
+   \mathbb{E}_{P(Y,M,Z)} \log P(Y | Z) &= \mathbb{E}_{P(Z | Y,M) P(Y) P(M)} \log P(Y | Z) \\
+   &= \mathbb{E}_{P(Z | Y,M) P(Y) P(M)} \log \sum_{X} P(Y | X) P(X | Z) \\
+\end{align*}
 
-Let's assume there exist probability distributions \(P\) and \(Q\), and for some values of random variables \(A\) and \(B\), we have either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\) and yet for all values of \(A\) and \(B\):
+\crit{[WIP] Here, I will find the function $Z = f(X)$ that maximises the likelihood.}
 
-\[ \frac{Q(A | B) Q(B | A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)} \] (1)
+\section{Problem} 
 
-From Bayes' theorem, we have:
+But how does this coding strategy perform when, in practice, it turns out that $P(M=1)$ is not 0.5, but actually 0.99?
 
-\[ P(A|B) = \frac{P(B|A)P(A)}{P(B)} \]
-\[ Q(A|B) = \frac{Q(B|A)Q(A)}{Q(B)} \]
+\crit{[WIP] Here, I find another function $Z' = g(X)$ that has a higher lower bound likelihood across all probabilities of $M$.}
 
-Plug these into equation (1):
+\section{My training criterion}
 
-\[ \frac{\frac{Q(B|A)Q(A)}{Q(B)} \times Q(B|A)}{P(A, B)} = \frac{P(A, B)}{P(A) P(B)} \]
+\crit{[WIP] Here, I propose my criterion, something like:}
+-
+If
 
-Rearrange and simplify:
+$$\forall Y, \mathbb{E}_{P(M) P(X|Y,M) P(X'|Y, 1-M) P(Z|X, M) P(Z'|X, 1-M)} \left[\log \frac{P(Y | Z) P(Y|Z')}{P(Y)} \frac{P(Y)}{P(X) P(X')}\right] =$$
 
-\[ Q(B|A)^2 \times \frac{Q(A)}{Q(B)} = \frac{P(A, B)^2}{P(A) P(B)} \] \[ (2) \]
+$$= \mathbb{E}_P(Y|X) [\log P(Y|X)]$$
 
-Now, from our assumption, if \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\), then there must be some change in the marginal probabilities of A or B (or both) between P and Q to maintain the relationship in equation (1). 
+then 
 
-Consider the first case, \(P(A|B) \neq Q(A|B)\):
-
-From equation (2), if \(Q(B|A)\) remains constant, then the ratio \(\frac{Q(A)}{Q(B)}\) must change. This indicates that the marginals \(Q(A)\) and/or \(Q(B)\) have changed between P and Q.
-
-Now consider the second case, \(P(B|A) \neq Q(B|A)\):
-
-From equation (2), if the ratio \(\frac{Q(A)}{Q(B)}\) remains constant, then \(Q(B|A)\) itself must change. This also indicates a change in the marginals.
-
-However, this contradicts our assumption in equation (1) that claims the relationship holds for all \(A\) and \(B\). The changing marginals would disrupt this relationship for other values of \(A\) and \(B\).
-
-Thus, by contradiction, the statement is proven: for all \(P, Q\), if there exists \(A, B\) such that either \(P(A|B) \neq Q(A|B)\) or \(P(B|A) \neq Q(B|A)\), then for those \(P, Q\) and for all \(A, B\), we must have \(\frac{Q(A | B) Q(B | A)}{P(A, B)} \neq \frac{P(A, B)}{P(A) P(B)}\).
-
-
-
-
+$$Z = \textrm{argmax}_Z \textrm{min}_M \mathbb{E}_{P(M) P(Y) P(Z | Y, M)} [\log P(Y | Z)]$$
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,507 @@
+%%%%%
+%%
+%% Sample document ``thesis.tex''
+%%
+%% Version: v0.2
+%% Authors: Jean Martina, Rok Strnisa, Matej Urbas
+%% Date: 30/07/2008
+%%
+%% Copyright (c) 2008-2011, Rok Strniša, Jean Martina, Matej Urbas
+%% License: Simplified BSD License
+%% License file: ./License
+%% Original License URL: http://www.freebsd.org/copyright/freebsd-license.html
+%%%%%
+
+% Available documentclass options:
+%
+%   <all `report` document class options, e.g.: `a5paper`>
+%   withindex   - enables the index. New index entries can be added through `\index{my entry}`
+%   glossary    - enables the glossary.
+%   techreport  - typesets the thesis in the technical report format.
+%   firstyr     - formats the document as a first-year report.
+%   times       - uses the `Times` font.
+%   backrefs    - add back references in the Bibliography section
+%
+% For more info see `README.md`
+\documentclass[withindex,glossary,firstyr,times]{cam-thesis}
+
+% Citations using numbers
+\usepackage[numbers]{natbib}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+% \usepackage{subfigure}
+\usepackage{xcolor}
+\usepackage{comment}
+\usepackage{caption}
+\usepackage{subcaption}
+\input{math_commands.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis meta-information
+%%
+
+%% The title of the thesis:
+\title{Latent-space disentanglement\\
+for image manipulation}
+
+%% The full name of the author (e.g.: James Smith):
+\author{Dan Andrei Iliescu}
+
+%% College affiliation:
+\college{St Edmund's College}
+
+%% College shield [optional]:
+% \collegeshield{CollegeShields/Christs}
+% \collegeshield{CollegeShields/Churchill}
+% \collegeshield{CollegeShields/Clare}
+% \collegeshield{CollegeShields/ClareHall}
+% \collegeshield{CollegeShields/CorpusChristi}
+% \collegeshield{CollegeShields/Darwin}
+% \collegeshield{CollegeShields/Downing}
+% \collegeshield{CollegeShields/Emmanuel}
+% \collegeshield{CollegeShields/Fitzwilliam}
+% \collegeshield{CollegeShields/Girton}
+% \collegeshield{CollegeShields/GonCaius}
+% \collegeshield{CollegeShields/Homerton}
+% \collegeshield{CollegeShields/HughesHall}
+% \collegeshield{CollegeShields/Jesus}
+% \collegeshield{CollegeShields/Kings}
+% \collegeshield{CollegeShields/LucyCavendish}
+% \collegeshield{CollegeShields/Magdalene}
+% \collegeshield{CollegeShields/MurrayEdwards}
+% \collegeshield{CollegeShields/Newnham}
+% \collegeshield{CollegeShields/Pembroke}
+% \collegeshield{CollegeShields/Peterhouse}
+% \collegeshield{CollegeShields/Queens}
+% \collegeshield{CollegeShields/Robinson}
+% \collegeshield{CollegeShields/Selwyn}
+% \collegeshield{CollegeShields/SidneySussex}
+% \collegeshield{CollegeShields/StCatharines}
+\collegeshield{CollegeShields/StEdmunds}
+% \collegeshield{CollegeShields/StJohns}
+% \collegeshield{CollegeShields/Trinity}
+% \collegeshield{CollegeShields/TrinityHall}
+% \collegeshield{CollegeShields/Wolfson}
+% \collegeshield{CollegeShields/FitzwilliamRed}
+
+%% Submission date [optional]:
+% \submissiondate{November, 2042}
+
+%% You can redefine the submission notice [optional]:
+% \submissionnotice{A badass thesis submitted on time for the Degree of PhD}
+
+%% Declaration date:
+\date{My Month, My Year}
+
+%% PDF meta-info:
+\subjectline{Computer Science}
+\keywords{one two three}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Abstract:
+%%
+\abstract{%
+  My abstract ...
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Acknowledgements:
+%%
+\acknowledgements{%
+  My acknowledgements ...
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Glossary [optional]:
+%%
+\newglossaryentry{HOL}{
+    name=HOL,
+    description={Higher-order logic}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Contents:
+%%
+\begin{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title page, abstract, declaration etc.:
+%% -    the title page (is automatically omitted in the technical report mode).
+\frontmatter{}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Thesis body:
+%%
+\chapter{Introduction and completed work}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{figures/bayes_net.pdf}
+\caption{Bayesian networks comparing VAE (left) and our Domain-Content model (right).}
+\label{fig:bayes_net}
+\end{figure}
+
+\begin{figure}
+\begin{subfigure}[b]{0.49\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/font_cropped.pdf}
+\caption{Disentangling font and character.}
+\label{fig:fonts}
+\end{subfigure}
+\hspace{0.02\textwidth}
+\begin{subfigure}[b]{0.49\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/norb_cropped.pdf}
+\caption{Disentangling object and imaging conditions.}
+\label{fig:norb}
+\end{subfigure}
+\\\\
+\begin{subfigure}[b]{1.\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/silhouettes_cropped.pdf}
+\caption{Disentangling object shape and object rotation.}
+\label{fig:silhouettes}
+\end{subfigure}
+\\\\
+\caption{Qualitative results of our model on the fusion task are displayed with a black border. Each row represents a domain and each column represents a content. The topmost row is the content input and each row of the leftmost 5 columns is a domain input.}
+\label{fig:res}
+\end{figure}
+
+Learning rich, interpretable representations with deep neural networks is one of the main challenges of current artificial intelligence research. Achieving such representations would enable us to perform complex and highly useful operations on high-dimensional data \citep{bengio2013representation}. Perhaps the first milestone that has yet to be reached in this research is learning representations which easily factorize along the lines of recognizable human concepts. This property is called ``the disentanglement of generative factors'', and is an accelerating field of inquiry \citep{tschannen2018recent}, with many major contributions coming from models based on the Variational Autoencoder \citep{kingma2013auto, rezende2014stochastic}.
+
+Recent work \citep{locatello2018challenging,van2019disentangled} has revealed limitations in the current methods caused by the inherent ambiguity of the disentanglement objective. They have pointed out the need for equipping models with inductive biases appropriate to their respective application. An example disentanglement task with such increased specificity is the learning to generate multi-object scenes whereby the representation is trained to factorize along object lines \citep{engelcke2019genesis,burgess2019monet,greff2019multi}.
+
+As a further step towards this goal, we identified another promising disentanglement objective, namely the separation of domain and content representations, widely applicable to a variety of tasks, ranging from unsupervised translation to missing data imputation. In a general sense, whenever there exists some form of grouping imposed on a dataset, the notion of domain arises naturally to characterize the attributes of the data which are common within groups but differ across groups. Such attributes could be the style of a painting in the context of style transfer, or the language of a text in the context of neural machine translation. The notion of content then appears as a counterpart to the domain to encompass the features which occur independently of the domain features. For instance, in the context of style transfer, the actual subject of the painting represents the content.
+
+This year, we have produced a paper under review at NeurIPS 2020 which proposes a probabilistic model and associated neural architecture for disentangling Domain and Content representations. The paper and supplementary materials are available as an appendix to this document. What follows is an outline of the background literature, contributions and results of the paper.
+
+\section{Related work}
+
+There are many research directions which lead into the domain-content paradigm. Early work on domain adaptation \citep{ben2010theory,ganin2016domain}, for example, has highlighted the desirability of learning domain-invariant (content) representations of the data, in order to perform classification and regression in a common space. The model of \citet{gonzalez2018image} can successfully separate domain-specific from domain-invariant features for two domains.
+
+Problems such as image-to-image translation, which entails changing the domain of an image while preserving its content, have been extensively studied. Major deep learning innovations have come from this area \citep{isola2017image, zhu2017unpaired}, producing results of excellent quality. However, unsupervised models have been limited by the rigidity of their domain representations. Many methods can only be trained to map between two domains \citep{zhu2017unpaired, taigman2016unsupervised}, or a fixed set of domains \citep{choi2018stargan, choi2019starganv2, lee2019drit++}. Even models designed to accommodate new domains at test-time either rely on restricting the domain to stylistic features \citep{liu2019few}, or requiring re-training for every new example \citep{benaim2018one}. Moreover, to the best of our knowledge, no model has the capacity to process sets of examples specifying both the source and target domain at test-time, but rely either on explicit conditioning or on one single example. All these constraints limit the model's ability to understand unseen domains and transfer knowledge between them.
+
+Conversely, state-of-the-art methods to perform novel view synthesis rely either on structural assumptions about the geometry of the scene \citep{sitzmann2019scene, yoon2020novel} or on explicit conditioning on camera viewpoint (content) \citep{eslami2018neural, mildenhall2020nerf}. This restricts the model's usefulness when the viewpoint or scene structure is missing or difficult to describe explicitly.
+
+Perhaps the closest inspiration for our approach comes from the influential work on Semi-Supervised learning by \citet{kingma2014semi}, where they design a generative model with two latent variables: class (domain) and $\rvz$ (content). They recognize that a limitation of their method is that the number of generative likelihood evaluations scales linearly with the number of classes, since the class variable is categorical. 
+
+\section{Our contribution}
+
+We wished to address a general formulation of the domain-content problem that does not rely on any explicit conditioning or constraints on the nature of the disentangled features. We treat domain and content as independent continuous random variables. The strength of our model is that it allows for the specification of new domains at test-time by provision of any number of examples, and permits content queries through examples as well. The continuous nature of the latent representations is also useful for measuring similarity between domains, or for classifying inputs by content irrespective of domain.
+
+\textbf{In the submitted paper:}
+
+\begin{itemize}
+\item We proposed a probabilistic model of domain-content (Figure \ref{fig:bayes_net}) with an associated neural architecture built upon the paradigm of the Variational Autoencoder. Our model has the capacity to separate domain and content features in an unsupervised, few-shot manner. The group-wise domain encoder enables it to process unseen domains at test-time, while its novel domain-confusion loss prevents domain and content information from mixing in the latent representations during training.
+
+\item We demonstrated qualitatively the ability of our model to perform a generalized task called domain-content fusion, bringing together image-to-image translation and novel view synthesis, that requires the model to generate images by combining the domain of one input with the content of another. Some results can be seen in Figure \ref{fig:silhouettes}.
+
+\item We measured quantitatively the robustness of our disentanglement by ascertaining how well our model's latent representations can predict domain and content features in the data. We recorded improvements over other disentanglement methods, some of which can be seen in Table \ref{tab:pred}.
+\end{itemize}
+
+\begin{table}
+  \caption{How well can the latent representation predict the ground-truth factors}
+  \label{tab:pred}
+  \centering
+  \begin{tabular}{llllllll}
+    \toprule
+    & \multicolumn{2}{c}{MO (w/ DC)} & \multicolumn{2}{c}{MO (w/o DC)} \\
+    \cmidrule(r){2-5}
+    Factor (metric) & domain & content & domain & content & FactorVAE & VAE & Guessing \\
+    \midrule
+    Object shape (CE) & \textbf{-0.023} & -0.449 & -0.051 & -0.402 & -0.211 & -0.236 & -0.451 \\
+    Rotation (MSE) & 673.4 & \textbf{456.2} & 672.8 & 533.2 & 563.1 & 597.8 & 671.3 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\chapter{Future work}
+
+The potential of latent disentanglement in computational photography lies in problems where the values of the salient factors are unavailable, or difficult to express explicitly. The prototypical image synthesis problem requiring disentangled representations is the general ``fusion'' task, which involves generating a new image by combining some of the factors extracted from one image with the remaining factors extracted from another image. Two high-level image editing problems interest me in particular: changing the ``style'' of an image while preserving a coherent structure, and inserting/removing/modifying objects in a scene.
+
+\section{Disentangling style and content}
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[t]{0.23\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/stensele.png}
+\caption{Style input.}
+\end{subfigure}
+\hspace{0.005\textwidth}
+\begin{subfigure}[t]{0.23\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/yngvar_red.png}
+\caption{Content input.}
+\end{subfigure}
+\hspace{0.005\textwidth}
+\begin{subfigure}[t]{0.23\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/yngvar_black.png}
+\caption{Ideal fusion}
+\end{subfigure}
+\hspace{0.005\textwidth}
+\begin{subfigure}[t]{0.23\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/chair_style.png}
+\caption{Arbitrary Style-Transfer \cite{huang2017arbitrary}.}
+\end{subfigure}
+\caption{Style-content fusion task.}
+\label{fig:chair}
+
+\end{figure}
+\begin{figure}[t]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/neoclassical-facade.jpg}
+\caption{Neoclassical facade.}
+\end{subfigure}
+\hspace{0.02\textwidth}
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/gothic-facade.jpg}
+\caption{Gothic facade.}
+\end{subfigure}
+\\ \vspace{0.2cm}
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/neo_to_gothic.png}
+\caption{Neoclassical -> Gothic}
+\end{subfigure}
+\hspace{0.02\textwidth}
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/gothic_to_neo.png}
+\caption{Gothic -> Neoclassical}
+\end{subfigure}
+\caption{Failure of Arbitrary Style-Transfer \cite{huang2017arbitrary} to capture the relationship between decorative elements and structural elements in architectural design.}
+\label{fig:arch}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/khamsa.png}
+\caption{16th century Persian illumination.}
+\end{subfigure}
+\hspace{0.02\textwidth}
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/lindisfarne.jpg}
+\caption{8th century Anglo-Saxon illumination.}
+\end{subfigure}
+\\ \vspace{0.2cm}
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/khamsa_to_lindisfarne.png}
+\caption{Persian -> Anglo-Saxon}
+\end{subfigure}
+\hspace{0.02\textwidth}
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[height=5cm]{figures/lindisfarne_to_khamsa.png}
+\caption{Anglo-Saxon -> Persian}
+\end{subfigure}
+\caption{Failure of Arbitrary Style-Transfer \cite{huang2017arbitrary} to capture the relationship between decorative motifs and global structure in manuscript illumination designs.}
+\label{fig:illum}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}[t]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/font_2.png}
+\caption{Font input.}
+\end{subfigure}
+\\ \vspace{0.2cm}
+\begin{subfigure}[t]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/font_1.png}
+\caption{Character input.}
+\end{subfigure}
+\\ \vspace{0.2cm}
+\centering
+\begin{subfigure}[t]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/font_1_to_2.png}
+\caption{Arbitrary Style-Transfer \cite{huang2017arbitrary}.}
+\end{subfigure}
+\\ \vspace{0.2cm}
+\begin{subfigure}[t]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/MO_font_1_to_2.png}
+\caption{Domain-Content fusion (ours).}
+\end{subfigure}
+\caption{Superiority of latent disentanglement over style-transfer in font translation.}
+\label{fig:font}
+\end{figure}
+
+The problem of changing the style features of an image while preserving the content features, known as style-transfer or image-to-image translation, has been one of the most extensively studied questions in image synthesis research. There are many variants of this problem, depending on the data available during training and testing.
+
+Standard style-transfer \cite{gatys2015neural, gatys2016image, huang2017arbitrary, karras2019style} involves training an image generation network (autoencoder or GAN) on a general unlabelled image dataset, and then exploiting the hierarchical structure of the network to separate high-level content features from low-level texture features. The Adaptive Instance Normalization framework \cite{huang2017arbitrary} achieves this by modifying the statistics of the low-level features of the input content image to match the statistics of the input style image.
+
+Supervised image-to-image translation methods \cite{isola2017image} train a conditional image generation network on a dataset with paired images from two different domains. Unsupervised methods \cite{zhu2017unpaired, liu2017unsupervised}, can be trained to map between two domains in the same way, but without having seen paired examples. Multi-domain unsupervised methods \cite{Huang_2018_ECCV, choi2018stargan, liu2019few, Choi_2020_CVPR} can accommodate a variable number of domains. However, they rely on the same separation of low-level and high-level features through AdaIN layers \cite{huang2017arbitrary} in order to facilitate the translation.
+
+The problem with this reliance on the hierarchical structure of deep nets to achieve translation is twofold: Firstly, it is a heuristic which is not always appropriate to the problem of interest, since very often the style features are at the same level as the content features, such as in the case of font transfer \ref{fig:font}. Secondly, and more subtly, low-level texture statistics and high-level content features are conditionally independent given an image, which means that they are actually marginally dependent (see Figure \ref{fig:bayes_net}). The implication of this fact is that, when switching the texture statistics for the purpose of style transfer, the resulting content-texture feature combination might be outside the manifold of the two factors, and so produce an image which appears incoherent. This is what happens in the case of highly structured datasets where the style and content are entangled strongly, such as the problem of transferring the style of a piece of furniture on the structure of another piece of furniture \ref{fig:chair}. The unsuitability of AdaIN for these kinds of problems can be seen in Figures \ref{fig:arch}, \ref{fig:font}.
+
+Recent work has partially overcome this limitation by learning separate style and content representations \cite{kotovenko2019content, Kotovenko_2019_ICCV}. However, the method still relies on heuristic losses to encourage this separation, such as the triplet loss \cite{hermans2017defense} and the content reconstruction loss \cite{liu2019few}. While these losses are effective, they suffer from great learning instability, and dependent on the careful choice of hyperparameters, whose values are strongly dataset dependent. Instead, we want a more principled learning algorithm for disentanglement that makes as few assumptions as possible about the data.
+
+\subsection{Proposed approach}
+
+I believe in designing general learning algorithms which have as little inbuilt knowledge as possible, but which can be trained on a specific problem to learn the biases and structure of the data. Consequently, I think latent disentanglement with a probabilistic foundation is particularly suited to a problem such as combining style and content in furniture design. Such a method would be trained on an IKEA catalog with the images grouped either by style or by function. Hierarchical graph methods on point clouds \cite{mo2019structurenet, mo2020structedit} can already perform this task well for 3D representations of furniture. We would like a method which could perform as well for images, without hard-coding assumptions about the 3D nature of the depicted object.
+
+Our Domain-Content model is, in theory, directly applicable to this problem. However, it has, so far, only been applied to datasets with, justifiably, small and simple images, such as Silhouettes (Figure \ref{fig:silhouettes}) or Fonts (Figure \ref{fig:fonts}). I expect it to, initially, produce images of poor quality when trained on the IKEA catalog because of the size of the images and the complexity of the task. This is why many image synthesis algorithms use skip-connections, or other stabilising techniques. I intend to research some general approaches that allow the network to produce outputs with detail at different scales without exploiting the pixel structure of the images too much. One option would be to extend the Domain-Content model to learn autoregressive latent representations through a recurrent network that can iteratively refine the  outputs, such as in Generative Query Networks \cite{eslami2018neural}. Another approach would be to emulate StructNet \cite{mo2019structurenet} and design learned a hierarchical graph-based semantic representation over pixel that would allow the progressive addition of texture information with each layer in a way that reflects the semantic structure of the data and not the absolute scale within the image.
+
+This would be a short to medium-term project, depending how well the Domain-Content model would perform on the furniture problem. If the model, with the proposed improvements, works well, I would aim to submit this work as a paper for CVPR 2021 in mid-Novemeber 2020. The main steps of this project are:
+\begin{enumerate}
+\item To gather datasets appropriate for this task, such as an IKEA furniture dataset, and structure it into packs corresponding to the Domain-Content frameworks.
+\item To design a set of variations of the Domain-Content model, as discussed above, and compare them with the a state-of-the-art image-to-image translation method, such as StarGAN \cite{Choi_2020_CVPR}.
+\end{enumerate}
+
+\section{Disentangling the constituent objects of a scene}
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.6\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/spade.png}
+\caption{Spatially Adaptive Normalization \cite{Park_2019_CVPR}.}
+\label{fig:spade}
+\end{subfigure}
+\hspace{0.1cm}
+\begin{subfigure}[b]{0.38\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/pyramid.png}
+\caption{Semantic Generation Pyramid \cite{Shocher_2020_CVPR}.}
+\label{fig:pyramid}
+\end{subfigure}
+\caption{Scene composition methods separating low-level texture from high-level structure.}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/iodine.png}
+\caption{IODINE \cite{pmlr-v97-greff19a} multi-object representation learning.}
+\label{fig:iodine}
+\end{subfigure}
+\hspace{0.1cm}
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/monet.png}
+\caption{MONet \cite{burgess2019monet} quality of output images is dependent on the segmentation map}
+\label{fig:monet}
+\end{subfigure}
+\caption{Multi-object representation methods.}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/inpainting.pdf}
+\caption{Failure of inpainting \cite{liu2018image} to remove objects successfully.}
+\label{fig:inpainting}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{figures/remove_insert.pdf}
+\caption{A hypothetical object-centric representation model used for object removal and insertion.}
+\label{fig:remove_insert}
+\end{figure}
+
+Another new and highly interesting problem is the separate representation and manipulation of objects in a scene. The formulation is the following: at test time, given an image of an object and an image of a scene, insert that object into the scene at a location specified by an input segmentation map. The insertion must be done in a way that preserves the coherence of the scene (this may involve modifying either the object, the scene, or both). Alternatively, remove an object from the scene located at a position highlighted on the input segmentation map. The procedure is exemplified in Figure \ref{fig:remove_insert}.
+
+Matting and compositing are a related computational photography problem that involve cropping a source object from a source scene and applying it to a target scene. This area of research is well established, with some new methods using deep learning to achieve excellent results with little information \cite{BMSengupta20}. The problem we are interested in, however, also involves modifying the both the source object and the target scene to account for the object insertion. 
+
+Image inpainting is another related problem, requiring the hallucination of pixels highlighted by a segmentation map. Current deep learning methods learn the manifold of natural images and then bring the input image, close to the manifold, achieving realistic results. However, inpainting is not a reliable method for object removal (Figure \ref{fig:inpainting}), for complex scenes, since the network can only model an approximation of the relationship between the elements of the scene, as learned through very general image statistics.
+
+Deep image-to-image translation methods approach this problem by exploiting the distinction between low-level texture and high-level structure, as discussed in the previous section. For example, Spatially Adaptive Normalization \cite{Park_2019_CVPR} (Figure \ref{fig:spade}) synthesizes different textures for different classes of objects within the image. Semantic Generation Pyramid \cite{Shocher_2020_CVPR} (Figure \ref{fig:pyramid}) is an approximate way to perform this task by simply inserting or removing an object in the scene naively, and then generating a new image with the high-level structure of the naive composition and the low-level texture of the original image. These methods work well for image types defined by general texture, such as landscapes, but fail to account for the relationship between objects in terms of lighting, occlusions, reflections, and spatial organization. The latter method also requires a precise segmentation map, which in the real-world is often impractical.
+
+There is already substantial probabilistic ML research approaching this problem through the disentanglement of individual object representations based on the VAE paradigm. Models like IODINE \cite{pmlr-v97-greff19a}, MONet \cite{burgess2019monet} and GENESIS \cite{engelcke2019genesis} produce separate latent representations corresponding to each object in the scene, and achieve excellent results in modelling the interaction between objects when generating an image (Figure \ref{fig:iodine}). They serve as a solid foundation for the method I would like to develop.
+
+What these methods lack is a latent representation of the arrangement of objects in the scene. This is crucial for image types where the constituent objects are spatially interlocked, such that the insertion or removal of an object changes the location of the others. This is the case, for example, with images depicting text, where each character is an object, as seen in Figure \ref{fig:remove_insert} a), b). The latent representation of scene layout would also enable the coherent repositioning of objects (Figure \ref{fig:remove_insert} d)), another useful image editing tool.
+
+\subsection{Proposed approach}
+
+The disentanglement methods mentioned previously do not represent the object locations in such a relative way, but in an absolute way, such as through a segmentation map. A separate latent representation can be learned by using the Domain-Content paradigm, where the Domain is the collection of objects in the scene and the Content is their arrangement. Therefore, an appropriate model for this task would combine Domain-Content with object-centric representation by breaking up the Domain code into separate object codes which could be deleted, added, or modified (Figure \ref{fig:remove_insert}).
+
+This extension is non-trivial, as it would require integrating the two probabilistic models and learning frameworks, and designing a realistic training regimen for real-world tasks that provides enough information for this complex disentanglement. This is a medium to long-term project, and I would be aiming for a paper at ECCV 2021 or NeurIPS 2021. The main steps of this project would be:
+
+\begin{enumerate}
+\item To gather datasets of multi-object images where the disentanglement method would be most useful. That is, image data with strongly interacting objects where high precision in removal/insertion/modification is required. Such application data include architectural plans, typography and branding, diagrams, or natural indoor photography.
+\item To establish the problem formulation from the perspective of training and testing. \item To synthesize the object-centric model and the Domain-Content model into a unified probabilistic model with an associated neural architecture.
+\item To compare our model's performance with the state-of-the-art in both multi-object disentanglement, image-to-image translation, and the benchmarks endemic to the specific tasks approached. For example, re-arranging objects in the scene by modifying the Content code can be performed in such a way as to produce image resizing. Therefore, we should compare with the state-of-the-art seam carving techniques \cite{avidan2007seam, arar2019image}.
+\end{enumerate}
+
+
+\chapter{Future work}
+
+\section{The link between disentanglement and invariance}
+
+\section{Representing images as domains of points}
+
+\section{Emerging disentanglement of the constituent parts of a scene}
+
+\section{Timetable}
+
+I am funded through a studentship for a period of 3 years. I have started the course in October 2019 and I am writing this report during month 12 of the course, intending to submit a final dissertation no later than September 2022. Below is a suggested timeline for my future progress.
+
+\begin{table}
+  \label{tab:timetable}
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    A & B \\
+    \midrule
+    May 2022 - September 2022 &  Writing the final disseration \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Bibliography:
+%%
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{plainnat}
+\bibliography{thesis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Appendix:
+%%
+
+\appendix
+
+\chapter{Submitted paper}
+
+\end{document}
+

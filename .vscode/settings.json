@@ -1,0 +1,13 @@
+{
+    "grammarly.selectors": [
+        {
+            "language": "latex",
+            "scheme": "file",
+            "pattern": "thesis/background/main.tex"
+        },
+        {
+            "language": "latex",
+            "scheme": "file"
+        }
+    ]
+}

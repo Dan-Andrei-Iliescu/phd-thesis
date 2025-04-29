@@ -1,0 +1,383 @@
+\documentclass[../thesis.tex]{subfiles}
+% \graphicspath{{\subfix{../images/}}}
+
+
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+
+% modification to natbib citations
+\setcitestyle{authoryear,round,citesep={;},aysep={,},yysep={;}}
+
+% My math notation
+% \newcommand{\myscal}[1]{#1}
+% \newcommand{\myvect}[1]{\bm{#1}}
+% \newcommand{\myrv}[1]{\MakeUppercase{#1}}
+% \newcommand{\mycnt}[1]{#1}
+% \newcommand{\mydim}[1]{{d_{\MakeUppercase{#1}}}}
+% \newcommand{\myfunc}[1]{#1}
+% \newcommand{\mylik}[1]{\mathrm{\MakeUppercase{#1}}}
+% \newcommand{\myexp}[3]{\mathbb{E}^{\mylik{#1}}_{#2 \sim #3}}
+% \newcommand{\mymat}[1]{\bm{\MakeUppercase{#1}}}
+
+\begin{document}
+
+\allsectionsfont{\sffamily}
+
+\chapter{Background}
+
+This chapter lays the foundation for understanding the contributions presented in this thesis by defining the key concepts in machine learning for group modeling. First, I define the \textit{group-instance model}, a framework for probabilistic modelling of grouped data. Then, I describe \textit{Variational Autoencoders}, my primary approach for function approximation and inference in the group-instance model. Finally, I explore connections between the group-instance model and other established methods for group modelling. These methods have emerged in parallel over the years to address specific problems in their research fields (e.g., \textit{domain adaptation}, \textit{regression analysis}, \textit{factor analysis}, \textit{representation learning}, and \textit{image translation}). Each method reveals important insights about the challenges and opportunities presented by grouped data.
+
+\paragraph{Mathematical notation.} 
+\begin{itemize}
+    \item I use uppercase to denote random variables (e.g., $\myrv{x}$ or $\myrv{y}$), lowercase to denote non-random variables (scalars or vectors) (e.g., $\myscal{x}$ or $\myscal{y}$).
+    \item I use boldface to denote a group of variables (e.g., $\mygroup{x}$ or $\mygroup{Y}$). I use superscript for the index of the group and subscript for the index of the element within the group (e.g., $\mygroup{x}^i_k$ for element $k$ of group $i$).
+    \item Functions are lowercase, including probability densities (e.g., $\myfunc{p}$ or $\myfunc{q}$).
+    \item Sets are denoted in uppercase fraktur font (e.g., $\mathfrak{A}$ or $\mathfrak{X}$).
+    \item I write $\myfunc{p}_{\myrv{x}}$ for the ``$\myfunc{p}$ density over $\myrv{x}$'' and $\myfunc{p}_{\myrv{x}} (\myvect{x})$ for the ``$\myfunc{p}$ likelihood that $\myrv{x}$ is $\myvect{x}$''.
+    \item The ``$\myfunc{p}$ conditional density over $\myrv{y}$ given that $\myrv{x}$ is $\myvect{x}$'' is $\myfunc{p}_{\myrv{y} | \myrv{x} = \myvect{x}}$.
+    \item I write $\myexp{p}{\myscal{y}}{\myrv{y} | \myrv{x} = \myvect{x}} \left[\myfunc{f} (\myscal{y})\right]$ for the ``$\myfunc{p}$ expectation of function $\myfunc{f}$ of $\myscal{y}$ over $\myrv{y}$ given that $\myrv{x}$ is $\myvect{x}$''.
+    \item I say that two likelihood functions $(\myfunc{p}_{\myrv{x}}, \myfunc{q}_{\myrv{x}})$ are equivalent, $\myfunc{p}_{\myrv{x}} \equiv \myfunc{q}_{\myrv{x}}$, when they take equal values everywhere on the support $\forall x \in \mathfrak{X}, ~ \myfunc{p}_{\myrv{x}} (x) = \myfunc{q}_{\myrv{x}} (x)$.
+    \item I use the notation $\{1:\mycnt{n}\}$ for the set of natural numbers between 1 and $\mycnt{n}$ (inclusive).
+    \item To denote the parameters of an isotropic normal density of dimensionality $\mycnt{n}$, I use $\myvect{0}_{\mycnt{n}}$ for the mean and $\myvect{I}_{\mycnt{n}}$ for the variance, $\mathrm{Normal}(\myvect{0}_{\mycnt{n}},\myvect{I}_{\mycnt{n}})$.
+    \item If the output of a function $\myfunc{f}(\myscal{x})$ has more than one dimension, I use the notation $\left[ \myfunc{f}(\myscal{x}) \right]_i$ to denote the $i$-th element of the output.
+\end{itemize}
+
+\section{The group-instance model}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\columnwidth]{figures/pgm.pdf}
+    \caption{Causal diagram of the group-instance model. A group of observations, $\mygroup{\myrv{x}}$, is generated conditionally on a group of instance-level latent variables, $\mygroup{\myrv{z}}$, and one group-level latent variable, $\myrv{w}$.}
+    \label{fig:pgm-group-instance}
+\end{figure}
+
+In this section, I define a probabilistic framework for modelling grouped data and describe how such a model can be fitted with maximum likelihood estimation. This framework is a synthesis and expansion of a set of closely related methods \citep{bouchacourt2017multi,hosoyaGroupbasedLearningDisentangled2019,nemethAdversarialDisentanglementGrouped2020} that have been referred to as the \textit{Group Variational Autoencoder}. In structuring this section, I was inspired by the expositions in \citet{bishopPatternRecognitionMachine2006} and \citet{maAdvancesBayesianMachine2022}.
+
+Consider an unsupervised learning task with a training dataset $\mathfrak{X} = \{\myvect{x}^i_k\}_{i=1, k=1}^{\mycnt{n}, \mycnt{m}_i}$ of $\mydim{x}$-dimensional observations $\myvect{x}^i_k \in \mathbb{R}^\mydim{x}$. The dataset is organised into $\mycnt{n}$ groups of variable size. The size of group $i$ is $\mycnt{m}_i$. For convenience, let $\mygroup{\myvect{x}}^i$ denote the $i$-th group $\{\myvect{x}^i_k\}_{k=1}^{\mycnt{m}_i}$. We aim to train a stochastic function $\myfunc{g}: \mathbb{R}^\mydim{z} \to \mathbb{R}^{\mydim{x} \times *}$ that can generate a new group of observations $\mygroup{\myvect{x}}'$ by taking as input a vector $\myvect{z} \in \mathbb{R}^\mydim{z}$ randomly sampled from a known density. The dimensionality $\mydim{x} \times *$ means that the output of the function $\myfunc{g}$ is a set containing a variable number of $\mydim{x}$-dimensional vectors.
+
+To address this task, this thesis is considering a probabilistic modelling approach to machine learning. Probabilistic modelling proposed a model for the training data consisting of sampling a joint density over a set of observed and latent random variables, which we call the \textit{data-generating process}. This data-generating process comprises quantities that we know (e.g., how many variables there are, how the joint density factorises, etc.) and quantities that we don't know (e.g., some parameters governing the joint density). Our aim is to recreate the data-generating process by inferring the unknown quantities based on the observed data; this is called \textit{identification}. When exact identification is not possible, we want to estimate the values of the unknown quantities in a way that ``closely'' approximates the data-generating process; we call this the \textit{learned model}. ``Closeness'' is not a well-defined concept. The best we can hope for our estimates is that, if we could generate an infinite number of samples from the data-generating process, the set of samples would be scored by our learned model as highly probable. In the absence of an infinite number of samples, people rely on rules-of-thumb to get a ``close'' estimate the unknown quantities. I will discuss these rules-of-thumb in the next section. Let's return to our group-instance model.
+
+Specifically, we assume that the dataset $\mathfrak{X}$ has been generated by first sampling $\mycnt{n}$ independent \textit{group-level} latent variables $\myrv{w}^i$ from some known density $\myfunc{p}_{\myrv{w}}$ (e.g., the normal density $\mathrm{Normal}(0,1)$). Then, for each group $i$, $\mycnt{m}_i$ independent \textit{instance-level} latent variables $\myrv{z}^i_k$ are independently sampled from some other known density $\myfunc{p}_{\myrv{z}}$. Finally, the observation variables $\myrv{x}^i_k$ are each sampled from an unknown density conditionally on their corresponding group-level and instance-level variables $\myrv{x}^i_k \sim \myfunc{p}_{\myrv{x}^i_k | \myrv{w}^i, \myrv{z}^i_k}$. We assume that the observations within a group $\mygroup{\myrv{x}}^i$ are \textit{exchangeable}, meaning that they are independent and identically distributed when conditioned on the corresponding group-level variable $\myrv{w}^i$, so $\forall i \in \{1:\mycnt{n}\}, ~ \forall k \in \{1:\mycnt{m}_i\}, ~ \myfunc{p}_{\myrv{x}^i_k | \myrv{w}^i} \equiv \myfunc{p}_{\myrv{x} | \myrv{w}}$ where $\myrv{x}$ is the prototypical observation variable. Without loss of generality, we can express the conditional density $\myfunc{p}_{\myrv{x} | \myrv{w}, \myrv{z}}$ using a function $\myfunc{g}^*: \mathbb{R}^{\mydim{w} \times \mydim{z}} \to \mathbb{R}^{\mydim{x}}$ belonging to a known family of functions $\mathfrak{G}$ such that:
+\[  
+    \forall i \in \{1:\mycnt{n}\}, ~ \forall k \in \{1:\mycnt{m}_i\}, 
+\]
+\[
+    \myrv{x}^i_k = \myfunc{g}^* (\myrv{w}^i, \myrv{z}^i_k) + \myrv{e}^i_k, \quad \myrv{w}^i \overset{\text{i.i.d.}}{\sim} \myfunc{p}_{\myrv{w}}, \quad \myrv{z}^i_k \overset{\text{i.i.d.}}{\sim} \myfunc{p}_{\myrv{z}}, \quad \myrv{e}^i_k \overset{\text{i.i.d.}}{\sim} \mathrm{Normal}(0, \sigma^2_{\myrv{e}}),
+\]
+where $\myrv{e}^i_k$ is an additive Gaussian error term with standard deviation $\sigma_{\myrv{e}}$. The causal diagram of the group-instance model is depicted in Figure~\ref{fig:pgm-group-instance}.
+
+\subsection{Deep neural networks as a function family}
+
+We choose the family of neural networks for the function $\mathfrak{G}$. The neural network function $\myfunc{g}$ is defined as the composition of its $\mycnt{l}$ layers, where each layer is in turn defined by a simpler function followed by an element-wise non-linearity or activation function, such as the \textit{rectified linear unit} (ReLU), $\mathrm{ReLU}(\myvect{a}) = \mathrm{max}(0, \myvect{a})$. There exist different families of neural networks with different choices of layers and non-linearities; the most popular neural network architectures include multi-layer perceptrons (MLPs), convolutional neural networks (CNNs), recurrent neural networks (RNNs) and Transformers. For the sake exposition, we here only describe MLPs, since they correspond to the simplest neural network, and are also common building blocks of other architectures; for details on other neural network architectures (and deep learning more generally), refer to \citet{goodfellowDeepLearning2016}. In an MLP, each layer $r$ is affine, parameterized by a weight matrix $\mymatrix{a}^{(\mycnt{r})}$ and bias vector $\myvect{b}^{(\mycnt{r})}$:
+
+\begin{align*}
+    \myfunc{g}(\myvect{w}, \myvect{z}) &= \mymatrix{a}^{(\mycnt{l})} \, \myfunc{h}^{(\mycnt{l})} (\myvect{w}, \myvect{z}) + \myvect{b}^{(\mycnt{l})}, \\
+    \mathrm{where} \quad \myfunc{h}^{(\mycnt{r})} (\myvect{w}, \myvect{z}) &= \mathrm{ReLU} \left( \mymatrix{a}^{(\mycnt{r-1})} \, \myfunc{h}^{(\mycnt{r-1})} (\myvect{w}, \myvect{z}) + \myvect{b}^{(\mycnt{r-1})} \right), \quad \forall r \in \{1:\mycnt{l}\}\\
+    \mathrm{and} \quad \myfunc{h}^{(\mycnt{0})} (\myvect{w}, \myvect{z}) &= \mathrm{concat}(\myvect{w}, \myvect{z}).
+\end{align*}
+
+\subsection{Fitting the model with maximum likelihood estimation}
+
+Our aim is to recreate the data-generating process by finding the unknown true function $\myfunc{g}^*$ out of the family of functions $\mathfrak{G}$; this is called \textit{identification}. However, exact identification is not possible in this case because the latent variables $(\myrv{w}, \myrv{z})$ are unobserved. In this case, we want to estimate a function $\myfunc{g}$ in a way that ``closely'' approximates the data-generating process; we call this the \textit{learned model}. ``Closeness'' is not a well defined concept. The best we can hope for our estimates is that, if we could generate an infinite number of samples from the data-generating process, the set of samples would be scored by our learned model as highly probable. In the absence of an infinite number of samples, people rely on proxy criteria to get a ``close'' estimate the unknown quantities. The most popular criterion, which I will treat as the default criterion for estimation in this thesis, is \textit{maximum likelihood}. Maximum likelihood estimation involves searching for the function $\hat{\myfunc{g}} \in \mathfrak{G}$ that maximises the probability of the training data with respect to the probability model implied by $\hat{\myfunc{g}}$:
+\begin{align}
+    \hat{\myfunc{g}} &= \underset{\myfunc{g}}{\mathrm{arg~max}} \prod_{i=1}^\mycnt{n} \myfunc{p}_{\myrv{x}} (\mygroup{\myvect{x}}^i) \\
+    &= \underset{\myfunc{g}}{\mathrm{arg~max}} \prod_{i=1}^\mycnt{n} \myexp{p}{\myvect{w}^i}{\myrv{w}} \prod_{k=1}^{\mycnt{m}_i} \myexp{p}{\myvect{z}^i_k}{\myrv{z}} \left[ \mathrm{Normal} \bigl(\myvect{x}^i_k \,;\, \myfunc{g}(\myvect{w}^i, \myvect{z}^i_k), \sigma^2_{\myrv{e}}\bigr) \right].
+\end{align}
+Note that since the training data only comprises observations $\mathfrak{X} = \{\mygroup{\myvect{x}}^i\}_{i=1}^\mycnt{n}$, the latent variables must be \textit{marginalised out}.
+
+Since dealing with products is tedious and might produce numerical problems (e.g., as taking a product of scalars smaller than 1 may rapidly approach 0 when the number of scalars is large, resulting in numerical underflow), it is more convenient to instead work in the log-space. As the logarithm function is monotonic, maximizing a function is equivalent to maximizing the log of that function, thus resulting in the maximum log-likelihood estimate:
+\[
+    \hat{\myfunc{g}} = \underset{\myfunc{g}}{\mathrm{arg~max}} \sum_{i=1}^\mycnt{n} \log \myexp{p}{\myvect{w}^i}{\myrv{w}} \prod_{k=1}^{\mycnt{m}_i} \myexp{p}{\myvect{z}^i_k}{\myrv{z}} \left[ \mathrm{Normal} \bigl(\myvect{x}^i_k \,;\, \myfunc{g}(\myvect{w}^i, \myvect{z}^i_k), \sigma^2_{\myrv{e}}\bigr) \right].
+\]
+The above optimization problem requires solving $\mycnt{n}$ integration problems of the type $\myexp{p}{\myvect{w}^i}{\myrv{w}, \, \myvect{z}^i_k \sim \myrv{z}} \left[ \mathrm{Normal} \bigl(\myvect{x}^i_k \,;\, \myfunc{g}(\myvect{w}^i, \myvect{z}^i_k), \sigma^2_{\myrv{e}}\bigr) \right]$, which are usually analytically intractable except for certain special cases. 
+
+\subsection{Variational inference in the group-instance model}
+
+The typical approach to train a latent variable generative model, such as the group-instance model, is \textit{variational inference} \citep{bleiVariationalInferenceReview2017}. For each group of observations $i$, a set of latent variational densities, $(\myfunc{q}_{\myrv{w}^i}, \{\myfunc{q}_{\myrv{z}^i_k}\}_{k=1}^{\mycnt{m}_i})$, are used to approximate the true latent posterior density, $\myfunc{p}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i}$. The variational densities are implemented as Gaussian densities with trainable mean and variance (e.g., $\myfunc{q}_{\myrv{w}^i} \equiv \mathrm{Normal}(\myvect{\mu} \left( {\myrv{w}}^i \right), \myvect{\sigma} \left( {\myrv{w}}^i \right))$). We use these densities to compute a more tractable lower-bound to the data log-likelihood, called the \textit{Evidence Lower Bound} (ELBO):
+\[
+    \sum_{i=1}^\mycnt{n} \log \myfunc{p}_{\mygroup{\myrv{x}}} (\mygroup{\myvect{x}}^i) = \sum_{i=1}^\mycnt{n} \log \myexp{p}{\myvect{w}^i}{\myrv{w}} \prod_{k=1}^{\mycnt{m}_i} \myexp{p}{\myvect{z}^i_k}{\myrv{z}} \left[ \myfunc{p}_{\myrv{x} | \myrv{w}, \myrv{z}} \bigl(\myvect{x}^i_k | \myvect{w}^i, \myvect{z}^i_k \bigr) \right]
+\]
+\[
+    \geq \sum_{i=1}^\mycnt{n} \myexp{q}{\myvect{w}^i}{\myrv{w}^i, ~ \{\myvect{z}^i_k \sim \myrv{z}^i_k\}_{k=1}^{\mycnt{m}_i}} \left[ \log \frac{\myfunc{p}_{\myrv{w}} (\myvect{w}^i)}{\myfunc{q}_{\myrv{w}^i} (\myvect{w}^i)} \prod_{k=1}^{\mycnt{m}_i} \frac{\myfunc{p}_{\myrv{z}} (\myvect{z}^i_k)}{\myfunc{q}_{\myrv{z}^i_k} (\myvect{z}^i_k)} \myfunc{p}_{\myrv{x} | \myrv{z}, \myrv{w}} (\myvect{x}^i_k | \myvect{w}^i, \myvect{z}^i_k) \right].
+\]
+\crit{[What is the proof?]} 
+
+Many algorithms can be used to maximise the ELBO. In the field of statistics, the most popular choice is the \textit{Variational Expectation-Maximization} (VEM) algorithm \citep{dempsterMaximumLikelihoodIncomplete1977,bealVariationalAlgorithmsApproximate2003}. Throughout my thesis, I will not be using VEM, but rather \textit{Variational Autoencoders} (VAEs) because of their advantage in terms of computational efficiency and ability to generalise. 
+
+It is useful to understand the VEM algorithm first in order to understand the properties of the ELBO and the computational challenges of variational inference. I will describe VEM in the rest of this section and move onto VAEs in the next section.
+
+The VEM algorithm consists of maximising the ELBO by recursively alternating between the following two steps:
+
+\begin{enumerate}
+    \item \textbf{Variational inference (Expectation) step.} We maximise the ELBO with respect to the variational distributional parameters, $\{(\myvect{\mu} \left( {\myrv{w}}^i \right), \myvect{\sigma} \left( {\myrv{w}}^i \right))\}_{i=1}^\mycnt{n}$ and $\{(\myvect{\mu} \left( {\myrv{z}}^i_k \right), \myvect{\sigma} \left( {\myrv{z}}^i_k \right))\}_{i=1, k=1}^{\mycnt{n}, \mycnt{m}_i}$, while fixing the data-generating function $\myfunc{g}$. The inequality of the ELBO becomes an equality if and only if the variational densities match the true latent posterior $\forall i \in \{1:\mycnt{n}\},$ $\myfunc{q}_{\myrv{w}^i} \prod_{k=1}^{\mycnt{m}_i} \myfunc{q}_{\myrv{z}^i_k} \equiv \myfunc{p}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i}$. \crit{[What is the proof?]}
+    \item \textbf{Supervised learning (Maximisation) step.} We maximise the ELBO with respect to the data-generating function $\myfunc{g}$ while fixing the variational distributional parameters, $\{(\myvect{\mu} \left( {\myrv{w}}^i \right), \myvect{\sigma} \left( {\myrv{w}}^i \right))\}_{i=1}^\mycnt{n}$ and $\{(\myvect{\mu} \left( {\myrv{z}}^i_k \right), \myvect{\sigma} \left( {\myrv{z}}^i_k \right))\}_{i=1, k=1}^{\mycnt{n}, \mycnt{m}_i}$. This is the step actually training the learned model.
+\end{enumerate}
+
+When the ELBO becomes an equality (i.e., the variational densities match the true latent posterior) then the algorithm is guaranteed to raise the log-likelihood of the data, $\sum_{i=1}^\mycnt{n} \log \myfunc{p}_{\mygroup{\myrv{x}}} (\mygroup{\myvect{x}}^i)$, with every step of training \citep{bleiVariationalInferenceReview2017}. Unfortunately, exact inference in the Expectation step is intractable in most cases. Therefore, in practice, the likelihood of VEM is not guaranteed to always have non-negative increments. However, under mild conditions, the VEM procedure is still convergent and will converge to a local optimum of the ELBO \citep{bleiVariationalInferenceReview2017}. 
+
+As an aside, the problem of negative increments can be overcome by modifying the Expectation step and replacing variational inference with a \textit{Markov Chain Monte Carlo} (MCMC) method \citep{andrieuIntroductionMCMCMachine2003}. Instead of training a set of latent variational densities, $(\myfunc{q}_{\myrv{w}^i}, \{\myfunc{q}_{\myrv{z}^i_k}\}_{k=1}^{\mycnt{m}_i})$, to approximate the true latent posterior density, $\myfunc{p}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i}$, we can sample directly from the true latent posterior using MCMC sampling. We can then use those samples in the Maximisation step as a substitute for the true latent posterior using a \textit{Monte Carlo} (MC) approximation to the gradient of the data log-likelihood:
+\[
+    \nabla_{\myfunc{g}} \sum_{i=1}^\mycnt{n} \log \myfunc{p}_{\mygroup{\myrv{x}}} (\mygroup{\myvect{x}}^i) = \lim_{\mycnt{s} \to \infty} \sum_{i=1}^{\mycnt{n}} \sum_{j=1}^{\mycnt{s}} \nabla_{\myfunc{g}} \log \myfunc{p}_{\mygroup{\myrv{x}}, \myrv{w}, \mygroup{\myrv{z}}} (\mygroup{\myvect{x}}^i, \myvect{w}^i (j), \mygroup{\myvect{z}}^i (j)), \quad (\myvect{w}^i (j), \mygroup{\myvect{z}}^i (j)) \overset{\text{MCMC}}{\sim} \myfunc{p}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i},
+\]
+where $\mycnt{s}$ is the number of MCMC samples. \crit{[What is the proof?]} Despite its guarantees of convergence, I didn't choose this method for training the group-instance model because it is impractical when dealing with high-dimensional data.
+
+In fact, in the context of the machine learning tasks considered in this thesis (i.e., high-dimensional data, large datasets, non-linear functions $\myfunc{g}$), it is computationally infeasible to use VEM algorithm at all to train the group-instance model. To begin with, it requires storing and optimising the $\mathfrak{O}(\mycnt{n} \times (\mydim{z} + \mydim{w}))$ variational parameters, $\{(\myvect{\mu} \left( \myrv{w}^i \right), \myvect{\sigma} \left( \myrv{w}^i \right))\}_{i=1}^\mycnt{n}$ and $\{(\myvect{\mu} \left( \myrv{z}^i_k \right), \myvect{\sigma} \left( \myrv{z}^i_k \right))\}_{i=1, k=1}^{\mycnt{n}, \mycnt{m}_i}$. This scales badly with the size of the dataset and the dimensionality of the latent vectors. Furthermore, VEM is also inefficient if we want to infer the latent representation of a group of observations unseen during training. For a new group $\mygroup{\myvect{x}}'$ of size $\mycnt{m}'$, VEM creates a new set of variational densities, $\myfunc{q}_{\myrv{w}'}$ and $\{\myfunc{q}_{\myrv{z}'_{k}}\}_{k=1}^{\mycnt{m}'}$, and performs gradient descent for their $\mathfrak{O} (\mycnt{m} \times (\mydim{z} + \mydim{w}))$ parameters.
+
+\subsection{Amortised variational inference using deep learning}
+
+For my contributions in this thesis, I will use \textit{Variational Autoencoders} (VAEs) \citep{kingma2013auto,rezende2014stochastic} as a solution to the problem of training the group-instance model. VAEs are computationally efficient to train and store in memory, and have the ability to quickly infer latent representations for new observations after training. As we shall see in the next section, VAEs are the most common machine learning approach for modelling grouped data, especially in the field of disentanglement \citep{tschannenRecentAdvancesAutoencoderBased2018}.
+
+VAEs perform \textit{amortised inference} in the group-instance model. Instead of training $\mycnt{m}_i+1$ variational densities, $\myfunc{q}_{\myrv{w}^i}$ and $\{\myfunc{q}_{\myrv{z}^i_k}\}_{k=1}^{\mycnt{m}_i}$, for each group of training observations $\mygroup{\myvect{x}}^i$, we train only one variational latent posterior density, $\myfunc{q}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i}$. These variational posterior densities are also trained to match the true posterior density, $\forall i \in \{1:\mycnt{n}\},$ $\myfunc{q}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i} \equiv \myfunc{p}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i}$. However, instead of storing and optimising a separate mean and standard deviation parameter for each observation in the training dataset (i.e., $\{(\myvect{\mu} \left( \myrv{w}^i \right), \myvect{\sigma} \left( \myrv{w}^i \right))\}_{i=1}^\mycnt{n}$ and $\{(\myvect{\mu} \left( \myrv{z}^i_k \right), \myvect{\sigma} \left( \myrv{z}^i_k \right))\}_{i=1, k=1}^{\mycnt{n}, \mycnt{m}_i}$), these densities are parametrised by two neural networks that output the mean and variance for each variable, one for the group-level variable $\myfunc{f}_{\myrv{w}}: \mathbb{R}^{\mydim{x} \times *} \to (\mathbb{R}^{\mydim{w}}, \mathbb{R}^{\mydim{w}}_{+})$ and another for the instance-level variable $\myfunc{f}_{\myrv{z}}: \mathbb{R}^{\mydim{x} + \mydim{w}} \to (\mathbb{R}^{\mydim{z}}, \mathbb{R}^{\mydim{z}}_{+})$. These functions approximate the following factorisation of the latent posterior: $\myfunc{p}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i} = \myfunc{p}_{\myrv{w} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i} \prod_{k=1}^{\mycnt{m}_i} \myfunc{p}_{\myrv{z} \,|\, \myrv{x} = \myvect{x}^i_k, \myrv{w}}$. The variational density $\myfunc{q}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i}$ is implied by the following sampling procedure:
+\[  
+    \forall i \in \{1:\mycnt{n}\}, \quad \forall k \in \{k:\mycnt{m}_i\},
+\]
+\[
+    \myrv{w}^i = \left[ \myfunc{f}_{\myrv{w}} (\mygroup{\myvect{x}}^i) \right]_1 + \myrv{e}_{\myrv{w}^i} \odot \left[ \myfunc{f}_{\myrv{w}} (\mygroup{\myvect{x}}^i) \right]_2, \quad \myrv{e}_{\myrv{w}^i} \sim \mathrm{Normal}(\myvect{0}_{\mydim{w}}, \myvect{I}_\mydim{w}),
+\]
+\[
+    \myrv{z}^i_k = \left[ \myfunc{f}_{\myrv{z}} (\myvect{x}^i_k, \myrv{w}^i) \right]_1 + \myrv{e}_{\myrv{z}^i} \odot \left[ \myfunc{f}_{\myrv{z}} (\myvect{x}^i_k, \myrv{w}^i) \right]_2, \quad \myrv{e}_{\myrv{z}^i_k} \sim \mathrm{Normal}(\myvect{0}_{\mydim{z}}, \myvect{I}_\mydim{z}).
+\]
+The random variables $\myrv{e}_{\myrv{w}^i}$ and $\myrv{e}_{\myrv{z}^i}$ allow for the gradients of training to pass from the latent variables $\myrv{w}^i$ and $\myrv{z}^i_k$ directly to the functions $\myfunc{f}_{\myrv{w}}$ and $\myfunc{f}_{\myrv{z}}$; this is called the \textit{reparametrisation trick}. This way, instead of the two-step recursive procedure from VEM, we can perform gradient descent on both $(\myfunc{f}_{\myrv{w}}, \myfunc{f}_{\myrv{z}})$ and $\myfunc{g}$ simultaneously. We rephrase the ELBO for a single group $i$ in a way specific to VAEs:
+\[
+    \log \myfunc{p}_{\mygroup{\myrv{x}}} (\mygroup{\myvect{x}}^i) \geq \myexp{q}{\myvect{w}^i}{\myrv{w} \,|\, \mygroup{\myrv{x}}^i = \mygroup{\myvect{x}}^i} \sum_{k=1}^{\mycnt{m}_i} \myexp{q}{\myvect{z}^i_k}{\myrv{z} \,|\, \myrv{x} = \myvect{x}^i_k, \myrv{w} = \myvect{w}^i} \left[ \log \myfunc{p}_{\myrv{x} | \myrv{z}, \myrv{w}} (\myvect{x}^i_k | \myvect{w}^i, \myvect{z}^i_k) \right] - 
+\]
+\[
+    - \myexp{q}{\myvect{w}^i}{\myrv{w} \,|\, \mygroup{\myrv{x}}^i = \mygroup{\myvect{x}}^i} \sum_{k=1}^{\mycnt{m}_i} \mathrm{KL} \left[ \myfunc{q}_{\myrv{z} \,|\, \myrv{x} = \myvect{x}^i_k, \myrv{w} = \myvect{w}^i} \,\|\, \myfunc{p}_{\myrv{z}} \right] - \mathrm{KL} \left[ \myfunc{q}_{\myrv{w} \,|\, \mygroup{\myrv{x}} = \mygroup{\myvect{x}}^i} \,\|\, \myfunc{p}_{\myrv{w}} \right]
+\]
+In this formulation, the training gradient can be computed easily. The expectation and $\mathrm{KL}$-divergence terms can be approximated through Monte Carlo integration and the $\log \myfunc{p}_{\myrv{x} | \myrv{z}, \myrv{w}} (\myvect{x}^i_k | \myvect{w}^i, \myvect{z}^i_k)$ can be computed through an $L_2$ norm between the input observation $\myvect{x}^i_k$ and the generated observation $\myfunc{g} (\myvect{w}^i, \myvect{z}^i_k)$.
+
+VAEs have advantages and disadvantages as compared to the VEM algorithm. Amortized inference certainly sacrifices representation power because it constrains the variational latent posterior to be represented by a neural network. It assumes that $\forall i \in \{1:\mycnt{n}\}$, $(\myvect{\mu} \left( \myrv{w}^i \right), \myvect{\sigma} \left( \myrv{w}^i \right))$ can be expressed as $\myfunc{f}_{\myrv{w}} (\mygroup{\myvect{x}}^i)$ and that $\forall i \in \{1:\mycnt{n}\}$,  $\forall k \in \{k:\mycnt{m}_i\}$, $(\myvect{\mu} \left( \myrv{z}^i_k \right), \myvect{\sigma} \left( \myrv{z}^i_k \right))$ can be expressed as $\myfunc{f}_{\myrv{z}} (\myvect{x}^i_k, \myrv{w}^i)$ where $\myfunc{f}_{\myrv{w}}$ and $\myfunc{f}_{\myrv{z}}$ are deep neural networks.  However, VAEs have several major advantages for generative modeling. The most direct impact is the drastically reduced memory cost, making this new formulation highly scalable to large datasets. Also, it allows for fast down-top inference on new data, without worrying about the mixing problem of MCMC or the additional cost of optimization steps in VEM. Moreover, the parameterization of $\myfunc{q}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}}}$ decouples the local structures, represented by $\mygroup{\myvect{x}}$, and the global structure of $\myfunc{q}$, represented by $(\myfunc{f}_{\myrv{w}}, \myfunc{f}_{\myrv{z}})$ shared across all data instances. This potentially helps the optimization of the variational functions $(\myfunc{f}_{\myrv{w}}, \myfunc{f}_{\myrv{z}})$ as well as the data-generating function $\myfunc{g}$.
+
+Not everyone implements the variational density, $\myfunc{q}_{\myrv{w}, \mygroup{\myrv{z}} \,|\, \mygroup{\myrv{x}}}$, in this way. The most common approach is to have the function $\myfunc{f}_{\myrv{z}}$ take as input only the corresponding observation $\myvect{x}^i_k$ (i.e., $\myrv{z}^i_k = \myfunc{f}_{\myrv{z}} (\myvect{x}^i_k) + \myrv{e}_{\myrv{z}^i_k}$, where $\myrv{e}_{\myrv{z}^i_k} \sim \mathrm{Normal}(\myvect{0}_{\mydim{z}}, \myvect{I}_\mydim{z})$) \citep{bouchacourt2017multi,hosoyaGroupbasedLearningDisentangled2019}. However, the downside of this approach is that it fails to learn the correct representations when the data-generating process suffers from \textit{conditional shift}. We will explore this limitation in the first contribution chapter. \crit{[When?]}
+
+\section{Other approaches for modelling groups}
+
+Apart from the group-instance model, there are numerous other methods for solving machine learning tasks involving grouped data. In this section, I will explore the problems and solutions that have been discovered over the years.
+
+% - People in the statistical community use mixed-effects models to estimate parameters and their confidence intervals mapping x to y.
+% - People in disentanglement think groups should be represented as different subspaces of the latent space of the individual observations.
+% - Style-content disentanglement people
+% - Image-to-image translation people think of the group as a fixed latent space of each observation. They learn that latent representation not through any probabilistic constraints, but through choosing a specific family of representation functions. This is for encoding in the group latent certain attributes. This works when there is such a correspondence between those attributes and the group.
+% - Causal inference people 
+
+% We talk about what role groups play in the 3 biggest ML archetypical tasks: synthesis, representation, and prediction.
+
+% \paragraph{Generating new data} The goal is to generate new data points, sometimes with certain desirable properties. Groups come into play when we want to use them to restrict the properties that these new datapoints have.
+
+% \paragraph{Unsupervised domain adaptation.} Unsupervised domain adaptation people for supervised learning think of groups as different densities of data on which 
+
+% \paragraph{Learning fair/invariant representations.}The goal here is to learn one representation per observation that is independent of other factors of variation. Some people believe that the whole point of learning is learning representations that capture one kind of variation but are invariant to other kinds of variation.
+
+% Some people learn invariant representations.
+
+% \afterpage{%
+%     \clearpage% Flush earlier floats (otherwise order might not be correct)
+%     \begin{landscape}% Landscape page
+%         \begin{table}
+%             \centering % Center table
+%             \scriptsize
+%             \begin{tabular}{p{0.1\linewidth}p{0.1\linewidth}p{0.2\linewidth}p{0.3\linewidth}p{0.1\linewidth}}
+%                 \toprule
+%                 \textsc{Model Name} & \textsc{Research Area} & \textsc{Problem Statement} & \textsc{Model Description} & \textsc{Disadvantages} \\
+%                 \midrule
+%                 Group VAE & Disentanglement, image translation & To learn separate representations for group-level and instance-level variation. & This is the same model, but with a slightly different inference model. & This is the model. Yess. \\
+%                 \midrule
+%                 Paired VAE & Self-supervised disentanglement & To learn separate representations for group-level and instance-level variation. & For each observation, we have a set of latent variables (more than 2). For each pair, a different subset of latent variables will have the same value. Basically the group variable changes from group to group. Also, instead of inferring the group variable based on the whole group of observations, the group is inferred based on one observation but constrained to be the same. & The group variable should identify the group. Also, cannot deal with conditional shift. \\
+%                 \midrule
+%                 Shared-private view & Dimensionality reduction, factor analysis	& To learn a representation that explains as much as much of the variation as possible from multiple views of the data. & Generalisation of group-instance. There is an explicit correspondence between samples from different views. Each view has a different density and maybe a different dimensionality. Can we make it the same as the GID model? We have to assume the same matrices for group and instance. & Cannot deal with high-dimensional data. \\
+%                 \midrule
+%                 Style-content model & Image-to-image translation & To generate a new image with the instance-level component extracted from one image and the group-level component specified from another image. & The style and content are inferred from a single observation, and there is no way to distinguish between them from a probabilistic POV. The separation and identification are performed by constraining the functional family. Low-level features are assigned to the group-level component and high-level features to the instance-level component. & Only works if the group-level variation is low-level and the instance-level variation is high-level. \\
+%                 \midrule
+%                 Mixed-effects model & Regression analysis & To estimate the parameter mapping X to Y and obtain a confidence interval. & There is an X variable. The model is linear or non-linear in a constrained way. Inference is achieved with expectation maximisation. & Cannot deal with high-dimensional data. \\
+%                 \midrule
+%                 Confounder model & Causal inference & To estimate the causal parameter mapping X to Y and obtain a confidence interval. & There is an X and Y variable. The confounder causes both X and Y. This could be framed as group-instance by either the confounder or the instrument being the group. & The methods don't deal with high-dimensional non-linear data. \\
+%                 \midrule
+%                 Nuisance variable model & Unsupervised domain adaptation, meta-learning, invariant representations, fair representations, regularised supervised learning & To learn a representation that is maximally predictive of a target variable while simultaneously making it independent & There is an observed Y variable to predict. Sometimes the nuisance variable is also available. The instance-level variable is of interest. The representation is inferred based on one observation. It is constrained to have the same representation across groups. & Doesn't deal with conditional shift. \\
+%                 \bottomrule
+%             \end{tabular}
+%             \caption{}
+%         \end{table}
+%         % Add 'table' caption
+%     \end{landscape}
+%     \clearpage% Flush page
+% }
+
+\subsection{Unsupervised domain adaptation}
+
+The goal of unsupervised domain adaptation is to maximise the prediction performance on a target domain $T$ of a supervised learning predictor $\myrv{y} | \myrv{x}$ trained on a source domain $S$. The source and target domains constitute the groups in this setup.
+
+Unsupervised domain adaptation approaches typically assume a probabilistic model of the data where the observations $\myrv{x}$ are generated conditionally on the outcomes $\myrv{y}$ and on an additional group-level latent variable $\myrv{w}$. The group-level latent variable $\myrv{w}$ has one value for the source domain (for which we have labelled data, i.e., we observe the outcomes $\myrv{y}$) and a different value for the target domain. The approach is usually to learn an instance-level latent representation $\myrv{z}$ of the observations $\myrv{x}$ where they have the same marginal density regardless of whether the observations come from the source or target domain $\myrv{z} | \myrv{x}_S \equiv \myrv{z} | \myrv{x}_T$.
+
+In their seminal work, \citet{ben2010theory} have computed a lower bound to the log-likelihood on the target domain of a classifier $\mathrm{H}(\myrv{y} | \myrv{x})$ trained on the source domain. I have reformulated their result probabilistically as follows:
+
+\[
+ \mathbb{E}_{\myvect{x}, y \sim \myfunc{p}^T_{\myrv{x}, \myrv{y}}} [\log \mathrm{H}_{\myrv{y} | \myrv{x}} (y | \myvect{x})] \geq \mathbb{E}_{\myvect{x}, y \sim \myfunc{p}^S_{\myrv{x}, \myrv{y}}} [\log \mathrm{H}_{\myrv{y} | \myrv{x}} (y | \myvect{x})] - 
+\]
+\[
+ - \mathbb{E}_{\myvect{x} \sim \myfunc{p}^S_{\myrv{x}}} \int \left\| \myfunc{p}^T_{\myrv{y} | \myrv{x}} (y) - \myfunc{p}^S_{\myrv{y} | \myrv{x}} (y) \right\| dy - \int \left\| \myfunc{p}^T_{\myrv{x}} (\myvect{x}) - \myfunc{p}^S_{\myrv{x}} (\myvect{x}) \right\| d\myvect{x}
+\]
+
+The expression suggests that a lower bound to the log-likelihood on the target domain $\mathbb{E}_{\myvect{x}, y \sim \myfunc{p}^T_{\myrv{x}, \myrv{y}}} [\log \mathrm{H}_{\myrv{y} | \myrv{x}} (y | \myvect{x})]$ can be maximised by minimising the pointwise absolute difference between the source and target data marginals $\int \left\| \myfunc{p}^T_{\myrv{x}} (\myvect{x}) - \myfunc{p}^S_{\myrv{x}} (\myvect{x}) \right\| d\myvect{x}$. This insight gave \citet{ben2010theory} the idea to map the two domains to a common representation space (that we call $\myrv{z}$) where the data marginals of the two domains match. Various methods have been proposed to learn such a common representation. Domain Adversarial Networks have become the mainstream method for learning domain-invariant representations in the image translation literature \citep{ganin2015unsupervised, ganin2016domain}. The method is conceptually elegant: train a discriminator \citep{goodfellow2014generative} whose task is to classify the domain origin of a representation and train the representation network to fool the discriminator. \citet{sohn2018unsupervised} propose a slightly more sophisticated method, whereby they learn a mapping between the representations of the two domains such that, if two observations belong to the same class in the source domain, then their translations will be clustered together in the target domain. They introduce a novel verification loss, implemented with a classifier taking two latent vectors as input and trying to predict whether they should belong to the same class. This method is ideally suited for domains with different label spaces, as it preserves the private variation of each domain while providing a mapping that extracts the shared variation.
+
+\citet{scholkopfCausalAnticausalLearning2012} point out that the way data densities change between source and target domains depends on the underlying causal relationship between the observation, $\myrv{x}$, and the outcome, $\myrv{y}$. In a causal setting, where $\myrv{y}$ is caused by $\myrv{x}$, the densities of both the observation and the outcome can differ between domains. However, the relationship between them, captured by the chance of observing a particular outcome $\myrv{y}$ given a specific observation $\myrv{x}$ (written as $\myrv{y} | \myrv{x}$), remains constant. In contrast, an anti-causal setting assumes $\myrv{x}$ is influenced by $\myrv{y}$. Here, the density of the observation and the relationship between observation and outcome ($\myrv{y} | \myrv{x}$) change across domains, while the density of the outcome itself and the (less relevant for our task) relationship $\myrv{x} | \myrv{y}$ (how likely a specific observation is given an outcome) stay the same. Since our goal is to predict the outcome $\myrv{y}$ from the observation $\myrv{x}$ (a supervised learning problem), the anti-causal setting presents a greater challenge for domain adaptation. Therefore, this thesis focuses on addressing challenges in the anti-causal setting.
+
+\citet{zhangDomainAdaptationTarget2013} formalise these shifts in densities between source and target domains into three common types: covariate shift (where the density of the observation $\myrv{x}$ changes across domains but the conditional density of the observation given the outcome stays the same $\myrv{x} | \myrv{y}$), conditional shift (where the density of the outcome $\myrv{y}$ stays the same, but the conditional density of the observation given the outcome $\myrv{x} | \myrv{y}$ changes), and target shift (where the density of the outcome changes $\myrv{y}$ but the conditional density of the outcome given the observation stays the same $\myrv{y} | \myrv{x}$). In this thesis, we mainly concentrate on the conditional shift setting. 
+
+\citet{liuNeedLanguageDescribing2023} investigate empirically the impact of the different kinds of shift on the generalisation capability of predictors from the source to the target domain. They observe that conditional shifts produce a sharper decrease in the predictor's performance than covariate shifts. They note that most of the literature proposing methods for unsupervised domain adaptation considers the problem of covariate shifts but that conditional shifts should be the focus.
+
+\citet{stojanovDomainAdaptationInvariant2021} propose Domain-Specific Adversarial Training to tackle the problem of conditional shift. They use the same invariant representations setup as Domain-Adversarial Neural Network, an adversarial loss ensuring that the marginal densities of the latent representations of the two domains are distributed equivalently. However, they enhance this setup by concatenating the inputs with some trainable domain-specific parameters, one for the source domain and one for the target domain. Adding domain-specific parameters allows the model to learn a different mapping from the observation $\myrv{x}$ to the target variable $\myrv{y}$ depending on whether they belong to the source or target domain. In order to ensure that the predictor will make similar predictions for the same observation $\myrv{x}$ regardless of whether the observation comes from the source domain or the target domain, they also use a regularisation loss to increase the mutual information between the source domain and target domain densities of the outcome $y$ given the observation $x$.
+
+\citet{petersCausalInferenceUsing2016} leverage causal inference to estimate the relationship between the observation $\myrv{x}$ and the outcome $\myrv{y}$. They focus on identifying the dimensions $\mathfrak{P}$ within $\myrv{x}$ that directly cause the outcomes $\myrv{y}$. Their approach assumes the source domain can be further subdivided into sub-domains sharing the same causal relationships with each other and the target domain. This setting combines causal and anti-causal aspects: some dimensions in $\myrv{x}$ (denoted by $\mathfrak{P}$) act as causal parents of $\myrv{y}$, while others ($\{1:D\} \setminus \mathfrak{P}$ ) are influenced by $\myrv{y}$. Their method aims to find a minimal set of causal parent dimensions, $\mathfrak{P}$ such that the conditional density of the outcome given these dimensions $\myrv{y} | \myrv{x}_{\mathfrak{P}}$ remains constant across different sub-domains. 
+
+\citet{magliacane2018domain} leverage causal inference for domain adaptation. However, their approach hinges on the assumption that the group-level variable $\myrv{w}$ is directly observable. This allows them to identify the causal parents of the outcome $\myrv{y}$ within the observation $\myrv{x}$. They achieve this by finding the minimal set of dimensions $\mathfrak{P}$ such that conditioning on these dimensions makes the outcome $\myrv{y}$ independent of the group variable $\myrv{w}$ (written as $\myrv{w} \perp \myrv{y} | \myrv{x}_{\mathfrak{P}}$). Instead of matching marginal densities, they focus on selecting features for the shared representation based on their ability to achieve consistent prediction performance across domains.
+
+\citet{arjovskyInvariantRiskMinimization2019} propose a novel approach for unsupervised domain adaptation that bridges the gap between representation learning and causal inference. Their method learns a latent representation, $\myrv{z}$, that remains unchanged across different domains. However, this notion of invariance differs from previous approaches. Instead of enforcing identical marginal densities for the latent representation across domains (i.e., $\myrv{z}_S \equiv \myrv{z}_T$), they focus on the conditional density of the outcome $\myrv{y}$ given the latent representation $\myrv{z}$. This means that the relationship between the outcome and the latent representation should be consistent across sub-domains within the source domain. 
+
+Domain adaptation methods are rarely concerned with learning to infer a representation of the group $\myrv{w}$ directly from data, in contrast to our group-instance framework. Part of the motivation for using a group-instance model is to be able to infer the group-level latent variable $\myrv{w}$ at test-time in an amortised way.
+
+\subsection{Image-to-image translation}
+
+As mentioned before, the problem of learning an unsupervised shared representation is equivalent to the problem of retrieving a joint density from its marginals: it is unidentifiable in the absence of priors and preferences. Theoretical works on unpaired translation specifically applied to images using neural networks \citep{galanti2018role, galanti2018generalization} have concluded that the deep hierarchical structure of a neural network offers a very strong prior over the space of possible translations, enabling heuristic tricks to perform very well in practice.
+
+And, truly, there are many heuristic tricks. One of the most popular losses to be used in image-to-image translation is the cycle-consistency loss \citep{zhu2017unpaired}. It consists of translating an image to the desired domain, translating it back, and then measuring the reconstruction loss. It encourages some consistency in the translation and is used widely in the literature \citep{liu2017unsupervised, royer2020xgan, lee2018diverse}. Most models are based on the conditional GAN paradigm \citep{mirza2014conditional}, whereby the GAN generator is conditioned on the input image when producing its translation. Other heuristics include using an adversarial loss to that the translation output belongs to the target domain \citep{taigman2016unsupervised, liu2017unsupervised, huang2018multimodal, choi2018stargan, royer2020xgan}, a reconstruction loss between the source image's latent and the target image's latent \citep{taigman2016unsupervised, royer2020xgan, liu2019few}, a noise injection to enable diverse outputs \citep{huang2018multimodal, lee2018diverse}, and even a loss for preserving relative distances between the images in the source domain and their translations \citep{benaim2018one}. All state-of-the-art image translation algorithms use residual connections in a U-Net structure \citep{ronneberger2015u} in order to separate hierarchical image features and achieve high-fidelity reconstructions.
+
+\subsection{Representation learning}
+
+In their seminal work on representation learning, \citet{bengioRepresentationLearningReview2014} postulated that ``a good representation is one that captures the posterior density of the underlying explanatory factors of the observed input''. I believe this statement reflects a mainstream belief in the machine learning community that, ultimately, representations should reflect the parameters of the true data generating process. This would allow us to understand those parameters and/or to modify them for the synthesis of new data samples with predefined features. 
+
+However, without a supervision signal from the actual data-generating process, any algorithm requires strong priors to learn a useful representation \citet{locatelloChallengingCommonAssumptions2019}. We implicitly suggest these priors when we formulate desirable properties of the representations. These usually involve either notions about the structure of the latent space (linearity, symmetry, orthogonality, sparsity, etc), or notions about the informational content of the representations (invariance to some factors, predictiveness of some other factors, mutual information between variables, etc). As explained in \citet{bengioRepresentationLearningReview2014}, we expect these categories of properties to be correlated with eachother and with the true data generating process itself, since we assume that the natural world has an interpretable, regular structure. This view is supported by the extensive discussion by \citet{higginsDefinitionDisentangledRepresentations2018} about the symmetries of the natural world and how they should be incorporated into a good representation. A review of the common desirable properties and autoencoder-based models embodying them has been compiled by \citet{tschannenRecentAdvancesAutoencoderBased2018}.
+
+One of the most discussed and intriguing desirable properties of latent representations is disentanglement. In the most general sense, this can be defined as the property in which the latent representation can be split into parts such that each part corresponds to one separate generative factor. What this means in practice is the subject of this section. Disentanglement has been variously equated to marginal independence between the parts of the representation \citet{ver2014discovering, kim2018disentangling, chen2018isolating, kumar2017variational}, sparsity of the representation \citep{mathieu2019disentangling}, that the marginal density of the latent would match a pre-defined prior \citep{tolstikhin2017wasserstein, makhzani2015adversarial}, and how predictive each latent unit is of its assigned generative factor \citep{higgins2016beta, kim2017learning}. \citet{locatelloChallengingCommonAssumptions2019} have shown that none of these approaches is a general guarantee of success, since there is no such thing as a universal representation, and that the chosen priors should be specifically designed for the task in hand.
+
+% Observing this conclusion, I chose a specific interpretation of disentanglement for the domain-content problem: given a pack of datapoints from the same domain $\mygroup{\myrv{x}}$ and the source datapoint $\myrv{x}$ coming from that pack, find its domain $\myrv{z}$ and content $\myrv{w}$ variables, for which the mutual information between the variables and the source datapoint is maximized $\mathrm{max}~\mathrm{I}(\myrv{x} ; \myrv{z}, \myrv{w})$, the mutual information between the domain and the pack is maximized $\mathrm{max}~\mathrm{I}(\myrv{z} ; \mygroup{\myrv{x}})$ and the mutual information between the content and the pack is minimized $\min \mathrm{I}(\myrv{w} ; \mygroup{\myrv{x}})$. This property is vague and not directly optimizable, but it serves as an intuitive goal for research. This interpretation springs from an information-theoretic view of disentanglement that relies on balancing of the amount of mutual information between the variables of the system.
+
+\paragraph{Information bottleneck.} The information-theoretic view of representation learning revolves around the principle of the information bottleneck (IB) \citep{tishby2000information}, which claims that a representation should contain the minimum amount of information sufficient to predict the target variable. More formally, if $\myrv{x}$ is a source variable and $\myrv{y}$ is a target variable, we want to find the intermediate representation $\myrv{z}$ that follows the Rate-Distortion function of Shannon and Kolmogorov \citep{cover1999elements}:
+
+\begin{align}
+    R(\delta) = ~ &\underset{\myrv{z}}{\min} ~ \mylik{I}(\myrv{x}; \myrv{z}) ~ \text{subject to} ~ \mathrm{H}(\myrv{y} | \myrv{z}) \leq \delta \\
+    &\text{where} ~ \mathrm{I}(\myrv{x}; \myrv{z}) = \mathrm{KL}\left[ \myfunc{p}_{\myrv{x}, \myrv{z}} \,\|\, \myfunc{p}_{\myrv{x}} \myfunc{p}_{\myrv{z}} \right] ~ \text{(mutual information)} \\
+    &\text{and} ~ \mathrm{H}(\myrv{y} | \myrv{z}) = \mathrm{H}(\myrv{y}, \myrv{z}) - \mathrm{H}(\myrv{z}) ~ \text{(conditional entropy)} \\
+    &\text{and} ~ \mathrm{H}(\myrv{y}, \myrv{z}) = - \mathbb{E}_{p(\myrv{y}, \myrv{z})} [\log p(\myrv{y}, \myrv{z})] ~ \text{(joint entropy)} \\
+    &\text{and} ~ \mathrm{H}(\myrv{z}) = - \myexp{p}{\myvect{z}}{\myrv{z}} \left[ \log \myfunc{p}_{\myrv{z}} (\myvect{z}) \right] ~ \text{(entropy)}
+\end{align}
+This means ``find the representation which minimizes the mutual information between itself and the input (rate), whilst simultaneously keeping the conditional entropy of the target (distortion) under a specified amount $\delta$''. This specification corresponds to a compression-type situation, where we are trying to tighten the rate without surpassing a threshold level of distortion. \citet{tishby2000information} reformulate this as an unconstrained optimization problem by introducing a Lagrange multiplier $\beta$:
+
+\begin{equation}
+    \underset{z}{\min} ~ \mathrm{I}(\myrv{x} ; \myrv{z}) + \beta \mathrm{H}(\myrv{y} | \myrv{z})
+\end{equation}
+This setting displays the general form of the rate-distortion trade-off, which one can reduce in either of its two compression-type or prediction-type dual forms. It also corresponds to the notion of a minimal sufficient statistic \citep{bahadur1954sufficiency}, but where $\myrv{z}$ is a stochastic function of $\myrv{x}$ rather than a set of deterministic measures of the density of $\myrv{x}$. 
+
+% A probabilistic graphical model of this setting is depicted in Figure \ref{fig:nuisance}.
+
+Some works \citep{tishby2015deep, shwartz2017opening, achille2018emergence} have argued that modern deep learning algorithms implicitly optimize the prediction-type dual form of the IB by performing constrained maximum likelihood estimation. \citet{achille2018emergence} in particular show how the loss of a regularized neural network forms an upper-bound to the generalization (test-time) loss of the network, by reframing it as an IB Lagrangian where $\myrv{x}$ is the training data, $\myrv{y}$ is the true data density and $\myrv{z}$ are the weights of the network. They use the data processing inequality \citep{cover1999elements} to show that:
+
+\begin{equation}
+    \underbrace{\mathrm{I}(\myrv{x}; \myrv{z} | \myrv{y})}_{\text{amount of overfitting}} \leq \underbrace{\mathrm{I}(\myrv{x}; \myrv{z})}_{\substack{\text{term implicitly minimized} \\ \text{when regularizing}}}
+\end{equation}
+This agrees with the decomposition principle of \citet{mathieu2019disentangling}, which states that a good representation should predict the target as precisely as possible without memorizing the data (there should be some overlap between the representations of similar observations). It also has similar implications with the claims of \citet{bengioRepresentationLearningReview2014} and \citet{bruna2013invariant} that representations should be robust to small perturbations in the input.
+
+Other works have sought to optimize the IB Lagrangian explicitly by learning variational approximations to the mutual information terms \citep{alemi2016deep}. \citet{burgess2018understanding} and \citet{alemi2018fixing} show how the $\beta$ term in the $\beta$-VAE \citep{higgins2016beta} has the effect of controlling the rate-distortion tradeoff in a Variational Autoencoder, subsequently proposing modifications of the loss that would reflect the IB Lagrangian more fully. Most notably, \citet{alemi2016deep} (inadvertently) prove that the mutual information between the inferred latent variable and the data is upper- and lower-bounded by the two terms of the ELBO:
+
+\begin{equation}
+    \mathbb{E}_{q(\myrv{x})} \mathbb{E}_{q(\myrv{z} | \myrv{x})} [\log p(\myrv{x} | \myrv{z})] \leq I_{q} (\myrv{z} ; \myrv{x}) \leq \mathbb{E}_{q(\myrv{x})} \mathrm{KL} [q(\myrv{z} | \myrv{x}) || p(\myrv{x})]
+\end{equation}
+
+\subsection{Invariance to sensitive variables}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/nuisance.pdf}
+    \caption{Probabilistic graphical model comparing the latent inference models of Information Bottleneck \citep{tishby2000information, achille2018emergence} and Domain-Content (mine). \textbf{IB:} Learning a representation $\myrv{z}$ which is maximally predictive to the target variable $\myrv{x}$ whilst minimizing its mutual information with the source variable $\myrv{x}$. \citet{achille2018emergence} show that this also implies minimizing its mutual information with the nuisance variable $\myrv{n}$. \textbf{Domain-Content:} We want the inferred domain and content variables $\myrv{z}^q, \mygroup{\myrv{w}}^q$ to be maximally informative of their data generating counterparts $\myrv{z}, \mygroup{\myrv{w}}$ and minimally informative of each other's counterpart.}
+    \label{fig:nuisance}
+\end{figure}
+
+Besides sufficiency and minimality, another common desirable property for a representation is invariance to the factors independent of the target (nuisances or confounders). This concept has its origins in vision science. In his classic work on visual perception, \citet{gibson2014ecological} argued that the human brain's perception of an object is invariant to a set of common imaging variables, including illumination, rotation, occlusion, and noise. The notion of invariance was subsequently formalized within the framework of group theory by \citet{dodwell1983lie}. A particular line or research \citep{sundaramoorthi2009set, anselmi2016invariance} has used this group assumption to construct classes of visual features maximally invariant to illumination and rotation transformations useful for image recognition.
+
+However, the assumption that the nuisance features have a group structure places too heavy a constraint on the representation for image synthesis \citep{soatto2014visual}. In our case, we are interested in sufficient invariance, namely the minimal mutual information achievable in the model $\min \mathrm{I}(\myrv{z}, \myrv{n})$, or maximal insensitivity \citep{achille2018emergence}. \citet{achille2018emergence} explore the notion of invariance within the same information-theoretic paradigm of the model in Figure \ref{fig:nuisance}. They show that there always exists a random variable $\myrv{n}$ independent of $\myrv{y}$, both of which together can fully explain the variation in $\myrv{x}$:
+
+\begin{equation}
+    \forall \myrv{x}, \myrv{y} ~ \text{s.t.} ~ \myrv{y} \to \myrv{x}, ~ \exists \myrv{n} \perp \myrv{y} ~ \text{s.t.} ~ f(\myrv{y}, \myrv{n}) = \myrv{x}, ~ \text{for some deterministic function} ~ f
+\end{equation}
+They also use the data processing inequality \citep{cover1999elements} to prove an intriguing and intuitive result, that invariance to nuisance variables is achieved implicitly when the representation becomes sufficient and minimal:
+
+\begin{equation}
+    \underbrace{\mathrm{I}(\myrv{z}; \myrv{n})}_{\text{invariance}} \leq \underbrace{\mathrm{I}(\myrv{z}; \myrv{x})}_{\text{minimality}} - \underbrace{\mathrm{I}(\myrv{z}; \myrv{y})}_{\text{sufficiency}}
+\end{equation}
+This result is especially useful for our case, where we do not have direct access to any of the nuisance variables.
+
+Learning representations invariant to nuisances has been widely explored in the realm of fair representations \citep{zemel2013learning, hardt2016equality, louizos2016variational}, where one would like to make predictions based on data unaffected by some ``unfair'' discriminating features. \citet{louizos2016variational} propose a Variational Fair Autoencoder factorizes its latent representation into ``fair'' code and ``nuisance'' code, where the latter is provided as a supervised label. The method proceeds to train the autoencoder while minimizing a penalty term based on Maximum Mean Discrepancy \citep{gretton2007kernel} between the two codes.
+
+The most sophisticated discussion of invariance to confounding factors comes from the study of causal inference through invariant predictions \citep{petersCausalInferenceUsing2016,arjovskyInvariantRiskMinimization2019}. Also called autonomy or stability \citep{pearl2009causality}, invariance is a hallmark in causal inference, that when all direct causes of a target variable have been accounted for, a predictor from the source variable to the target variable should behave equally well across different data views. In other words, the residual error of the prediction must be independent of environment \citep{magliacane2018domain}. Invariant Risk Minimization \citep{arjovskyInvariantRiskMinimization2019} involves attempting to find a representation of the data whose predictor is in a simultaneous local minimum across all the views of the data. In this setting, the nuisance variable is the environment itself.
+
+In our case, we would like each inferred representation to be maximally predictive of their true data-generating counterpart, and simultaneously invariant to the other's counterpart (Figure \ref{fig:nuisance}). However, neither the true domain nor the true content values are observed, since they only manifest through the grouping in the data. Therefore, we must use the group and the individual datapoints differentially in order to estimate mutual information relationships between the variables. For example, in order to minimize the mutual information between the inferred group of content variables $\mygroup{\myrv{w}}^{q}$ and the data generating domain variable $\myrv{z}$, we can reduce its upper-bound using the data processing inequality \citep{cover1999elements}:
+
+\begin{equation}
+    \underbrace{\mathrm{I}(\mygroup{\myrv{w}}^q; \myrv{z})}_{\substack{\text{inferred content group} \\ \text{vs true domain}}} \leq \underbrace{\mathrm{I}(\mygroup{\myrv{w}}^q; \mygroup{\myrv{x}})}_{\substack{\text{inferred content group} \\ \text{vs group}}} = \sum_{k=1}^K \underbrace{\mathrm{I}(\myrv{w}^q_k; \mygroup{\myrv{x}})}_{\substack{\text{individual inferred} \\ \text{content vs pack}}}
+    \label{eq:content_bottle}
+\end{equation}
+
+\subsection{Style-Content Disentanglement}
+
+Style-content disentanglement is the machine learning task of decomposing observations into group-level and instance-level variation. 
+% Consider a dataset of $D$-dimensional observations organised into $N$ groups $\{\mathbf{x}_{n,k} ~;~ \mathbf{x}_{n,k} \in \mathbb{R}^{D} \}_{k=1}^{K_n}$ of size $K_n$ where $n \in \{1:N\}$. For simplicity, we use the notation $\mathbf{x}_{n,1:K_n}$ to denote the group. These observations could refer to many kinds of data: paintings grouped by artist, medical records grouped by patient, or economic data grouped by country. 
+The ``content'' of an observation is defined as the set of attributes that vary within groups, equivalent to the instance variable $\myrv{z}$, while the ``style'' is defined as the attributes of the observation that vary across groups, equivalent to the group variable $\myrv{w}$. To disentangle style and content, a representation network $\myfunc{r}: \mathbb{R}^{\mydim{x} \times *} \to \mathbb{R}^{\mydim{w} + \mydim{z} \times *}$ is trained to encode one group of observations $\mygroup{\myvect{x}}^i$ into one style latent code $\myvect{w}_n \in \mathbb{R}^{\mydim{w}}$ and a group of content latent codes $\mygroup{\myvect{z}}^i \in \mathbb{R}^{\mydim{z} \times *}$, one for each observation. The goal is for the style codes $\myvect{w}$ to capture only the variation across groups and the content codes $\myvect{z}$ to capture only the variation within groups, in a way that they are marginally independent of eachother.
+
+% \crit{[Not defined. The terms only have a meaning with a probabilistic model. Signal when you're being rigorous and when informal.]}
+
+Style-content disentanglement is crucial for real-world situations that involve groups of high-dimensional data. Latent representations have certain desirable properties that raw data typically lack, such as low-dimensionality, linearity, and continuity~\citep{bengioRepresentationLearningReview2014}. This is why content representations $\mathbf{c}$ are used to replace the underlying observations $\mathbf{x}$ as inputs for a wide variety of ML tasks, such as classification, regression, clustering, and visualisation. Example applications for style-content disentanglement include computer vision~\citep{tenenbaum2000separating}, data anonymisation~\citep{louizos2016variational}, and clinical risk modelling~\citep{pavlouHowDevelopMore2015}, among others.
+
+% This problem is known as style-content disentanglement \citep{Tenenbaum2000SeparatingSA}, content-transformation disentanglement \citep{Hosoya2019GroupbasedLO},  and disentanglement with group supervision \citep{Shu2020Weakly}, to name a few. 
+
+Recent work \citep{shuWeaklySupervisedDisentanglement2019, locatelloWeaklySupervisedDisentanglementCompromises2020} has contextualised style-content disentanglement as a subproblem of weakly-supervised disentanglement, where disentangled representations are learned with the help of indirect supervision (e.g., grouping, ranking, restricted labelling). Early work in this area focused on separating between visual concepts \citep{reedDeepVisualAnalogyMaking2015,kulkarniDeepConvolutionalInverse2015}. This area has received renewed interest after the theoretical impossibility result of \citet{locatelloChallengingCommonAssumptions2019} and the identifiability proofs of \citet{khemakhemVariationalAutoencodersNonlinear2020} and \citet{mitaIdentifiableDoubleVAE2021}. A key aspect of recent weakly-supervised models is the interpretation of the grouping as a signal of similarity between datapoints \citep{chenWeaklySupervisedDisentanglement2020}. Recently, \citep{vonkugelgenSelfSupervisedLearningData2021} have proved that style-content representations are identifiable, meaning that there exists a probabilistic model whose maximum likelihood solution has disentangled latent representations. However, their proof relies on the assumption that the true data-generating function $\myfunc{g}$ is invertible, which is a very restrictive assumption that is clearly not true in many real-world settings, such as conditional shift \citep{zhangDomainAdaptationTarget2013}.  
+
+% \crit{[Explain this. Why is conditional shift incopatible with invertibility? More detail would be interesting.]}
+
+
+\subsection{Shared and private variation}
+
+% \begin{figure}
+%     \centering
+%     \captionsetup{format=hang}
+%     \includegraphics[width=\textwidth]{figures/bayes_shared_private.pdf}
+%     \caption{Bayesian networks contrasting generative models based on shared-private variation against the domain-content generative model. The graphical models are modified for the purpose of comparison. One significant departure from the way CCA-based models are usually represented is that, following the notation conventions [\ref{sec:notation}], there is a separate shared latent variable $\rvz_{ik}$ for every datapoint in every view. Even though is customary to show the shared variable as being common across views, in practice, every datapoint corresponds to a different value for this variable. The depiction presented here clearly shows the inherent ambiguity of the distinction between the shared and private variables, whose separation can be made only on the basis of their priors (as opposed to the domain-content model, whose separation is structural). \\\\ \textbf{a) Bayesian CCA} \cite{klami2013bayesian} separates between the shared $\rvz_{ik}$ and private $\myrv{z}^(i)_{ik}$ representations using the constraint of its linear mapping mechanism and the latents' view-specific and view-independent priors (here the priors also encapsulate the dimensionality of the representation). \textbf{b) MRD} \cite{damianou2016multi} adapts the shared $\rvz_{ik}$ to a shared+private $\myrv{z}^{(i)_{ik}}$ representation using a learned view-specific weighting of the latent dimensions. The role of the weights $\omega^(i)$ is similar to the role of the domain variable. \textbf{c) Domain-Content} provides structural separation between the domain $\rvm_i$ (which summarizes the view) and content $\rvo_{ik}$ (which models the intra-view variation).}
+%     \label{fig:bayes_shared_private}
+% \end{figure}
+
+One of the first algorithms used to represent multi-view data in a shared latent space is Canonical Correlation Analysis (CCA) \cite{hotelling1992relations, hardoon2004canonical}. Its goal is to extract linear projections of the data views in a common space where they are maximally correlated. Conceptually, the method extends principal component analysis (PCA) to a multi-view setting by selecting $K$ jointly-orthogonal 1-dimensional linear transformations of the data that maximise the correlation across data views. The resulting representation is not intended to be a causal explanation, but a distillation of the features with the strongest co-occurrence.
+
+Some works have sought a generative interpretation of CCA that can answer questions about the latent posterior density and the data likelihood and enable sampling from the data marginal. Following the paradigm of the probabilistic framing of PCA \cite{tipping1999probabilistic}, \citet{bach2005probabilistic} have shown how the CCA solution can be interpreted as the maximum likelihood parameters of a generative model consisting of two observed variables $\myrv{x}^{(1)}, \myrv{x}^{(2)}$ (the views of the data) sampled from normal densities whose means are affine transformations of the value of a latent variable $\myrv{z}$ (the representation), distributed according to an isotropic normal with a diagonal matrix. Instead of extending CCA to accommodate a more sophisticated criterion for aligning the two views, this work clarifies the generative model for which CCA does already produce a latent representation which explains the data.
+
+\subsection{Bayesian CCA}
+
+However, because of its single latent representation, any uncorrelated variance between the two views is treated as residual noise produced by the covariance matrices of the generative posteriors $p(\myrv{x}^{(i)} | \myrv{z})$. Consequently, \citet{klami2013bayesian} propose an expanded generative model to explain the data variance more precisely, by unifying CCA with inter-battery factor analysis \cite{tucker1958inter, browne1979maximum}, a method for extracting separate shared and private representations from multi-view data. The new Bayesian CCA model has both a shared latent variable $\myrv{z}$ and a private latent variable for each view $\myrv{z}^{(i)}$. The generative posterior of a view now takes the form of a normal whose mean is a linear combination of its two latent variables $\mymatrix{a}^{(i)} \myrv{z} + \mymatrix{b}^{(i)} \myrv{z}^{(i)}$. The authors design an ingenious Bayesian inference technique for the parameters, which involves reframing both views as a single random variable $\myrv{x}$ and then performing Bayesian factor analysis \cite{ghahramani2000variational} with a strong sparsity prior on the linear transformation producing the mean of the generative posterior. 
+
+Bayesian CCA identifies two crucial issues involved in learning disentangled representations of grouped data: 
+\begin{enumerate}
+    \item Without the presence of a latent variable with the capacity to encode private variance, the shared representation will (wrongly) seek to explain it in cases where the shared correlations are of a smaller scale.
+    \item Such a disentangled model is fundamentally unidentifiable (as it is equivalent to inferring a joint representation from the marginals) so a strong prior is needed in order to learn a useful representation.
+\end{enumerate}
+It addresses these issues by providing a separate variable $\myrv{z}^{(i)}$ for each view and by using the linearity of the model and the sparsity of the prior to encourage convergence towards an appropriate representation.
+
+Bayesian CCA is appropriate, however, only when we assume that covariance is equivalent to dependence (and variance to information content). In the study of a high-dimensional, highly non-linear and sparse data such as images, covariance and orthogonality are poor predictors of information, which is ultimately the quantity in which we are interested.
+
+\subsection{Manifold relevance determination} 
+
+\citet{damianou2016multi} have augmented the representation power of Bayesian CCA to accommodate arbitrarily complex mappings between the latent variables and the data. This allows the criterion for alignment to move completely past co-occurence onto representations which simultaneously maximize the marginal likelihood of the data views. The method uses a Gaussian Process latent variable model (GP-LVM) \cite{lawrence2004gaussian}, the unsupervised equivalent of a Gaussian Process regression where the source variables are unobserved and treated as low-dimensional latent variables to be trained alongside the GP parameters through maximum likelihood estimation (or maximum a posteriori estimation if we wish to impose some prior structure on the latents). The authors build upon the factorized latent structure of the ``shared'' GP-LVM of \citet{ek2008gp} and propose a model with a single shared latent representation whose dimensions are weighted selectively by each data view depending on their relevance for that particular view, thus achieving a ``private interpretation'' of the shared representation. They call this mechanism manifold relevance determination (MRD).
+
+I have only recently come across this approach but find it very compelling. The fully Bayesian, non-parametric nature of GP-LVMs allows one to reason very clearly about the priors used for selecting an alignment, which is essential in settings where the solution space is so vast, as is the case of image synthesis. \citet{shon2006learning} have used such a shared GP-LVM model to achieve good results on the task of supervised image-to-image translation by imposing a common latent representation on pairs of images depicting different objects from the same viewpoint. It would be interesting to explore if MRD could be used to learn unsupervised I2I translation using appropriate priors (thus retrieve a joint density having access only to marginals). MRD is also interesting from the perspective of causal invariance \citep{petersCausalInferenceUsing2016, arjovskyInvariantRiskMinimization2019}, since there is a common latent representation whose features each view is allowed to weight differently. Perhaps features that are weighted similarly across views have learned to represent causal generative factors?
+
+\subsection{Shared-private variation versus group-instance disentanglement}
+
+Representations disentangling shared and private variation have also been used successfully for image-to-image translation in the context of deep learning by \citet{gonzalez2018image}. They use a clever arrangement of reconstruction losses training view-specific encoders and decoders in order to encourage the separation of latent representations into view-exclusive and view-agnostic representations.
+
+It is worth noting at this point that, although similar in their relationship, the notions of shared and private variation do not correspond exactly to the notions of content and domain. Content can be construed as a shared representation across views, where we would expect each view to have a similar density of values. We would also interpret two observations having the same content/shared representation value as being ``translations'' of each other.
+
+However, the domain variable is a much more well-defined notion than the private representation: all members of a view have, by definition, the same domain value. Indeed, the domain can be seen as a special case of a private representation where the domain value can be said to encode a recipe for transforming the shared representation into a shared-private representation. This is virtually identical to the role of the view-specific weighting in MRD \citep{damianou2016multi}. 
+
+% A comparison of generative models involving these notions is presented in Figure \ref{fig:bayes_shared_private}.
+
+\biblio
+
+\end{document}

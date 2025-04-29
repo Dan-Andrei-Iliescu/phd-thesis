@@ -1,0 +1,198 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand\@newglossary[4]{}
+\@newglossary{main}{glg}{gls}{glo}
+\providecommand\@glsorder[1]{}
+\providecommand\@istfilename[1]{}
+\@istfilename{thesis.ist}
+\@glsorder{word}
+\@writefile{toc}{\thispagestyle {empty}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{7}{chapter.1}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Proposed approach}{7}{section.1.1}\protected@file@percent }
+\citation{kingma2013auto,rezende2014stochastic}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.1}{\ignorespaces Outline of the proposed generative algorithm for image synthesis using disentangled Domain-Content latent representations.    \textbf  {Pixel-wise Domain-Content:} The algorithm involves generating each pixel of the output image ${\mathbf  {x}}_{ij}$ as a function of the domain code ${\mathbf  {m}}$, which represents the appearance of the image, and the corresponding content code ${\mathbf  {o}}_{ij}$, which specifies to which object in the image the pixel belongs.}}{8}{figure.caption.2}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:proposed}{{1.1}{8}{Outline of the proposed generative algorithm for image synthesis using disentangled Domain-Content latent representations. \\\\ \textbf {Pixel-wise Domain-Content:} The algorithm involves generating each pixel of the output image $\rvx _{ij}$ as a function of the domain code $\rvm $, which represents the appearance of the image, and the corresponding content code $\rvo _{ij}$, which specifies to which object in the image the pixel belongs}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}A note on notation}{9}{section.1.2}\protected@file@percent }
+\newlabel{sec:notation}{{1.2}{9}{A note on notation}{section.1.2}{}}
+\citation{bengio2013representation}
+\citation{locatello2019challenging}
+\citation{bengio2013representation}
+\citation{higgins2018towards}
+\citation{tschannen2018recent}
+\citation{ver2014discovering,kim2018disentangling,chen2018isolating,kumar2017variational}
+\citation{mathieu2019disentangling}
+\citation{tolstikhin2017wasserstein,makhzani2015adversarial}
+\citation{higgins2016beta,kim2017learning}
+\citation{locatello2019challenging}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Modelling grouped observations}{11}{chapter.2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chapter:grouped}{{2}{11}{Modelling grouped observations}{chapter.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}An information-theoretic view of representation learning}{11}{section.2.1}\protected@file@percent }
+\citation{tishby2000information}
+\citation{cover1999elements}
+\citation{tishby2000information}
+\citation{bahadur1954sufficiency}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Information bottleneck}{12}{subsection.2.1.1}\protected@file@percent }
+\citation{tishby2015deep,shwartz2017opening,achille2018emergence}
+\citation{achille2018emergence}
+\citation{cover1999elements}
+\citation{mathieu2019disentangling}
+\citation{bengio2013representation}
+\citation{bruna2013invariant}
+\citation{alemi2016deep}
+\citation{burgess2018understanding}
+\citation{alemi2018fixing}
+\citation{higgins2016beta}
+\citation{alemi2016deep}
+\citation{tishby2000information,achille2018emergence}
+\citation{achille2018emergence}
+\citation{tishby2000information,achille2018emergence}
+\citation{achille2018emergence}
+\citation{gibson2014ecological}
+\citation{dodwell1983lie}
+\citation{sundaramoorthi2009set,anselmi2016invariance}
+\citation{soatto2014visual}
+\citation{achille2018emergence}
+\citation{achille2018emergence}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.2}Invariance to confounding factors}{13}{subsection.2.1.2}\protected@file@percent }
+\citation{cover1999elements}
+\citation{zemel2013learning,hardt2016equality,louizos2016variational}
+\citation{louizos2016variational}
+\citation{gretton2007kernel}
+\citation{peters2016causal,arjovsky2019invariant}
+\citation{pearl2009causality}
+\citation{magliacane2018domain}
+\citation{arjovsky2019invariant}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Bayesian networks comparing the latent inference models of Information Bottleneck \cite  {tishby2000information, achille2018emergence} and Domain-Content (mine). \textbf  {IB:} Learning a representation ${\mathbf  {z}}$ which is maximally predictive to the target variable ${\mathbf  {x}}$ whilst minimizing its mutual information with the source variable ${\mathbf  {x}}$. \citet  {achille2018emergence} show that this is also implies minimizing its mutual information with the nuisance variable ${\mathbf  {n}}$. \textbf  {Domain-Content:} We want the inferred domain and content variables ${\mathbf  {m}}^q, \underline  {{\mathbf  {o}}}^q$ to be maximally informative of their data generating counterparts ${\mathbf  {m}}, \underline  {{\mathbf  {o}}}$ and minimally informative of each other's counterpart.}}{14}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:nuisance}{{2.1}{14}{Bayesian networks comparing the latent inference models of Information Bottleneck \cite {tishby2000information, achille2018emergence} and Domain-Content (mine). \textbf {IB:} Learning a representation $\rvz $ which is maximally predictive to the target variable $\rvx $ whilst minimizing its mutual information with the source variable $\rvx $. \citet {achille2018emergence} show that this is also implies minimizing its mutual information with the nuisance variable $\rvn $. \textbf {Domain-Content:} We want the inferred domain and content variables $\rvm ^q, \underline {\rvo }^q$ to be maximally informative of their data generating counterparts $\rvm , \underline {\rvo }$ and minimally informative of each other's counterpart}{figure.caption.3}{}}
+\citation{cover1999elements}
+\citation{fraser1986independent}
+\citation{grassberger1988finite}
+\citation{kraskov2004estimating}
+\citation{houthooft2016vime,alemi2016deep}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.3}Invariance within Domain-Content}{15}{subsection.2.1.3}\protected@file@percent }
+\newlabel{eq:content_bottle}{{2.11}{15}{Invariance within Domain-Content}{equation.2.1.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.4}Estimating mutual information}{15}{subsection.2.1.4}\protected@file@percent }
+\citation{sugiyama2012density,mescheder2017adversarial}
+\citation{goodfellow2014generative}
+\citation{nowozin2016f}
+\citation{nguyen2010estimating}
+\citation{donsker1983asymptotic}
+\citation{belghazi2018mutual}
+\citation{hjelm2018learning}
+\citation{kim2018disentangling}
+\citation{watanabe1960information}
+\citation{klami2013bayesian}
+\citation{damianou2016multi}
+\citation{klami2013bayesian}
+\citation{damianou2016multi}
+\citation{hotelling1992relations,hardoon2004canonical}
+\citation{tipping1999probabilistic}
+\citation{bach2005probabilistic}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Shared and private variation}{16}{section.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Bayesian networks contrasting generative models based on shared-private variation against the domain-content generative model. The graphical models are modified for the purpose of comparison. One significant departure from the way CCA-based models are usually represented is that, following the notation conventions [\ref {sec:notation}], there is a separate shared latent variable ${\mathbf  {z}}_{ik}$ for every datapoint in every view. Even though is customary to show the shared variable as being common across views, in practice, every datapoint corresponds to a different value for this variable. The depiction presented here clearly shows the inherent ambiguity of the distinction between the shared and private variables, whose separation can be made only on the basis of their priors (as opposed to the domain-content model, whose separation is structural).    \textbf  {a) Bayesian CCA} \cite  {klami2013bayesian} separates between the shared ${\mathbf  {z}}_{ik}$ and private ${\mathbf  {z}}^(i)_{ik}$ representations using the constraint of its linear mapping mechanism and the latents' view-specific and view-independent priors (here the priors also encapsulate the dimensionality of the representation). \textbf  {b) MRD} \cite  {damianou2016multi} adapts the shared ${\mathbf  {z}}_{ik}$ to a shared+private ${\mathbf  {z}}^{(i)_{ik}}$ representation using a learned view-specific weighting of the latent dimensions. The role of the weights $\omega ^(i)$ is similar to the role of the domain variable. \textbf  {c) Domain-Content} provides structural separation between the domain ${\mathbf  {m}}_i$ (which summarizes the view) and content ${\mathbf  {o}}_{ik}$ (which models the intra-view variation).}}{17}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:bayes_shared_private}{{2.2}{17}{Bayesian networks contrasting generative models based on shared-private variation against the domain-content generative model. The graphical models are modified for the purpose of comparison. One significant departure from the way CCA-based models are usually represented is that, following the notation conventions [\ref {sec:notation}], there is a separate shared latent variable $\rvz _{ik}$ for every datapoint in every view. Even though is customary to show the shared variable as being common across views, in practice, every datapoint corresponds to a different value for this variable. The depiction presented here clearly shows the inherent ambiguity of the distinction between the shared and private variables, whose separation can be made only on the basis of their priors (as opposed to the domain-content model, whose separation is structural). \\\\ \textbf {a) Bayesian CCA} \cite {klami2013bayesian} separates between the shared $\rvz _{ik}$ and private $\rvz ^(i)_{ik}$ representations using the constraint of its linear mapping mechanism and the latents' view-specific and view-independent priors (here the priors also encapsulate the dimensionality of the representation). \textbf {b) MRD} \cite {damianou2016multi} adapts the shared $\rvz _{ik}$ to a shared+private $\rvz ^{(i)_{ik}}$ representation using a learned view-specific weighting of the latent dimensions. The role of the weights $\omega ^(i)$ is similar to the role of the domain variable. \textbf {c) Domain-Content} provides structural separation between the domain $\rvm _i$ (which summarizes the view) and content $\rvo _{ik}$ (which models the intra-view variation)}{figure.caption.4}{}}
+\citation{klami2013bayesian}
+\citation{tucker1958inter,browne1979maximum}
+\citation{ghahramani2000variational}
+\citation{damianou2016multi}
+\citation{lawrence2004gaussian}
+\citation{ek2008gp}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Bayesian CCA}{18}{subsection.2.2.1}\protected@file@percent }
+\citation{shon2006learning}
+\citation{peters2016causal,arjovsky2019invariant}
+\citation{gonzalez2018image}
+\citation{damianou2016multi}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Manifold relevance determination}{19}{subsection.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.3}Shared-private variation vs Domain-Content}{19}{subsection.2.2.3}\protected@file@percent }
+\citation{ben2010theory}
+\citation{ben2010theory}
+\citation{ganin2015unsupervised,ganin2016domain}
+\citation{goodfellow2014generative}
+\citation{sohn2018unsupervised}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Unsupervised image-to-image translation}{20}{section.2.3}\protected@file@percent }
+\citation{magliacane2018domain}
+\citation{galanti2018role,galanti2018generalization}
+\citation{zhu2017unpaired}
+\citation{liu2017unsupervised,royer2020xgan,lee2018diverse}
+\citation{mirza2014conditional}
+\citation{taigman2016unsupervised,liu2017unsupervised,huang2018multimodal,choi2018stargan,royer2020xgan}
+\citation{taigman2016unsupervised,royer2020xgan,liu2019few}
+\citation{huang2018multimodal,lee2018diverse}
+\citation{benaim2018one}
+\citation{ronneberger2015u}
+\citation{gatys2015neural,gatys2016image}
+\citation{sirovich1987low}
+\citation{tenenbaum2000separating}
+\citation{vasilescu2002multilinear}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}Disentangling style and content}{21}{subsection.2.3.1}\protected@file@percent }
+\citation{taigman2016unsupervised,zhu2017unpaired,liu2017unsupervised}
+\citation{ulyanov2018deep}
+\citation{huang2017arbitrary}
+\citation{karras2019style}
+\citation{wang2019few,liu2019few}
+\citation{bouchacourt2017multi,esser2019unsupervised}
+\citation{bouchacourt2017multi,esser2019unsupervised}
+\citation{esser2019unsupervised}
+\citation{esser2019unsupervised}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Domain-Content: Contextualizing observations for disentanglement}{22}{section.2.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces The famous ambiguity illusion. The pose of the animal is ambiguous in the absence of an assumed species. Changing the inferred species from ``duck'' to ``rabbit'' fundamentally changes the inferred pose. This is an (contrived) example of how the inferred content variable of an input should also be conditioned on the inferred domain variable.}}{23}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:duck}{{2.3}{23}{The famous ambiguity illusion. The pose of the animal is ambiguous in the absence of an assumed species. Changing the inferred species from ``duck'' to ``rabbit'' fundamentally changes the inferred pose. This is an (contrived) example of how the inferred content variable of an input should also be conditioned on the inferred domain variable}{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.4}{\ignorespaces Bayesian networks comparing the Domain-Content model with competing group-based disentanglement methods in the literature \cite  {bouchacourt2017multi, esser2019unsupervised}. Our model is the only one whose individual-level latent inference posterior (the content) is conditioned on the group-level latent variable (the domain). This allows our latent posterior to model the joint distribution between the two latent variables conditioned on the input, and thus obtain more precise estimates. We call this ``contextualizing'' the input in its domain of origin. }}{23}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:bayes_context}{{2.4}{23}{Bayesian networks comparing the Domain-Content model with competing group-based disentanglement methods in the literature \cite {bouchacourt2017multi, esser2019unsupervised}. Our model is the only one whose individual-level latent inference posterior (the content) is conditioned on the group-level latent variable (the domain). This allows our latent posterior to model the joint distribution between the two latent variables conditioned on the input, and thus obtain more precise estimates. We call this ``contextualizing'' the input in its domain of origin}{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces Impact of the domain contextualization of ${\mathbf  {x}}' = [-1, 2]$ on the precision of the latent inference. The bottom plot depicts samples in data-space, the top plots show the encoding of ${\mathbf  {x}}'$ into the two latent-spaces using contextualized and un-contextualized methods. The blue dots depict latent inference samples of the un-contextualized state-of-the-art model of \citet  {esser2019unsupervised}. The red and orange dots depict samples from our model with ${\mathbf  {x}}$ contextualized within two different domains. The red and orange clusters in the data plot are the two domains used for contextualizing ${\mathbf  {x}}'$ in our method, with their respective colours. Our model's capacity for contextualization clearly increases its representation precision, especially in content-space.    \textbf  {The data generation process:} The data variable ${\mathbf  {x}}$ is a 2-d vector produced by $[{\mathbf  {x}}_1, {\mathbf  {x}}_2] := [{\mathbf  {o}}_1, {\mathbf  {o}}_2] * [{\mathbf  {v}}, {\mathbf  {v}}] + [{\mathbf  {u}}, 0] + \epsilon $. ${\mathbf  {o}}_1, {\mathbf  {o}}_2$ are the content features (called ``${\mathbf  {x}}_1, {\mathbf  {x}}_2$ displacement''), and are sampled independently from $\mathcal  {N}(0, 1)$. ${\mathbf  {u}}, {\mathbf  {v}}$ are the domain features (called ``mean'' and ``variance'') which are sampled uniformly according to $\mathcal  {U}(-3, 3), \mathcal  {U}(0, 2)$ respectively. $$ is noise sampled from $\mathcal  {N}(0, 0.1)$ The inherent ambiguity of this dataset (a point could have come from multiple domains) illustrates the need for contextualization. }}{24}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:mo_inference}{{2.5}{24}{Impact of the domain contextualization of $\rvx ' = [-1, 2]$ on the precision of the latent inference. The bottom plot depicts samples in data-space, the top plots show the encoding of $\rvx '$ into the two latent-spaces using contextualized and un-contextualized methods. The blue dots depict latent inference samples of the un-contextualized state-of-the-art model of \citet {esser2019unsupervised}. The red and orange dots depict samples from our model with $\rvx $ contextualized within two different domains. The red and orange clusters in the data plot are the two domains used for contextualizing $\rvx '$ in our method, with their respective colours. Our model's capacity for contextualization clearly increases its representation precision, especially in content-space. \\\\ \textbf {The data generation process:} The data variable $\rvx $ is a 2-d vector produced by $[\rvx _1, \rvx _2] := [\rvo _1, \rvo _2] * [\rvv , \rvv ] + [\rvu , 0] + \epsilon $. $\rvo _1, \rvo _2$ are the content features (called ``$\rvx _1, \rvx _2$ displacement''), and are sampled independently from $\mathcal {N}(0, 1)$. $\rvu , \rvv $ are the domain features (called ``mean'' and ``variance'') which are sampled uniformly according to $\mathcal {U}(-3, 3), \mathcal {U}(0, 2)$ respectively. $\epislon $ is noise sampled from $\mathcal {N}(0, 0.1)$ The inherent ambiguity of this dataset (a point could have come from multiple domains) illustrates the need for contextualization}{figure.caption.7}{}}
+\citation{kingma2013auto,rezende2014stochastic}
+\citation{zaheer2017deep}
+\citation{ganin2016domain,sohn2018unsupervised}
+\citation{liu2019few}
+\citation{liu2019few}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Evaluation}{25}{subsection.2.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces Comparison between our model and Few-Shot Unsupervised Image Translation (FUNIT) \citet  {liu2019few} on the task of novel-view synthesis using the Silhouettes dataset. For both ours and FUNIT, the left column is trained on 1000 different individual domains and the right is trained on 100 individual domains.}}{26}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:funit}{{2.6}{26}{Comparison between our model and Few-Shot Unsupervised Image Translation (FUNIT) \citet {liu2019few} on the task of novel-view synthesis using the Silhouettes dataset. For both ours and FUNIT, the left column is trained on 1000 different individual domains and the right is trained on 100 individual domains}{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces The effect of varying the pack size (16, 4, 1) for the contextualization of the content input. More information about the domain of the input helps to clarify its content.}}{26}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:pack}{{2.7}{26}{The effect of varying the pack size (16, 4, 1) for the contextualization of the content input. More information about the domain of the input helps to clarify its content}{figure.caption.9}{}}
+\citation{liu2019few}
+\citation{liu2019few}
+\citation{kim2018disentangling}
+\citation{kingma2013auto}
+\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces How well can the latent representation predict the ground-truth factors}}{27}{table.caption.10}\protected@file@percent }
+\newlabel{tab:pred}{{2.1}{27}{How well can the latent representation predict the ground-truth factors}{table.caption.10}{}}
+\citation{luo2019significance}
+\citation{burgess2018understanding,alemi2018fixing}
+\citation{belghazi2018mutual}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Next steps}{29}{chapter.3}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chapter:next}{{3}{29}{Next steps}{chapter.3}{}}
+\citation{lawrence2004gaussian}
+\citation{peters2016causal,magliacane2018domain,arjovsky2019invariant}
+\citation{cootes1999comparing,jojic2003epitomic,kannan2007clustering}
+\citation{eslami2016attend,greff2016tagger}
+\citation{hong2018learning,bau2019semantic,park2019semantic,liu2020decompose}
+\citation{heusel2017gans}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Validation}{30}{section.3.1}\protected@file@percent }
+\citation{bau2019semantic}
+\citation{yu2015lsun}
+\citation{johnson2017clevr}
+\citation{lin2014microsoft}
+\citation{cordts2016cityscapes}
+\citation{belghazi2018mutual}
+\citation{liu2019few}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Research Plan}{31}{section.3.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Research plan for the following two years. [1] and [2] are tasks associated with the simple Domain-Content and pixel-wise Domain-Content, respectively.}}{32}{table.caption.11}\protected@file@percent }
+\newlabel{tab:timetable}{{3.1}{32}{Research plan for the following two years. [1] and [2] are tasks associated with the simple Domain-Content and pixel-wise Domain-Content, respectively}{table.caption.11}{}}
+\bibstyle{plainnat}
+\bibdata{thesis}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{33}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Submitted paper}{33}{appendix.A}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{appendix}{{A}{33}{Submitted paper}{appendix.A}{}}
+\gdef \@abspage@last{33}

@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: icml2024.bst
+Database file #1: bibliography.bib
+Warning--empty booktitle in cressieStatisticsSpatioTemporalData2011
+Warning--empty booktitle in settlesActiveLearningLiterature2009a
+You've used 13 entries,
+            2773 wiz_defined-function locations,
+            691 strings with 9037 characters,
+and the built_in function-call counts, 8592 in all, are:
+= -- 691
+> -- 783
+< -- 8
++ -- 262
+- -- 249
+* -- 782
+:= -- 1366
+add.period$ -- 49
+call.type$ -- 13
+change.case$ -- 120
+chr.to.int$ -- 13
+cite$ -- 28
+duplicate$ -- 296
+empty$ -- 521
+format.name$ -- 270
+if$ -- 1748
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 13
+newline$ -- 82
+num.names$ -- 53
+pop$ -- 258
+preamble$ -- 1
+purify$ -- 109
+quote$ -- 0
+skip$ -- 273
+stack$ -- 0
+substring$ -- 183
+swap$ -- 49
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 128
+warning$ -- 2
+while$ -- 51
+width$ -- 0
+write$ -- 187
+(There were 2 warnings)

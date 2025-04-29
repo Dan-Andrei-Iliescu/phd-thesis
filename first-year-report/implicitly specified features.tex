@@ -1,0 +1,194 @@
+\subsection{Disentangling implicitly specified features}
+
+The closest works to our domain-content setting are image synthesis networks trained to disentangle between two sets of features specified indirectly through groupings in the training data. 
+\cite{kotovenko2019content}
+
+\textbf{Unsupervised Robust Disentanglement of Latent Characteristics for Image Synthesis}
+\citet{esser2019unsupervised} disentangles between independent random variables, pose and appearance. They use pairs. They use a classifier to estimate the minimal required regularization to perform the disentanglement. They say that adversarial methods fail to achieve this independence and variational methods obtain uninformative representations. They combine pose and appearance for a variety of objects.
+
+They extract pose and appearance based on one single image. The intuition of having two separate encoders, one for domain and one for content is the same. They also correctly identify that without further constraints the model will learn a degenerate solution by ignoring the domain code and turning the content path to an autoencoder.
+
+They say don't use a discriminator because the encoder has access to the discriminator gradients and can, therefore, learn to trick the discriminator. They use a classifier to detect overpowering, but do not provide the gradient to the encoder.
+
+They require examples of both same domain and same content, like in a triple loss.
+
+\citet{mathieu2016disentangling} adds an adversarial loss on top of \citet{kingma2014semi}.
+
+\citet{locatello2019challenging}, \citet{szabo2017challenges} The prior $p(\rvz)$ cannot model the individual contribution of domain and content without inductive biases.
+
+\citet{szabo2017challenges} use only pairs with same domain but reduce the dimensionality of the content code to enforce disentanglement.
+
+\citet{denton2017unsupervised} uses a discriminator to predict whether two images come from the same video.
+
+\citet{hadad2018two} the domain is given as a class label.
+
+\citet{choi2018stargan} \citet{choi2020stargan} StarGAN cannot transfer to unseen appearances.
+
+DRIT \citet{lee2018diverse} \citet{lee2020drit++} requires separate training for each appearance. So does \citet{huang2018multimodal}.
+
+They try to solve an constrained optimization problem which means, basically, find the domain and content which explain the data as precisely as possible without letting the mutual information between domain and content increase over a certain limit:
+
+\begin{align}
+    & \underset{\theta}{\max} ~ \E_{i} [ \log p_\theta (\rvx_i | \rvm, \rvo_i) ] \\
+    & \mathrm{subject ~ to} ~ I_\theta (\rvm, \rvo) \leq \epsilon ~ \mathrm{(mutual ~ information)} \\
+    & \mathrm{where} ~ I_\theta (\rvm, \rvo) = \KL[p_\theta(\rvm, \rvo) || p_\theta(\rvm) p_\theta(\rvo)]
+\end{align}
+
+However, this is not correct, since the content can still be used to explain all the data while keeping the domain and content having no mutual information, by just making the domain a dummy variable. The reason this method works in practice, we presume, is still the architectural constraints on the content variable. Basically any constraint on the content variable will give some power to the domain, and the more constraints there are the more powerful the domain gets.
+
+\citet{pmlr-v70-mescheder17a} \citet{pmlr-v80-belghazi18a} estimate mutual information through density estimation. In this work, they make a classifier $T$ which aims to identify whether pairs of domains and contents come from the joint distribution or the individual independent priors.
+
+\begin{equation}
+    \underset{T}{\max} ~ \E_{p(\rvm, \rvo)} [\log \sigma(T(\rvm, \rvo))] + \E_{p(\rvm)p(\rvo)} [\log (1 - \sigma(T(\rvm, \rvo)))]
+\end{equation}
+
+The optimal solution $T'$ is 
+
+\begin{equation}
+    I(\rvm, \rvo) = \E_{p(\rvm, \rvo)} T' (\rvm, \rvo)
+\end{equation}
+
+
+This equation is wrong because it assumes that the domain and content are independent of eachother conditional on the data. In reality, the knowledge of the domain of a datapoint can increase the precision of the content estimation.
+
+\begin{equation}
+    p(\rvm, \rvx, \rvo) = p(\rvm | \rvx) p(\rvx | \rvo) p(\rvo)
+\end{equation}
+
+The data processing inequality \citep{cover1999elements} says that a child of event $\rmX$ cannot get more information about the parent of $\rmX$ than from $\rmX$ itself.
+
+\begin{equation}
+I(\rvm, \rvo) \leq I(\rvo, \rvx) = \E_{\rvx} \KL[p(\rvo | \rvx) || p(\rvo)]
+\end{equation}
+
+But this is a mistake, since the domain code is not a child of the image, but a parent.
+
+What does disentanglement seek to do? In principle, we want an inference model which inverts the generative model of the data whilst simultaneously maximizing the likelihood of the data.
+
+\citet{mathieu2019disentangling} says disentanglement is ill defined and we should restrict ourselves to two feat
+
+\citet{bouchacourt2017multi} uses a product of 
+
+\textbf{Max Welling}
+
+Generative model (inductive bias, ood generalization) vs Disc model (lots of data, limited domain).
+
+The generative model is the place where we put all our knowledge.
+
+Point based image representation: Apply encoder to each pixel and their location, then mix the distributions according to the expression below:
+
+\begin{align}
+    q(\rvm | \underline{\rvx})
+    &= \frac{q(\rvm) \prod_{i=1}^K q(\rvx_i | \rvm)}{q(\underline{\rvx})} \\
+    &= \frac{1}{q(\rvm)^{K-1}} \underbrace{\frac{\prod_{i=1}^K q(\rvx_i)}{q(\underline{\rvx})}}_{\substack{\text{We~can~assume} \\ \text{this~is~the~same} \\ \text{for~every} ~ \underline{\rvx}.}} \prod_{i=1}^K \underbrace{q(\rvm | \rvx_i)}_{\substack{\text{This~could~be~our} \\ \text{domain~encoder.}}}
+\end{align}
+
+
+\cite{bouchacourt2017multi}
+
+
+
+\section{Shape-appearance dichotomy}
+
+\section{Disentangling objects}
+
+\section{Image Manipulation}
+
+\textbf{<<Import literature review here>>}
+
+% \subsection{Natural image statistics}
+
+
+Multi-object domain-content disentanglement
+- Multi-object disentanglement
+- Disentanglement of cumulative grouped observations
+- Point based image representations
+
+Multi-object disentanglement
+- Disentanglement
+- I2I translation
+- 
+
+Disentanglement
+- Information bottleneck
+- Invariance to nuisance
+
+Disentanglement of cumulative grouped observations
+- Disentanglement of grouped observations
+- Multi-view learning
+
+Disentanglement of grouped observations
+- 
+
+Appearance \& shape image priors
+\cite{simakov2008summarizing}
+\cite{cootes1999comparing}
+\cite{jojic2003epitomic}
+\cite{roth2005fields}
+\cite{kannan2007clustering}
+\cite{ashburner2019algorithm}
+
+Disentangling shape and appearance with parts
+\cite{eslami2016attend}
+\cite{reed2016learning}
+\cite{greff2016tagger}
+\cite{lorenz2019unsupervised}
+\cite{esser2018variational}
+
+Deep image manipulation
+\cite{hong2018learning}
+\cite{bau2019semantic}
+\cite{park2019semantic}
+\cite{liu2020decompose}
+
+Hierarchical image prior
+\cite{minnen2018joint}
+\cite{gregor2015draw}
+\cite{vahdat2020nvae}
+\cite{shocher2020semantic}
+\cite{shaham2019singan}
+\cite{ulyanov2018deep}
+
+Non-local image representations
+\cite{wang2018non}
+\cite{li2018beyond}
+\cite{zhang2019self}
+
+Point data models
+\cite{li2018point}
+\cite{qi2017pointnet}
+\cite{kipf2016semi}
+
+Disentanglement
+\cite{siddharth2017learning}
+\cite{kim2018disentangling}
+\cite{higgins2018towards}
+\cite{higgins2016beta}
+\cite{mathieu2019disentangling}
+\cite{locatello2019challenging}
+\cite{tschannen2018recent}
+
+Information theoretic disentanglement
+\cite{tishby2000information}
+\cite{achille2018emergence}
+\cite{belghazi2018mutual}
+\cite{alemi2016deep}
+\cite{louizos2016variational}
+\cite{alemi2018fixing}
+\cite{burgess2018understanding}
+\cite{chen2018isolating}
+
+Multi-object representation learning
+\cite{engelcke2019genesis}
+\cite{lin2019space}
+\cite{locatello2019challenging}
+\cite{greff2019multi}
+\cite{burgess2019monet}
+
+% \subsection{Beyond grids of pixels}
+
+\cite{wang2018non}
+
+Non-local NN \cite{li2018beyond}
+
+Self-attention GAN \cite{zhang2019self}

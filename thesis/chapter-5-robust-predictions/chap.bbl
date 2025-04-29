@@ -1,0 +1,103 @@
+\begin{thebibliography}{16}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Arjovsky et~al.(2019)Arjovsky, Bottou, Gulrajani, and {Lopez-Paz}]{arjovskyInvariantRiskMinimization2019}
+Arjovsky, M., Bottou, L., Gulrajani, I., and {Lopez-Paz}, D.
+\newblock Invariant {{Risk Minimization}}.
+\newblock \emph{ArXiv}, July 2019.
+
+\bibitem[{Ben-David} et~al.(2010){Ben-David}, Blitzer, Crammer, Kulesza, Pereira, and Vaughan]{ben2010theory}
+{Ben-David}, S., Blitzer, J., Crammer, K., Kulesza, A., Pereira, F., and Vaughan, J.~W.
+\newblock A theory of learning from different domains.
+\newblock \emph{Machine learning}, 79\penalty0 (1-2):\penalty0 151--175, 2010.
+
+\bibitem[Glymour et~al.(2019)Glymour, Zhang, and Spirtes]{glymourReviewCausalDiscovery2019}
+Glymour, C., Zhang, K., and Spirtes, P.
+\newblock Review of {{Causal Discovery Methods Based}} on {{Graphical Models}}.
+\newblock \emph{Frontiers in Genetics}, 10, June 2019.
+\newblock ISSN 1664-8021.
+\newblock \doi{10.3389/fgene.2019.00524}.
+
+\bibitem[Liu et~al.(2023)Liu, Wang, Cui, and Namkoong]{liuNeedLanguageDescribing2023}
+Liu, J., Wang, T., Cui, P., and Namkoong, H.
+\newblock On the {{Need}} for a {{Language Describing Distribution Shifts}}: {{Illustrations}} on {{Tabular Datasets}}.
+\newblock In \emph{Thirty-Seventh {{Conference}} on {{Neural Information Processing Systems Datasets}} and {{Benchmarks Track}}}, November 2023.
+
+\bibitem[Locatello et~al.(2020)Locatello, Poole, R{\"a}tsch, Scholkopf, Bachem, and Tschannen]{locatelloWeaklySupervisedDisentanglementCompromises2020}
+Locatello, F., Poole, B., R{\"a}tsch, G., Scholkopf, B., Bachem, O., and Tschannen, M.
+\newblock Weakly-{{Supervised Disentanglement Without Compromises}}.
+\newblock In \emph{International {{Conference}} on {{Machine Learning}}}, February 2020.
+
+\bibitem[Magliacane et~al.(2018)Magliacane, {van Ommen}, Claassen, Bongers, Versteeg, and Mooij]{magliacane2018domain}
+Magliacane, S., {van Ommen}, T., Claassen, T., Bongers, S., Versteeg, P., and Mooij, J.~M.
+\newblock Domain adaptation by using causal inference to predict invariant conditional distributions.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pp.\  10846--10856, 2018.
+
+\bibitem[Noble et~al.(2011)Noble, Mathur, Dent, Meads, and Greenhalgh]{nobleRiskModelsScores2011}
+Noble, D., Mathur, R., Dent, T., Meads, C., and Greenhalgh, T.
+\newblock Risk models and scores for type 2 diabetes: Systematic review.
+\newblock \emph{BMJ}, 343:\penalty0 d7163, November 2011.
+\newblock ISSN 0959-8138, 1468-5833.
+\newblock \doi{10.1136/bmj.d7163}.
+
+\bibitem[Pearl(2009)]{pearl2009causality}
+Pearl, J.
+\newblock \emph{Causality}.
+\newblock Cambridge university press, 2009.
+
+\bibitem[Perkonigg et~al.(2021)Perkonigg, Hofmanninger, Herold, Brink, Pianykh, Prosch, and Langs]{perkoniggDynamicMemoryAlleviate2021}
+Perkonigg, M., Hofmanninger, J., Herold, C.~J., Brink, J.~A., Pianykh, O., Prosch, H., and Langs, G.
+\newblock Dynamic memory to alleviate catastrophic forgetting in continual learning with medical imaging.
+\newblock \emph{Nature Communications}, 12\penalty0 (1):\penalty0 5678, September 2021.
+\newblock ISSN 2041-1723.
+\newblock \doi{10.1038/s41467-021-25858-z}.
+
+\bibitem[Peters et~al.(2016)Peters, B{\"u}hlmann, and Meinshausen]{petersCausalInferenceUsing2016}
+Peters, J., B{\"u}hlmann, P., and Meinshausen, N.
+\newblock Causal {{Inference}} by using {{Invariant Prediction}}: {{Identification}} and {{Confidence Intervals}}.
+\newblock \emph{Journal of the Royal Statistical Society Series B: Statistical Methodology}, 78\penalty0 (5):\penalty0 947--1012, November 2016.
+\newblock ISSN 1369-7412.
+\newblock \doi{10.1111/rssb.12167}.
+
+\bibitem[{Qui{\~n}onero-Candela} et~al.(2008){Qui{\~n}onero-Candela}, Sugiyama, Schwaighofer, and Lawrence]{quinonero-candelaDatasetShiftMachine2008}
+{Qui{\~n}onero-Candela}, J., Sugiyama, M., Schwaighofer, A., and Lawrence, N.~D. (eds.).
+\newblock \emph{Dataset {{Shift}} in {{Machine Learning}}}.
+\newblock The MIT Press, December 2008.
+\newblock ISBN 978-0-262-25510-3.
+\newblock \doi{10.7551/mitpress/9780262170055.001.0001}.
+
+\bibitem[Ruige et~al.(1997)Ruige, {de Neeling}, Kostense, Bouter, and Heine]{ruigePerformanceNIDDMScreening1997}
+Ruige, J.~B., {de Neeling}, J.~N., Kostense, P.~J., Bouter, L.~M., and Heine, R.~J.
+\newblock Performance of an {{NIDDM}} screening questionnaire based on symptoms and risk factors.
+\newblock \emph{Diabetes Care}, 20\penalty0 (4):\penalty0 491--496, April 1997.
+\newblock ISSN 0149-5992.
+\newblock \doi{10.2337/diacare.20.4.491}.
+
+\bibitem[Sch{\"o}lkopf et~al.(2012)Sch{\"o}lkopf, Janzing, Peters, Sgouritsa, Zhang, and Mooij]{scholkopfCausalAnticausalLearning2012}
+Sch{\"o}lkopf, B., Janzing, D., Peters, J., Sgouritsa, E., Zhang, K., and Mooij, J.
+\newblock On causal and anticausal learning.
+\newblock In \emph{Proceedings of the 29th {{International Coference}} on {{International Conference}} on {{Machine Learning}}}, {{ICML}}'12, pp.\  459--466, Madison, WI, USA, June 2012. Omnipress.
+\newblock ISBN 978-1-4503-1285-1.
+
+\bibitem[Sharma et~al.(2021)Sharma, Davies, and Ainsworth]{sharmaClinicalRiskPrediction2021}
+Sharma, V., Davies, A., and Ainsworth, J.
+\newblock Clinical risk prediction models: The canary in the coalmine for artificial intelligence in healthcare?
+\newblock \emph{BMJ Health \& Care Informatics}, 28\penalty0 (1):\penalty0 e100421, October 2021.
+\newblock ISSN 2632-1009.
+\newblock \doi{10.1136/bmjhci-2021-100421}.
+
+\bibitem[Thompson et~al.(2019)Thompson, Gwinnup, Khayrallah, Duh, and Koehn]{thompsonOvercomingCatastrophicForgetting2019}
+Thompson, B., Gwinnup, J., Khayrallah, H., Duh, K., and Koehn, P.
+\newblock Overcoming {{Catastrophic Forgetting During Domain Adaptation}} of {{Neural Machine Translation}}.
+\newblock In Burstein, J., Doran, C., and Solorio, T. (eds.), \emph{Proceedings of the 2019 {{Conference}} of the {{North American Chapter}} of the {{Association}} for {{Computational Linguistics}}: {{Human Language Technologies}}, {{Volume}} 1 ({{Long}} and {{Short Papers}})}, pp.\  2062--2068, Minneapolis, Minnesota, June 2019. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/N19-1209}.
+
+\bibitem[Xu et~al.(2020)Xu, Zhong, Yepes, and Lau]{xuForgetMeNot2020}
+Xu, Y., Zhong, X., Yepes, A. J.~J., and Lau, J.~H.
+\newblock Forget {{Me Not}}: {{Reducing Catastrophic Forgetting}} for {{Domain Adaptation}} in {{Reading Comprehension}}, November 2020.
+
+\end{thebibliography}

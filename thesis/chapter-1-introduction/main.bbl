@@ -1,0 +1,82 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Barto{\v s} et~al.(2024)Barto{\v s}, Sarafoglou, Godmann, Sahrani, Leunk, Gui, Voss, Ullah, Zoubek, Nippold, Aust, Vieira, Islam, Zoubek, Shabani, Petter, Roos, Finnemann, Lob, Hoffstadt, Nak, {de Ron}, Derks, Huth, Terpstra, Bastelica, Matetovici, Ott, Zetea, Karnbach, Donzallaz, John, Moore, Assion, {van Bork}, Leidinger, Zhao, Motaghi, Pan, Armstrong, Peng, Bialas, Pang, Fu, Yang, Lin, Sleiffer, Bognar, Aczel, and Wagenmakers]{bartosFairCoinsTend2024}
+Barto{\v s}, F., Sarafoglou, A., Godmann, H.~R., Sahrani, A., Leunk, D.~K., Gui, P.~Y., Voss, D., Ullah, K., Zoubek, M.~J., Nippold, F., Aust, F., Vieira, F.~F., Islam, C.-G., Zoubek, A.~J., Shabani, S., Petter, J., Roos, I.~B., Finnemann, A., Lob, A.~B., Hoffstadt, M.~F., Nak, J., {de Ron}, J., Derks, K., Huth, K., Terpstra, S., Bastelica, T., Matetovici, M., Ott, V.~L., Zetea, A.~S., Karnbach, K., Donzallaz, M.~C., John, A., Moore, R.~M., Assion, F., {van Bork}, R., Leidinger, T.~E., Zhao, X., Motaghi, A.~K., Pan, T., Armstrong, H., Peng, T., Bialas, M., Pang, J. Y.-C., Fu, B., Yang, S., Lin, X., Sleiffer, D., Bognar, M., Aczel, B., and Wagenmakers, E.-J.
+\newblock Fair coins tend to land on the same side they started: {{Evidence}} from 350,757 flips, June 2024.
+
+\bibitem[Bengio et~al.(2014)Bengio, Courville, and Vincent]{bengioRepresentationLearningReview2014}
+Bengio, Y., Courville, A., and Vincent, P.
+\newblock Representation {{Learning}}: {{A Review}} and {{New Perspectives}}, April 2014.
+
+\bibitem[Bryk \& Raudenbush(1992)Bryk and Raudenbush]{brykHierarchicalLinearModels1992}
+Bryk, A.~S. and Raudenbush, S.~W.
+\newblock \emph{Hierarchical Linear Models: {{Applications}} and Data Analysis Methods}.
+\newblock Hierarchical Linear Models: {{Applications}} and Data Analysis Methods. Sage Publications, Inc, Thousand Oaks, CA, US, 1992.
+\newblock ISBN 978-0-8039-4627-9.
+
+\bibitem[Cressie \& Wikle(2011)Cressie and Wikle]{cressieStatisticsSpatioTemporalData2011}
+Cressie, N. and Wikle, C.
+\newblock Statistics for {{Spatio-Temporal Data}}.
+\newblock April 2011.
+
+\bibitem[Gagniuc(2017)]{gagniucMarkovChainsTheory2017}
+Gagniuc, P.~A.
+\newblock \emph{Markov {{Chains}}: {{From Theory}} to {{Implementation}} and {{Experimentation}}}.
+\newblock Wiley, 1 edition, June 2017.
+\newblock ISBN 978-1-119-38755-8 978-1-119-38759-6.
+\newblock \doi{10.1002/9781119387596}.
+
+\bibitem[Iliescu \& Wischik(2024)Iliescu and Wischik]{iliescuStyleContentDisentanglementConditional2024}
+Iliescu, D.~A. and Wischik, D.~J.
+\newblock Style-{{Content Disentanglement Under Conditional Shift}}.
+\newblock In \emph{Data-{{Centric Machine Learning}}, {{International Conference}} on {{Learning Representations}}}, 2024.
+
+\bibitem[Iliescu et~al.(2024)Iliescu, Ram~Mohan, Teh, and Hodari]{iliescuControllableProsodyGeneration2024a}
+Iliescu, D.~A., Ram~Mohan, D.~S., Teh, T.~H., and Hodari, Z.
+\newblock Controllable {{Prosody Generation}} with {{Partial Inputs}}.
+\newblock In \emph{{{ICASSP}} 2024 - 2024 {{IEEE International Conference}} on {{Acoustics}}, {{Speech}} and {{Signal Processing}} ({{ICASSP}})}, pp.\  11916--11920, April 2024.
+\newblock \doi{10.1109/ICASSP48485.2024.10446859}.
+
+\bibitem[Mishra et~al.(2022)Mishra, McClelland, Inoue, and Kerr]{mishraRecalibrationMethodsImproved2022}
+Mishra, A., McClelland, R.~L., Inoue, L. Y.~T., and Kerr, K.~F.
+\newblock Recalibration {{Methods}} for {{Improved Clinical Utility}} of {{Risk Scores}}.
+\newblock \emph{Medical Decision Making}, 42\penalty0 (4):\penalty0 500--512, May 2022.
+\newblock ISSN 0272-989X.
+\newblock \doi{10.1177/0272989X211044697}.
+
+\bibitem[Nickel et~al.(2016)Nickel, Murphy, Tresp, and Gabrilovich]{nickelReviewRelationalMachine2016}
+Nickel, M., Murphy, K., Tresp, V., and Gabrilovich, E.
+\newblock A {{Review}} of {{Relational Machine Learning}} for {{Knowledge Graphs}}.
+\newblock \emph{Proceedings of the IEEE}, 104\penalty0 (1):\penalty0 11--33, January 2016.
+\newblock ISSN 1558-2256.
+\newblock \doi{10.1109/JPROC.2015.2483592}.
+
+\bibitem[Pinheiro \& Bates(2001)Pinheiro and Bates]{pinheiroMixedEffectsModelsSPLUS2001}
+Pinheiro, J.~C. and Bates, D.~M.
+\newblock Mixed-{{Effects Models}} in {{S}} and {{S-PLUS}}.
+\newblock \emph{Technometrics}, 43:\penalty0 113--114, 2001.
+
+\bibitem[{Qui{\~n}onero-Candela} et~al.(2008){Qui{\~n}onero-Candela}, Sugiyama, Schwaighofer, and Lawrence]{quinonero-candelaDatasetShiftMachine2008}
+{Qui{\~n}onero-Candela}, J., Sugiyama, M., Schwaighofer, A., and Lawrence, N.~D. (eds.).
+\newblock \emph{Dataset {{Shift}} in {{Machine Learning}}}.
+\newblock The MIT Press, December 2008.
+\newblock ISBN 978-0-262-25510-3.
+\newblock \doi{10.7551/mitpress/9780262170055.001.0001}.
+
+\bibitem[Settles(2009)]{settlesActiveLearningLiterature2009a}
+Settles, B.
+\newblock Active {{Learning Literature Survey}}.
+\newblock 2009.
+
+\bibitem[Wang et~al.(2021)Wang, Zhou, Sun, and Zhang]{wangCausalAttentionUnbiased2021a}
+Wang, T., Zhou, C., Sun, Q., and Zhang, H.
+\newblock Causal {{Attention}} for {{Unbiased Visual Recognition}}.
+\newblock In \emph{2021 {{IEEE}}/{{CVF International Conference}} on {{Computer Vision}} ({{ICCV}})}, pp.\  3071--3080, October 2021.
+\newblock \doi{10.1109/ICCV48922.2021.00308}.
+
+\end{thebibliography}

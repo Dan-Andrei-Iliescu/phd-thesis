@@ -1,51 +1,66 @@
-This is BibTeX, Version 0.99d (TeX Live 2021)
+This is BibTeX, Version 0.99d (TeX Live 2023)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: thesis.aux
-The style file: plainnat.bst
-Database file #1: thesis.bib
-Warning--empty booktitle in Cressie2011StatisticsFS
-Warning--empty booktitle in Raudenbush1992HierarchicalLM
-Warning--empty booktitle in Train2003DiscreteCM
-Warning--empty booktitle in Zuur2009MixedEM
-You've used 10 entries,
+The style file: icml2024.bst
+Reallocated field_info (elt_size=4) to 10320 items from 5000.
+Database file #1: bibliography.bib
+Warning--empty journal in bach2005probabilistic
+Warning--empty journal in bahadur1954sufficiency
+Warning--empty year in bahadur1954sufficiency
+Warning--empty year in bahadur1954sufficiency
+Warning--empty school in bealVariationalAlgorithmsApproximate2003
+Warning--empty journal in bishopPatternRecognitionMachine2006
+Warning--empty booktitle in braunComparingPrivateSchools2006
+Warning--empty journal in clarkGroundingCommunication1991
+Warning--empty booktitle in cressieStatisticsSpatioTemporalData2011
+Warning--empty booktitle in ek2008gp
+Warning--can't use both author and editor fields in alRethinkingContextLanguage1992
+Warning--empty journal in higgins2016beta
+Warning--empty journal in hodariSynthesisingProsodyInsufficient2022
+Warning--empty journal in liMaskedModelingSelfsupervised2024
+Warning--empty journal in maAdvancesBayesianMachine2022
+Warning--empty booktitle in rasmussenGaussianProcessesMachine2005
+Warning--empty booktitle in settlesActiveLearningLiterature2009a
+Warning--empty journal in tangSelfsupervisedLearningDataefficient2024
+You've used 190 entries,
             2773 wiz_defined-function locations,
-            651 strings with 6929 characters,
-and the built_in function-call counts, 4748 in all, are:
-= -- 381
-> -- 352
-< -- 8
-+ -- 118
-- -- 108
-* -- 361
-:= -- 752
-add.period$ -- 30
-call.type$ -- 10
-change.case$ -- 66
-chr.to.int$ -- 10
-cite$ -- 24
-duplicate$ -- 210
-empty$ -- 365
-format.name$ -- 132
-if$ -- 980
-int.to.chr$ -- 1
+            1757 strings with 50532 characters,
+and the built_in function-call counts, 109272 in all, are:
+= -- 9624
+> -- 7465
+< -- 134
++ -- 2505
+- -- 2314
+* -- 9131
+:= -- 16435
+add.period$ -- 673
+call.type$ -- 190
+change.case$ -- 1323
+chr.to.int$ -- 189
+cite$ -- 398
+duplicate$ -- 4781
+empty$ -- 8109
+format.name$ -- 2572
+if$ -- 23219
+int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 10
-newline$ -- 58
-num.names$ -- 40
-pop$ -- 149
+missing$ -- 192
+newline$ -- 1025
+num.names$ -- 767
+pop$ -- 2825
 preamble$ -- 1
-purify$ -- 56
+purify$ -- 1145
 quote$ -- 0
-skip$ -- 173
+skip$ -- 3933
 stack$ -- 0
-substring$ -- 68
-swap$ -- 11
-text.length$ -- 0
+substring$ -- 3788
+swap$ -- 973
+text.length$ -- 73
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 110
-warning$ -- 4
-while$ -- 32
+type$ -- 2035
+warning$ -- 18
+while$ -- 844
 width$ -- 0
-write$ -- 127
-(There were 4 warnings)
+write$ -- 2588
+(There were 18 warnings)

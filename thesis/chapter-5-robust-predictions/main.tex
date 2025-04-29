@@ -1,0 +1,379 @@
+\documentclass[../thesis.tex]{subfiles}
+% \graphicspath{{\subfix{../images/}}}
+
+\begin{document}
+
+\allsectionsfont{\sffamily}
+
+\chapter{Unsupervised domain adaptation}
+
+% \draft{\paragraph{Summary.} This section deals with the problem of supervised learning from interventional data. The setup is that we have multiple groups of data. Each group comprises of multiple samples. Each sample is a tuple $X, Y, U$ where $X$ is the covariate, $Y$ is the target variable and $U$ is the confounder. The goal is to predict $Y$ from $X$, as in supervised learning. But the relationship between $X$ and $Y$ is confounded by $U$. However, the structure of the dataset offers us a help. Across groups, the variable $X$ has been intervened upon, such that each group comprises samples of data with a different intervention on $X$. I want to illustrate how the Group-Instance model that I introduce in my thesis can help with achieving more accurate causal predictions. The Group-Instance model is an autoencoder model that can encode a group of $K$ covariates into one group-level representation and $K$ instance-level representations. How can we use the group structure to help us improve the accuracy of predictions? Well, it all has to do with the relationship between $U$ and the group. The distribution of confounder $U$ can vary across groups. The strength of this variation sits on a scale from 0 (i.e. the confounder is independent of the group) to total (all cases within a group have the same value for the confounder, and this value is different across groups). In middling cases on this scale, group-level latent variables don't have much to offer. But in the extreme cases, they do. SO there are 2 extreme cases. The first is when the group is independent of the confounder (i.e. the confounder variable $U$ has the same distribution across every group). The second is when the confounder variable is the same as the group (i.e. the value of the confounder variable is constant within the group and varies across groups). For the first case, we can use the group-level latent variable learned by the Group-Instance model as a synthetic instrumental variable to perform causal inference. This means training the Group-Instance model on the groups of covariates and then using the group-level latent variable to predict both the covariate and the response (using 2 different linear predictors). Then, by dividing the parameter of the response predictor by the parameter of the covariate predictor, we obtain the causal parameter mapping the covariate to the response. We claim that this group-level latent variable is a decent instrumental variable. We validate this claim by creating a toy dataset using known formulas and then showing that the parameter estimate obtained using our instrumental variable is better than the parameter estimate using simple maximum likelihood, and also than the parameter estimate using some popular but naive instrumental variables, like neighbour instrument. Now let's look at the second case. The solution there is to train a more accurate predictor by feeding the group-level latent variable as input. So this means that we train the Group-Instance model and use the output group variables as extra inputs when training the supervised predictor. This means concatenating the covariate with the group-level latent variable and using that to predict the response. At test-time, we must receive a whole group of data, that we feed into the Group-Instance model to produce a group-level latent variable. This we concatenate with the covariate and feed as input to the predictor. We claim that this predictor is better even than the true causal parameter. We show this empirically using another toy dataset.}
+
+% I think what I want to communicate in this chapter is:
+
+% \begin{enumerate}
+%     \item Sometimes the invariant (causal) predictor is not the best predictor. If the data you receive at test-time belongs to the same group, you can use the group information to make better predictions.
+%     \item Autoencoding groups (using the GID model) is a way to bring causal inference solutions (instrumental variables, controlling for confounders) to discrete domain problems.
+%     \item The way to make use of the group information depends on the nature of the groups. For example, if the groups represent different interventions on the confounder, then we can control for the effect of the confounder by using the group variable as a proxy. Conversely, if the groups are independent of the confounder, then we can use the group variable as an instrument to perform causal inference.
+% \end{enumerate}
+
+\paragraph{Abstract.} This chapter explores how the group-instance model can bring improvements to the task of \textit{unsupervised domain adaptation}. This is the task of training a predictor function to perform well across multiple data environments with different relationships between covariate and response. My purpose in this chapter is to advance the conversation of the domain adaptation research community from the current evaluation paradigm of \textit{singleton prediction} (i.e., measuring the prediction performance on a single covariate) to \textit{contextual prediction} (i.e., measuring the prediction performance on a group of covariates from the same environment).
+
+\section{Introduction}
+
+The goal of unsupervised domain adaptation is to learn predictors that can be applied to various real-world data environments. The challenge is that, across environments, the relationship between covariates, $X$, and responses, $Y$, may differ. For example, consider the task of predicting the duration of a hike based on its distance. The same hiking trail (covariate) might take two hours to complete (response) for an experienced hiker (environment 1) but might take three hours to complete for a beginner (environment 2). The hope is that we can learn a predictor that performs well even on covariate-response pairs from a new environment (e.g., a third hiker about whose experience we know nothing).
+
+The standard setup for domain adaptation involves training the predictor on a dataset comprising samples from a few different environments, and then evaluating the predictor on one sample coming from a new environment. Formally, let $\myvect{x}^i_{k} \in \mathbb{R}^{\mydim{x}}$ be the $k$-th covariate in environment $i$ of the training set, with $i \in \{1,\dots,\mycnt{n}\}$ and $k \in \{1,\dots,\mycnt{m}_i\}$, where $\mycnt{m}_i$ is the number of samples from environment $i$. Let $\myvect{y}^i_{k} \in \mathbb{R}^{\mydim{y}}$ be the $k$-th response in environment $i$. Let $\left(\myvect{x}', \myvect{y}' \right)$ be an covariate-response pair from the testing environment. The predictor uses the training set to learn the relationship between covariates and responses, and its prediction accuracy is then evaluated on the testing pair. I call this evaluation paradigm \textit{singleton prediction}. Actually, the predictor is typically evaluated independently on multiple testing pairs sampled from one or more new environments, and then the average prediction accuracy over all pairs is reported. However, since predictions are made independently for each testing pair, this is still a case of singleton prediction.
+
+I am proposing an alternative evaluation setup where, instead of a single sample, the predictor can see a group of samples from a new testing environment, $\left\{\myvect{x}'_{k}, \myvect{y}_{k}\right\}_{k=1}^{\mycnt{m}'}$, and can make a joint prediction for the entire group. I call this paradigm \textit{contextual prediction}.
+
+I claim that the new evaluation task of contextual prediction is more interesting than singleton prediction because (1) it allows for new solutions to the problem of domain adaptation (2) while still corresponding to a realistic evaluation scenario. 
+% To the first point, allowing the predictor to see other covariates from the same environment may improve the accuracy of its predictions by supplying extra information about the relationship between covariates and responses in that environment. To the second point, the most common real-world use-cases of unsupervised domain adaptation involve applying the predictor to data environments where it is easy to collect new covariates. 
+
+\section{Illustrative example: Diabetes risk}
+\label{sec:example-diabetes}
+
+\begin{figure}[t]
+    \begin{center}
+        \centerline{\includegraphics[width=0.5\columnwidth]{figures/prob_model.pdf}}
+        \caption{Causal diagram for the variables involved in the diabetes risk model. A major cause of type-2 diabetes, $\myrv{y}$, is a high body-mass index, $\myrv{x}_{c}$, which itself is affected by whether the patient has a diet rich in salt, $W$. The frequency of thirst, $\myrv{x}_{s}$, is symptom of both diabetes, $\myrv{y}$, and a salt-rich diet, $\myrv{w}$. The environments in this case correspond to different groups of patients organised by diet.}
+        \label{fig:diabetes}
+    \end{center}
+    \vskip -0.2in
+\end{figure}
+
+What follows is a concrete case study that exemplifies how the paradigm of contextual prediction is more interesting and relevant for domain adaptation. Consider the task of screening patients for type-2 diabetes risk. Let us imagine that we are developing a non-invasive test that predicts the risk of diabetes, $\myrv{y}$, based on body-mass index, $\myrv{x}_{c}$ (normalised to a real number between 0 and 1), and frequency of thirst (also a real number between 0 and 1), $\myrv{x}_{s}$. These variables could be measured through a simple questionnaire.
+
+Even though both body-mass index and thirst frequency are predictive of diabetes, only body-mass index is a reliable predictor across environments \citep{ruigePerformanceNIDDMScreening1997}. This is because body-mass index is a cause of type-2 diabetes, whereas frequent thirst is a symptom. Causes make for more reliable predictors than symptoms because, when you intervene upon a cause, the symptom changes accordingly, but when you intervene upon an effect, the cause remains unchanged. In the case of domain adaptation, the different data environments reflect different interventions applied to the variables of the system \citep{petersCausalInferenceUsing2016}.
+
+Suppose that the interventions in our diabetes example result from the amount of salt in the patient's diet, represented by the tertiary variable $\myrv{w}$. Salt-intake has a direct causal effect on both body-mass index, $\myrv{x}_{c}$, and on the frequency of thirst, $\myrv{x}_{s}$, but not on diabetes, $\myrv{y}$. The value of this variable is hidden to us (we do not measure it), but our patients are grouped according to diet (e.g., mediterranean, vegetarian, etc.) so we know that the average salt intake is different in each group.
+
+Let us put numbers to our diabetes example in order to see why causes are consistent predictors. Consider the following causal mechanism for the variables involved in diabetes risk:
+\begin{equation}\label{eq:diabetes-case-study}
+\begin{split}
+    \myrv{w} &\in \left[ 0,1,2 \right] \\
+    \myrv{x}_{c} &= \mathrm{Beta} \Biggl( \alpha = 2 + \frac{1}{2}  \myrv{w}, ~ \beta = 2 - \frac{1}{2}  \myrv{w} \Biggr) \\
+    \myrv{y} &= \mathrm{Bin} \Biggl( n = 1, ~ p = \myrv{x}_{c} \Biggr) \\
+    \myrv{x}_{s} &= \mathrm{Beta} \Biggl( \alpha = 2 + 4  \myrv{y} + 10  \myrv{w}, ~ \beta = 22 - 4  \myrv{y} - 10  \myrv{w} \Biggr).
+\end{split}
+\end{equation}
+This mechanism is also depicted visually in Figure~\ref{fig:diabetes}. Notice how, once the value of the body-mass index, $\myrv{x}_{c}$, has been established, the probability of diabetes, $\myrv{y}$, remains constant regardless of how the patient's salt intake, $\myrv{w}$, might change. This makes body-mass index, $\myrv{x}_{c}$, a consistent predictor across the environments defined by the values of the patient's salt intake, $\myrv{w}$. This is not the case for the frequency of thirst, $\myrv{x}_{s}$. For a given level of thirst frequency, $\myrv{x}_{s}$, the probability of diabetes, $\myrv{y}$, depends on the patient's salt intake, $\myrv{w}$.
+
+The state-of-the-art approach for identifying causal features is by learning \textit{invariant predictors}. This means training the predictor with both $\myrv{x}_{c}$ and $\myrv{x}_{s}$ such that it predicts with the same accuracy across every environment. Under a certain set of assumptions, invariant predictors are guaranteed to learn to only use information from causal features, $\myrv{x}_{c}$, and to discard information from symptoms, $\myrv{x}_{s}$. I review the literature on invariant predictors in Section~\ref{sec:invariant-predictors}.
+
+\textit{If} we knew the patient's salt intake, $W$, then the frequency of thirst, $X_2$, would become usable as a predictor. $X_2$ contains useful information about the response, $\myrv{y}$, that can potentially reduce the variance of our predictor. We can see in Figure~\ref{fig:x2-shift} that, when all other variables are kept constant, the frequency of thirst is a good predictor of diabetes.
+
+\begin{figure}[t]
+    \begin{center}
+        \begin{subfigure}[t]{0.325\textwidth}
+            \centerline{\includegraphics[width=\columnwidth]{figures/X1_shift.pdf}}
+            \caption{}
+            % \caption{Probability of diabetes, $\myrv{y}$, given body-mass, $\myrv{x}_{c}$, stays constant regardless of salt intake, $\myrv{w}$.}
+            \label{fig:x1-shift}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.325\textwidth}
+            \centerline{\includegraphics[width=\columnwidth]{figures/X2_shift.pdf}}
+            \caption{}
+            % \caption{Probability of diabetes, $\myrv{y}$, given thirst frequency, $\myrv{x}_{s}$, changes with salt intake, $\myrv{w}$.}
+            \label{fig:x2-shift}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.325\textwidth}
+            \centerline{\includegraphics[width=\columnwidth]{figures/X2_pred.pdf}}
+            \caption{}
+            % \caption{Probability of diabetes, $\myrv{y}$, changes with thirst frequency, $\myrv{x}_{s}$, even when salt intake, $\myrv{w}$, stays constant.}
+            \label{fig:x2-pred}
+        \end{subfigure}
+        \caption{Causes are more consistent predictors than symptoms, although symptoms still contain important information. In (a), we can see that the probability of diabetes, $\myrv{y}$, conditioned on a cause of diabetes (body-mass index, $\myrv{x}_{c}$) remains constant across environments (i.e., regardless of whether salt intake, $\myrv{w}$, is 1 or 0). However, (b) shows that the probability of diabetes, $\myrv{y}$, conditioned on a symptom of diabetes (thirst frequency, $\myrv{x}_{s}$) changes across environments. Nevertheless, the probability of diabetes, $\myrv{y}$, changes with thirst frequency, $\myrv{x}_{s}$, within each environment (i.e., when the salt intake, $\myrv{w}$, is constant), as shown in (c).}
+        \label{fig:x2}
+    \end{center}
+    \vskip -0.2in
+\end{figure}
+
+Crucially, we \textit{can} infer the patient's salt intake, $W$, \textit{if} we have multiple samples of the covariates, $\myrv{x}_{c}$ and $\myrv{x}_{s}$, from the same environment (i.e., from the same value of $\myrv{w}$). We can see in Figure~\ref{fig:diabetes} that multiple samples from $\myrv{x}_{c}$ would allow us to infer the distribution of $\myrv{x}_{c}$, therefore indirectly revealing the value of $\myrv{w}$.
+
+This procedure is only possible within an evaluation paradigm that allows at test-time for multiple covariates from the same environment. In the paradigm of singleton prediction, the best we can hope for is the causal predictor. In the rest of the chapter, we will explore the two questions that arise naturally: (1) How general is this framework? (2) How would a contextual predictor be implemented in practice? At the end, I will also show an interesting link between domain adaptation and disentanglement (defined in Chapter 3).
+
+\section{Background: Singleton predictions}
+
+\crit{[Start off with a presentation of Domain Adaptation, starting from the standard "common beliefs" about how it works.]}
+
+I will start by formally defining the problem of domain adaptation. Assume a training dataset comprising $n$ groups (i.e., environments), each with a different number of covariate-response pairs. Let $\myvect{x}^i_k \in \mathbb{R}^{\mydim{x}}$ be the $k$-th covariate in group $i$, with $i \in \{1,\dots,N\}$ and $k \in \{1,\dots,m_i\}$, where $\mycnt{m}_i$ is the size of group $i$. Let $\myvect{y}^i_{k} \in \mathbb{R}^{\mydim{y}}$ be the $k$-th response in group $i$. We assume that the data belonging to group $i$, the pairs $\left\{ \left( \myvect{x}^i_{k}, \myvect{y}^i_{k} \right) \right\}_{k=1}^{m_i}$, were generated by repeatedly sampling the joint distribution over two random variables, $\myrv{x}^i$ and $\myrv{y}^i$, modelling the covariate-response pairs, 
+\[
+    \left( \myrv{x}^i_{k}, \myrv{y}^i_{k} \right) \overset{\mathrm{i.i.d.}}{\sim} \myrv{x}^i, \myrv{y}^i, \quad \forall k \in \{1,\dots,\mycnt{m}_i\}. 
+\]
+
+The underlying joint distribution over $\myrv{x}$ and $\myrv{y}$ is assumed to change across groups. Let $\myfunc{p}^*$ represent the family of density functions corresponding to the underlying data-generating process. We allow for the general case where there may be $i \neq j \in \{1,\dots,n\}$, such that $\myfunc{p}^{*}_{\myrv{x}^i, \myrv{y}^i} \not\equiv \myfunc{p}^{*}_{\myrv{x}^j, \myrv{y}^j}$. These changes are called \textit{distributional shifts} \citep{quinonero-candelaDatasetShiftMachine2008}. 
+
+The conventional goal of unsupervised domain adaptation is to learn a parametric density of the responses conditioned on the covariates, $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{x}}$, called the \textit{predictive conditional}, that can model the data across the various groups. Let $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{x}}$ be the predictive conditional parametrised by $\theta$. One possible way to quantify how well the predictor models data across multiple groups is to measure the data log-likelihood for the worst performing group,
+\[
+    \underset{i \in \{1,\dots,\mycnt{n}\}}{\mathrm{min}} \frac{1}{\mycnt{m}_i} \sum_{k=1}^{\mycnt{m}_i} \log \myfunc{p}^{\theta}_{\myrv{y} | \myrv{x}} \left( \myvect{y}^i_{k} | \myvect{x}^i_{k} \right).
+\]
+
+The ultimate promise of unsupervised domain adaptation lies in its ability to deliver predictors with high real-world performance, capable of accurately handling diverse and previously unseen data distributions. We assume that there is another underlying joint distribution for the in-the-wild, or held-out, data, $\myfunc{p}^{*}_{\myrv{x}', \myrv{y}'}$. Our goal is to learn a parametric distribution of the responses conditioned on the covariates, $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{x}}$, that is as close as possible to the held-out distribution, $\myfunc{p}^{*}_{\myrv{y}' | \myrv{x}'}$, by using the information that can be extracted from the training data, $\left\{\left(\myvect{x}^i_{k},\myvect{y}^i_{k}\right)\right\}_{i=1, k=1}^{\mycnt{n}, \mycnt{m}_i}$.
+
+This problem setup applies to many real-world prediction tasks in science and engineering. One example is clinical risk modelling \citep{sharmaClinicalRiskPrediction2021}. Suppose we want to create a model that assesses a patient's risk of developing cardiovascular disease, $\myrv{y}$, based on the results of an LDL cholesterol test, $\myrv{x}$. We train this model on patient case histories, where each covariate-response pair, $(\myrv{x}, \myrv{y})$ corresponds to one patient. Typically, datasets of medical records are compiled with data sourced from different environments: different hospitals, countries, years, etc. Each of these environments corresponds to a different intervention on the joint distribution, $\myfunc{p}_{\myrv{x}, \myrv{y}}$.
+
+\subsection{Catastrophic forgetting}
+
+\crit{[It's often said that if I train on dataset A, then on dataset B, then show a single item from A, then I ought to predict well. But I don't. This is called "catastrophic forgetting".]}
+
+One of the most surprising and problematic phenomena typical of domain adaptation is \textit{catastrophic forgetting}. The naive hope of domain adaptation is that, after we train a predictor, $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{x}}$, on group $i$, training on group $j$ will improve the predictor's performance on group $i$. However, in practice, we discover that our predictor will perform poorly on group $i$, as if training on group $j$ has made the predictor ``forget'' what it had learned on group $i$. There is a large body of literature proposing improvements to neural network architectures in the hope of overcoming catastrophic forgetting in many domain areas, including medical imaging~\citep{perkoniggDynamicMemoryAlleviate2021}, machine translation~\citep{thompsonOvercomingCatastrophicForgetting2019}, or reading comprehension~\citep{xuForgetMeNot2020}.
+
+\crit{[Actually, if we think about it (in the generalized Covariate + Feature + Conditional + Instrumental shift settings), it's desirable to not predict well.]}
+
+Catastrophic forgetting is an inevitable consequence of certain kinds of distributional shifts. \citet{ben2010theory} explain that there are two kinds of shifts in the underlying joint distribution between the covariates and the responses, $\myfunc{p}^{*}_{\myrv{y} | \myrv{x}}$, with different implications for catastrophic forgetting. One is a change in the marginal distribution of the covariates (i.e., $\myfunc{p}^{*}_{\myrv{x}^i} \not\equiv \myfunc{p}^{*}_{\myrv{x}^j}$, where $i$ and $j$ are different groups) and another is a change in the predictive conditional (i.e., $\myfunc{p}^{*}_{\myrv{y}^i | \myrv{x}^i} \not\equiv \myfunc{p}^{*}_{\myrv{y}^j | \myrv{x}^j}$, where $i$ and $j$ are different groups). The former's effect on catastrophic forgetting can be mitigated by improving the neural network architecture~\citep{liuNeedLanguageDescribing2023}. The latter case, which is called conditional shift~\citep{liuNeedLanguageDescribing2023}, is more challenging. Under conditional shift, the same covariate, $\myvect{x}$, corresponds to different distributions of responses, $\myrv{y}$, depending on which environment we are in. This means that catastrophic forgetting is \textit{expected} when we train the same predictor with maximum likelihood on different environments. We must change the learning objective of the predictor in order to overcome this challenge.
+
+\subsection{Causal predictors}
+\label{sec:invariant-predictors}
+
+\crit{[The model should learn that only some features (namely, the causal predictors) are reliable / robust predictors. We should obviously be using causal predictors.]}
+
+Causal predictors are the gold-standard for domain adaptation under the singleton prediction paradigm. The main challenge involved in learning causal predictors is identifying which elements of the covariate, $\myrv{x}$, are causes of the response, and which are symptoms. There exists a broad literature on algorithms for discovering the causal components \citep{glymourReviewCausalDiscovery2019}.
+
+The current state-of-the-art approach for learning causal predictors is the paradigm of \textit{invariant predictors}. A predictor is said to be invariant when it achieves the same accuracy on each of the environments in the training set. Formally, let $\myfunc{r}_i: \mathbb{R}^{\mydim{x} + \mydim{\theta}} \to \mathbb{R}$ be a function evaluating the error achieved by the predictive conditional, $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{x}}$, on environment $i$. Let $\myfunc{r}_i$ be defined as:
+\[
+    \myfunc{r}_i \left( \myvect{x}, \theta \right) = \kl[\bigg]{\myfunc{p}^{*}_{\myrv{y}^i | \myrv{x}^i = \myvect{x}}}{\myfunc{p}^{\theta}_{\myrv{y} | \myrv{x} = \myvect{x}}}.
+\]
+We say that $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{x}}$ is an invariant predictor if and only if the random variable $\myrv{r}_i = \myfunc{r}_i \left( \myrv{x}^i, \theta \right)$ is identically distributed across every environment: $\forall i \neq j \in \{1,\dots,\mycnt{n}\}, ~ \myrv{R}_i \sim \myrv{R}_j$. 
+
+This definition of invariant predictors is a generalisation of the more common formulation, $\myfunc{r}_i \left( \myvect{x}, \theta \right) = \frac{1}{\mycnt{n}} \sum_{i=1}^{\mycnt{n}} \sum_{k=1}^{\mycnt{m}_i}  \left(\myvect{y}^i_k - \tilde{\myvect{y}}^i_k \right)^2$, where $\tilde{\myvect{y}}^i_k$ is the output of the predictor. I use the generalisation because, in the diabetes exaple, the response, $\myrv{y}$, is categorical rather than continuous.
+
+Invariant predictors are attractive because, under a certain set of assumptions, they are guaranteed to learn \textit{causal features}~\citep{pearl2009causality, scholkopfCausalAnticausalLearning2012}. Causal features are the components of the covariate, $\myrv{x}$, that are direct causal parents of the response, $\myrv{y}$. A predictor trained on only causal features is guaranteed to perform with the same level of accuracy on any environment, as long as the dataset shift does not include interventions on the response, $\myrv{y}$.
+
+There exist several algorithms for learning invariant predictors, each with its own set of specific sets of assumptions. For example, \citet{petersCausalInferenceUsing2016} assume that the relationship between the covariates, $\myrv{x}$, and responses, $\myrv{y}$, is linear. \citet{magliacane2018domain} assume that the change in the true predictive distribution, $\myfunc{p}^{*}_{\myrv{y} | \myrv{x}}$, across environments is determined by a random variable, $\myrv{u}$, that is observed. \citet{arjovskyInvariantRiskMinimization2019} assume a linear optimisation problem. 
+
+\crit{[Show $X_1 \to Y \to X_2$  example, then set out a more general example that includes feature shift (encompassing covariate and conditional shift) + instrumental shift.]}
+
+% Consider the following probabilistic model for an environment. Without loss of generality, we can decompose the covariate, $\myrv{x}$, into the set of dimensions that are causes of the response, $\myrv{y}$, and the rest of the dimensions, which are effects of the response. I use $\myrv{x}_{c}$ to denote the former set of dimensions and $\myrv{x}_{s}$ to denote the latter. We assume a group-level latent variable, $\myrv{w}$, that causes all the components of the covariate, $\myrv{x}$, but does not directly affect the response, $\myrv{y}$. See Figure~\ref{fig:prob_model} for the probabilistic graphical model.
+
+% \citet{stojanovDomainAdaptationInvariant2021} propose Domain-Specific Adversarial Training to tackle the problem of conditional shift. They use the same invariant representations setup as Domain-Adversarial Neural Network, an adversarial loss ensuring that the marginal distributions of the latent representations of the two domains are distributed equivalently. However, they enhance this setup by concatenating the inputs with some trainable domain-specific parameters, one for the source domain and one for the target domain. Adding domain-specific parameters allows the model to learn a different mapping from the covariate $\myrv{x}$ to the target variable $\myrv{y}$ depending on whether they belong to the source or target domain. In order to ensure that the predictor will make similar predictions for the same covariate $\myrv{x}$ regardless of whether the covariate comes from the source domain or the target domain, they also use a regularisation loss to increase the mutual information between the source domain and target domain distributions of the response $y$ given the covariate $x$.
+
+% \citet{petersCausalInferenceUsing2016} leverage causal inference to estimate the relationship between the covariate $\myrv{x}$ and the response $\myrv{y}$. They focus on identifying the dimensions $\mathcal{P}$ within $\myrv{x}$ that directly cause the responses $\myrv{y}$. Their approach assumes the source domain can be further subdivided into sub-domains sharing the same causal relationships with each other and the target domain. This setting combines causal and anti-causal aspects: some dimensions in $\myrv{x}$ (denoted by $\mathcal{P}$) act as causal parents of $\myrv{y}$, while others ($\{1:D\} \setminus \mathcal{P}$ ) are influenced by $\myrv{y}$. Their method aims to find a minimal set of causal parent dimensions, $\mathcal{P}$ such that the conditional distribution of the response given these dimensions $\myrv{y} | \myrv{x}_{\mathcal{P}}$ remains constant across different sub-domains. 
+
+% \citet{magliacane2018domain} leverage causal inference for domain adaptation. However, their approach hinges on the assumption that the group-level variable $\myrv{w}$ is directly observable. This allows them to identify the causal parents of the response $\myrv{y}$ within the covariate $\myrv{x}$. They achieve this by finding the minimal set of dimensions $\mathcal{P}$ such that conditioning on these dimensions makes the response $\myrv{y}$ independent of the group variable $\myrv{w}$ (written as $\myrv{w} \perp \myrv{y} | \myrv{x}_{\mathcal{P}}$). Instead of matching marginal distributions, they focus on selecting features for the shared representation based on their ability to achieve consistent prediction performance across domains.
+
+% \citet{arjovsky2019invariant} propose a novel approach for unsupervised domain adaptation that bridges the gap between representation learning and causal inference. Their method learns a latent representation, $\myrv{z}$, that remains unchanged across different domains. However, this notion of invariance differs from previous approaches. Instead of enforcing identical marginal distributions for the latent representation across domains (i.e., $\myrv{z}_S \equiv \myrv{z}_T$), they focus on the conditional distribution of the response $\myrv{y}$ given the latent representation $\myrv{z}$. This means that the relationship between the response and the latent representation should be consistent across sub-domains within the source domain. 
+
+\crit{[Note: there's loads of dumb empirical stuff about invariant predictors. The right way to do it is with causal predictors, i.e. distributionally invariant, i.e. causal predictors in the Peters sense.]}
+
+\crit{[Note: People talk about Target Shift and Confounder Shift. Those are dumb settings, for this singleton prediction task. If we allow the Y-SEM to change, then all bets are off. They're basically assuming "the problem is unsolvable", and it's daft to try to solve an unsolvable problem. The only basis we have for being able to make predictions at all (in the singleton prediction task) is the ASSUMPTION that the future behaves similarly to the past.]}
+
+\section{My approach: Contextual predictions}
+
+\crit{[Actually, there's another paradigm: when I'm allowed to make predictions based on a group of covariates from the new dataset. (Note: this is not what's evaluated in a typical Domain Adaptation paper. Typical Domain Adaptation is just about prediction based on a singleton, and point 2 addresses that).]}
+
+\crit{[In this Contextual Paradigm, we can do better than a Causal Predictor. Think of a simple case with $X_1 \to Y \to X_2$. The causal predictor will only use $X_1$, because it realizes that the $Y \to X_2$  link is contingent on the environment. But, in the Contextual paradigm, we have data that lets us learn about this contingency, and so we can do better! This is a textual explanation. Or maybe a worked example. Introduce the IDEA in the simplest way you can, and make sure that the core idea is well understood. A minimal example.]}
+
+I claim that there is another way of solving the problem of catastrophic forgetting under conditional shift: \textit{contextual prediction}. The current domain adaptation paradigm is that, at test time, we can only make predictions based on one covariate at a time. In that scenario, that invariant predictor is our best option, because the relationship between the response, $\myrv{y}$, and the components of the covariate that are symptoms of the response, $\myrv{x}_{2}$, is contingent on the environment, whereas the relationship between $\myrv{y}$ and the dimensions that are causes of the response, $\myrv{x}_{c}$, is stable across environments. What if at test time we could make use of multiple covariates from the same environment to infer something about this relationship? 
+
+Formally, contextual prediction is an evaluation paradigm that allows the predictor to model the joint probability of responses, $\myrv{y}$, conditional on a group of covariates, $\myrv{x}$, belonging to the same environment. Let $\myfunc{p}^\theta_{\mygroup{\myrv{y}} | \mygroup{\myrv{x}}}$ be the predictive conditional density under this paradigm, where $\mygroup{\myrv{x}}$ and $\mygroup{\myrv{y}}$ are the random variables modelling a group of covariate-response pairs coming from the same environment, such as $\left\{ \left( x^i_k, y^i_k \right) \right\}_{k=1}^{\mycnt{m}_i}$.
+
+Contextual predictors are necessary in situations where the causal predictor is not sufficient. One assumption that is necessary for invariant predictors to be a reasonable solution for domain adaptation is that the causal features of the covariate, $\myrv{x}_{c}$, must be expressive enough to predict the response, $\myrv{y}$, with any kind of accuracy. However, this is not always the case. For example, in the case of \textit{anti-causal learning}, all the components of the covariate, $\myrv{x}$, are assumed to be causal effects of the response, $\myrv{y}$, rendering invariant predictors useless~\citep{scholkopfCausalAnticausalLearning2012}.
+
+
+% The potential for contextual prediction to unlock more accurate solutions to domain adaptation comes from the information brought by multiple covariates, $\mygroup{x}'$, about the true distribution of the covariates in the held-out environment, $\myfunc{p}^{*}_{\myrv{x}'}$. Knowing $\myfunc{p}^{*}_{\myrv{x}'}$ would be sufficient to recover the true predictive distribution for the held-out environment, $\myfunc{p}^{*}_{\myrv{y}' | \myrv{x}'}$, using the following decomposition based on Bayes' rule:
+% \[
+%     \myfunc{p}^{*}_{\myrv{y}' | \myrv{x}'} \equiv \frac{\myfunc{p}^{*}_{\myrv{y}' | \myrv{x}'_{1}} ~ \myfunc{p}^{*}_{\myrv{x}'_{2} | \myrv{y}'}}{\myfunc{p}^{*}_{\myrv{x}'_{2} | \myrv{x}'_{1}}}.
+% \]
+% When we know $\myfunc{p}^{*}_{\myrv{x}'}$, this calculation becomes tractable because the terms in the numerator do not change across environments and the term in the denominator can be recovered from $\myfunc{p}^{*}_{\myrv{x}'}$. So what algorithm can we use to infer $\myfunc{p}^{*}_{\myrv{x}'}$ at test time from the covariates, $\mygroup{\myvect{x}}'$?
+
+\section{Group-instance predictor}
+
+\crit{[Now, let me formally set out the Contextual Predictor. It does ... [Note: (5) is less important than (4), in the flow of your argument.]]}
+
+In this section, I will introduce a concrete example of a predictor exploiting the paradigm of contextual prediction which outperforms causal predictors in the diabetes case study introduced in Section~\ref{sec:example-diabetes}. This method is based on the group-instance model defined in the Background section. Using the group-instance model for conextual predictions is a simple idea, but it serves to show empirically the great potential of contextual predictions as an evaluation paradigm.
+
+We first assume that we have prior knowledge of which components of the covariates, $\myrv{x}$, are causes, $\myrv{x}_{c}$, and which are symptoms, $\myrv{x}_{s}$. This assumption is fair because, for the purpose of our evaluation, the causal predictor used for comparison will be trained only on the causal components, $\myrv{x}_c$ (see Section~\ref{sec:domain-evaluation}).
+
+We train the group-instance model to autoencode each group $i$ of symptoms $\left\{\myvect{x}^i_{s, k}\right\}_{k=1}^{\mycnt{m}_i}$ from the training set. Recall that, for each group, the group-instance encoder will infer one group-level latent vector $\myvect{w}^i \in \mathbb{R}^{\mydim{w}}$ and a group of instance-level latent vectors $\left\{ \myvect{z}^i_{k} \right\}_{k=1}^{\mycnt{m}_i}$ with $\myvect{z}^i_{k} \in \mathbb{R}^{\mydim{z}}$. Then, we train our response predictor, $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{z}, \myrv{x}_c}$, the conditional density of the response, $\myrv{y}$, given the instance-level variable (inferred with the value of the corresponding symptom), $\myrv{z}$, and given the corresponding cause, $\myrv{x}_c$. This method, in effect, enhances the causal predictor by concatenating a ``de-environmentalised'' symptom to the input.
+
+For testing, recall that the paradigm of contextual predictions means making a joint prediction for an entire group of covariates, $\left\{ \myvect{x} \right\}_{k=1}^{\mycnt{m}'}$. We use the group-instance model to infer the group-level, $\myvect{w}'$, and instance-level, $\left\{ \myvect{z}'_{k} \right\}_{k=1}^{\mycnt{m}'}$, vectors based on the held-out symptoms, $\left\{ \myvect{x}'_{k} \right\}_{k=1}^{\mycnt{m}'}$. Then, for each covariate, $k$, we obtain the distribution of the response, $\myrv{y}'_k$, from the response model, $\myfunc{p}^{\theta}_{\myrv{y} | \myrv{z} = \myvect{z}'_k, \myrv{X} = \myrv{x}'_{c}}$.
+
+\section{Experiment for illustration}
+\label{sec:domain-evaluation}
+
+\begin{figure}[t]
+    \begin{center}
+        \centerline{\includegraphics[width=\columnwidth]{figures/domain_adaptation_results.pdf}}
+        \caption{Evaluation results following the paradigm of contextual prediction. Each horizontal bar in the rugplot denotes the result for one random initialisation of the dataset and model weights. Our model, Group-Instance, which predicts jointly for an entire group of covariates, outperforms causal predictors, the current state-of-the-art under the paradigm of singleton prediction. As expected, the Naive Predictor (i.e., a model trained with maximum likelihood on the pooled data from the training environments) performs well on average but generalises poorly to new environments. The Oracle (i.e., a model similar to the Naive Predictor, but that also takes as input the ground-truth environment variable, $\myrv{w}$, in addition to the covariates, $\myrv{x}_{c}$ and $\myrv{x}_{s}$) performs best on average.}
+        \label{fig:diabetes-empirical-results}
+    \end{center}
+    \vskip -0.4in
+\end{figure}
+
+In this section, I show empirically that the group-instance predictor outperforms the causal predictor under the diabetes case study from Section~\ref{sec:example-diabetes}. The task is to predict whether a patient has diabetes, $\myrv{y}$, based on their body-mass index, $\myrv{x}_{c}$, and their frequency of thirst, $\myrv{x}_{s}$. The patients are grouped into environments based on a hidden variable, the patient's salt intake, $\myrv{w}$.
+
+We generate a dataset according to the diabetes mechanism defined in Equation~\ref{eq:diabetes-case-study}. Each level of salt intake, $\myrv{w} \in [0, 1, 2]$, corresponds to one data environment, two of which will be used for training and the remaining one used for testing. Specifically, $w^i = i$, for each $i \in [0,1,2]$. For each environment, $i$, we use the mechanism~\ref{eq:diabetes-case-study} to randomly generate $\mycnt{m} = \num{10000}$ covariate-response tuples containing one body-mass index, $\myvect{x}^i_{c, k}$, one frequency of thirst, $\myvect{x}^i_{s, k}$, and one diabetes diagnosis, $y^i_k$, where $k \in \{1,\dots,\mycnt{m}\}$.
+
+The evaluation metric is the accuracy of predictions on the testing environment. We train with maximum likelihood estimation on the covariate-response pairs from the two training environments, $\left\{ \left(\myvect{x}^1_{c, k}, \myvect{x}^1_{s, k}, y^1_{k} \right) \right\}_{k=1}^{\mycnt{m}}$ and $\left\{ \left( \myvect{x}^2_{c, k}, \myvect{x}^2_{s, k}, y^2_{k} \right) \right\}_{k=1}^{\mycnt{m}}$, and evaluate on the data pairs from the testing environment, $\left\{ \left( \myvect{x}^3_{c, k}, \myvect{x}^3_{s, k}, y^3_{k} \right) \right\}_{k=1}^{\mycnt{m}}$. For each data pair, $k$, we make a prediction, $\tilde{y}^i_k$. We measure the accuracy for environment $i$ using the following function:
+\[
+    \mathrm{acc} \left( \theta, i \right) = \frac{1}{\mycnt{m}} \sum_{k=1}^{\mycnt{m}} \left[ \mathbb{I} \left( \tilde{y}^i_k > 0.5 \right)  y^i_k  + \mathbb{I}\left( \tilde{y}^i_k < 0.5 \right)  \left(1 - y^i_k \right) \right].
+\]
+
+I compare four prediction methods in my analysis:
+\begin{enumerate}
+    \item The naive predictor. The predictive conditional, $\myfunc{p}^\theta_{\myrv{y} | \myrv{x}_{c}, \myrv{x}_{s}}$, takes as input the body-mass index, $\myrv{x}_{c}$, and frequency of thirst, $\myrv{x}_{s}$, of a single patient. We implement the predictor as a binomial distribution parametrised by a linear model, $\myrv{y} = \mathrm{Bin} \left( n=1, ~ p=\theta_1 + \theta_2  \myrv{x}_{c} + \theta_3  \myrv{x}_{s} \right)$. This method is the standard supervised learning approach.
+    \item The causal predictor. The predictive conditional, $\myfunc{p}^\theta_{\myrv{y} | \myrv{x}_{c}}$, takes as input only the body-mass index, $\myrv{x}_{c}$, which is the causal parent of the response, $\myrv{y}$. We implement the predictor as a binomial distribution parametrised by a linear model, $\myrv{y} = \mathrm{Bin} \left( n=1, ~ p=\theta_1 + \theta_2  \myrv{x}_{c} \right)$.  This method is the idealised predictor under the singleton prediction paradigm, since it assumes that we already know which component is causal, $\myrv{x}_c$.
+    \item The group-instance predictor. The predictive conditional, $\myfunc{p}^\theta_{\myrv{y} | \myrv{x}_{c}, \myrv{x}_{s}, \mygroup{\myrv{x}}_{c}, \mygroup{\myrv{x}}_{s}}$, takes as input both the patient's covariates (i.e., body-mass index, $\myrv{x}_{c}$, and frequency of thirst, $\myrv{x}_{s}$), as well as the covariates of all the other patients in the environment, $\mygroup{\myrv{x}}_{c}$ and $\mygroup{\myrv{x}}_{s}$. We implement the predictor as a binomial distribution parametrised by a linear model, $\myrv{y} = \mathrm{Bin} \left( n=1, ~ p=\theta_1 + \theta_2  \myrv{x}_{c} + \theta_3  \myrv{z} \right)$, where $\myrv{z}$ is the inferred instance-level latent code sampled from the latent posterior density of the group-instance model, $\myfunc{q}^{\phi, \psi}_{\myrv{w}, \mygroup{\myrv{z}} | \mygroup{\myrv{x}}}$. This method is my proposed implementation for the paradigm of contextual prediction.
+    \item The environment-oracle predictor. The predictive conditional, $\myfunc{p}^\theta_{\myrv{y} | \myrv{x}_{c}, \myrv{x}_{s}, \myrv{w}}$, takes as input both the patient's covariates (i.e., body-mass index, $\myrv{x}_{c}$, and frequency of thirst, $\myrv{x}_{s}$) as well as the patient's salt intake, $\myrv{w}$. This method acts as a topline because it is the only one that has access to the ground-truth salt intake levels, $w^i$. We implement the predictor as a binomial distribution parametrised by a linear model, $\myrv{y} = \mathrm{Bin} \left( n=1, ~ p=\theta_1 + \theta_2  \myrv{x}_{c} + \theta_3  \myrv{x}_{s} + \theta_4  \myrv{w} \right)$. 
+\end{enumerate}
+
+These methods are simplistic, but they reflect a real use case. Medical researchers frequently use simple linear models for clinical risk prediction \citep{nobleRiskModelsScores2011}. 
+
+The results can be seen in Figure~\ref{fig:diabetes-empirical-results}. My group-instance model outperforms causal predictors in every environment and overall, demonstrating the potential of contextual prediction to unlock new solutions for domain adaptation. As expected, the naive predictor performs vastly differently across environments. The environment-oracle predictor performs best on average, but also has quite high variance between environments.
+
+The results of this experiment reflect the potential of contextual predictions. Under singleton predictions, it is impossible to consistently surpass the performance of the causal predictor; it offers the best worst-case solution. However, contextual predictions allow for new methods, such as the group-instance predictor, to achieve new levels of prediction accuracy.
+
+\crit{[By the way, the Contextual Predictor could even let us come up with interesting results for the Target Shift and Confounder Shift. Let's call them "Y-SEM interference".]}
+
+\crit{[On the topic of Y-SEM interference, I've come across three cases: (a) Siyuan, (b) Blessings of multiple causes, (c) the fuzziness around regression discontinuity design. It's interesting to note that (a) and (b) are both related to Contextual settings. The world of Causal Inference is still very far from a settled answer about "Y-SEM interference", and so it's nice that my Contextual stuff gives another way in. [For present purposes, this should just be a teaser, e.g. the simplest possible example you can manage that has Y-SEM interference.]]}
+
+\crit{[Finally, to bring us back full circle to (1), let's consider an interesting case: completely disentangled. Then, we don't actually need a group for us to learn the group variable. Therefore, we can make successful contextual prediction on a "context" of size 1!]}
+
+\crit{[Let's explore this empirically, and see how "degree of disentanglement" is linked to "necessary context size".]}
+
+\crit{[Unlinked to the rest of the story above? Or possibly it has to go under 5.] In Causal Analysis, there are two regimes that people have studied: the standard ISV setting with one covariate per environment and meaningful environments, and the Peters setting with many covariates across few environments and meaningless environments. My work on this Group-Instance stuff suggests another regime in which we can come up with decent causal predictors, namely, many smallish meaningless environments. Quite aside from the main story (1)--(6), I also have something to offer to plain vanilla Causal Inference described in (2).]}
+
+\section{Discussion}
+
+% This chapter introduced the paradigm of contextual predictions as an improvement over singleton predictions in unsupervised domain adaptation. By allowing access to groups of covariates at test time, contextual prediction enables the predictor to use environmental information in order to improve its accuracy. I propose an example method under contextual predictions, called group-instance predictor, which outperforms a predictor that uses only causal features. 
+
+
+\crit{[1. If we absolutely have to do singleton prediction, then we should
+use causal predictors.]}
+
+\crit{[2. But causal predictors are limited: "forgetting" is a feature of
+causal prediction, not a bug!]}
+
+This chapter introduced the paradigm of contextual predictions for unsupervised domain adaptation as an interesting counterpoint to singleton predictions. I start by reviewing why causal predictors are the state-of-the-art in the paradigm of singleton predictions. Causal predictors learn to predict based solely on the causes of the outcomes instead of the symptoms. This is because the relationship between cause and response does not change across environments. For example, a symptom that is positively correlated with the response in one environment may be nagatively correlated in another. This is why the fact that causal predictors ``forget'' information available in one environment is not a bug, it is a feature. 
+
+\crit{[3. If we want to do better than causal prediction, we need to use
+context. I've suggested a context-aware predictor, though there are
+surely many others.]}
+
+In order to surpass the performance of the causal predictor across different environments, one way to safely make use of information from symptoms is to use the paradigm of contextual predictions. Contextual predictors make a joint prediction for an entire group of covariates belonging to the same environment. I proposed one example method for contextual predictions, but many other may exist. My method is based on the group-instance model, which comprises the core of the contribution in this thesis. This result is counterintuitive in the context of the common wisdom in domain adaptation, which states that predictions based on symptoms are unreliable.
+
+\crit{[4. There is one exception to my argument above. If the dataset happens
+to be unentangled (see definition in chapter 3), then I speculate we
+can achieve contextual-level quality of prediction but using only a
+singleton. It's further work to figure out what a good method might be
+for training such a predictor.]}
+
+There is one exception, however, to this argument. As I show in Chapter 3, one-sample disentanglement methods (GVAE) perform on par with my contextual disentanglement method (CxVAE), when the dataset does not suffer from conditional shift. I speculate that a similar result applies to domain adaptation: When there is no conditional shift, it is possible to design a singleton predictor that outperforms the causal predictor across multiple environments. I leave it to future work to design a singleton prediction method that effectively makes use of symptom information. A promising direction would be to use a one-sample disentanglement method, such as AdaGVAE~\citep{locatelloWeaklySupervisedDisentanglementCompromises2020} to extract a de-environmentalised representation that can be then used as input for the predictor.
+
+% \section{Introduction}
+
+% This chapter illustrates the ability of the \textit{Group-Instance Disentanglement} model (\texttt{GID}) to achieve causally-robust predictions.
+
+% We consider the problem of \textit{supervised learning} from \textit{interventional data} with \textit{confounding}. Supervised learning is the task of training a predictor function that achieves accurate predictions of an response variable $Y$ conditioned on an covariate variable $X$. The training dataset comprises covariate-response pairs sampled from $X, Y$. Confounding occurs when an unseen variable $U$ is a causal parent of both the covariate $X$ and the target $Y$. Interventional data refers to a training set where the the covariate-response pairs are assigned to different groups based on interventions on the covariate $X$ and/or the confounder $U$.
+
+% \paragraph{Problem statement.} The training dataset comprises $N$ groups, each with a different number of covariate-response pairs. Let $x_{i, k} \in \mathbb{R}$ be the $k$-th covariate in group $i$, with $i \in \{1:N\}$ and $k \in \{1:K_i\}$. Let $y_{i,k}$ be the $k$-th response in group $i$. 
+
+% We assume that the data belonging to group $i$, the pairs $\{(x_{i,k}, y_{i,k})\}_{k=1}^{K_i}$, were generated by repeatedly sampling the joint distribution of the random variables $X_i, Y_i$. Let $U_i$ be the unobserved random variable, called the confounder, that is a causal parent of both the covariate $X_i$ and the response $Y_i$. We assume that the distributions of the confounder $U_i$ and the covariate $X_i$ may change from one group to another. Equivalently, each group represents an intervention on the variables $X, Y, U$ such that the interventional distribution for group $i$ is $(X_i, Y_i, U_i) \sim P(do(X; \xi_i), Y, do(U; \zeta_i))$ where $\xi_i, \zeta_i$ are the unknown parameters controlling the interventions for group $i$. 
+
+% At test time, we receive a new set of $M$ covariates $\{x'_i\}_{i=1}^M$ and the goal is to predict the the corresponding ground-truth responses $\{y'_i\}_{i=1}^M$. The ground-truth covariate-response pairs were generated in 1 of 2 ways:
+
+% \begin{enumerate}
+%     \item The \textsc{Whole-Group} scenario. The testing data $\{(x'_i, y'_i)\}_{i=1}^M$ were sampled from a new interventional distribution $P(do(X; \xi'), Y, do(U; \zeta'))$ where $\xi', \zeta'$ are the unknown parameters controlling the new intervention. This scenario is equivalent to receiving a whole group of covariates previously unseen during training.
+%     \item The \textsc{Single-Instance} scenario. Each pair of testing data $(x'_i, y'_i)$ was sampled from a different intervention $P(do(X; \xi'_i), Y, do(U; \zeta'_i))$ where $\xi'_i, \zeta'_i$ are the unknown parameters controlling the intervention for sample $i$. This scenario is equivalent to receiving a set of single instances of covariates with no relationship to one another.
+% \end{enumerate}
+
+% \begin{table}[t]
+%     \caption{How to use \texttt{GID} to achieve causally robust predictions.}
+%     \label{table:instructions}
+%     \begin{center}
+%     \begin{tabularx}{\columnwidth}{p{0.11\columnwidth}p{0.4\columnwidth}p{0.4\columnwidth}}
+%     \toprule & No intervention on $U$ & No intervention on $X$ \\
+%     \midrule {\sc Single-Instance} & Estimate the causal parameter $\theta$ using the inferred group-level latent variable $\mathbf{s}$ as instrument. & Estimate the causal parameter $\theta$ using the inferred instance-level latent variable $\mathbf{c}$ as instrument. \\ 
+%     \midrule {\sc Whole-Group} & Condition the predictor on the inferred instance variable $C_i$. & Condition the predictor on the inferred group variable $S_i$. \\
+%     \bottomrule
+%     \end{tabularx}{\parfillskip=0pt\par}
+%     \end{center}
+% \end{table}
+
+% \paragraph{Approximating the confounder.} When is it reasonable to assume that either one of the instance variable $C_i$ or the group variable $S_i$ approximates the confounder $U_i$? It depends on the relationship between the intervention on the confounder $do(U, \zeta)$ and the intervention on the covariate $do(X, \xi)$. If the intervention on the covariate $X$ is ``stronger'' than the intervention on the confounder $U$, then the inferred group-level latent variable $\mathbf{s}$ should be used as an instrumental variable . I define intervention ``strength'' on variable $X$ as the average KL-divergence between response variables from different groups when conditioned on $X$:
+
+% \[
+%     \sum_{1 \leq i \neq j \leq N} \mathbb{E}_{X_i, Y_i} \left[ \log \frac{P(Y_i | X_i)}{P(Y_j = Y_i | X_j = X_i)} \right] > \sum_{1 \leq i \neq j \leq N} \mathbb{E}_{U_i, Y_i} \left[ \log \frac{P(Y_i | U_i)}{P(Y_j = Y_i | U_j = U_i)} \right]
+% \]
+
+% \crit{[Maybe my definition of intervention ``strength'' is not great or necessary. If that's the case, let's skip over it.]}
+
+% At the extremes ends of the relationship between the intervention on the confounder $do(U, \zeta)$ and the intervention on the covariate $do(X, \xi)$, we find two cases:
+
+% \begin{enumerate}
+%     \item \textbf{No intervention on $U$.} This is the case where the difference between groups is due solely to interventions on the covariate $X_i$: $\forall 1 \leq i \neq j \leq N, ~ \mathrm{KL} [U_i ~||~ U_j] \approx 0$. In this case, the instance variable $C_i$ will approximate the confounder $U_i$ because $C_i$ captures the variation in the covariate $X_i$ that is independent of the group. 
+%     \item \textbf{No intervention on $X$.} This is the case where the difference between groups is due solely to interventions on the confounder $U_i$: $\forall 1 \leq i \neq j \leq N, ~ \mathrm{KL} [X_i | U_i ~||~ X_j | U_j] \approx 0$. In this case, the group variable $S_i$ will approximate the confounder $U_i$ because $S_i$ captures the variation in the covariate $X_i$ across groups.
+% \end{enumerate}
+
+% \paragraph{Contribution.} In this chapter, I provide an illustration for how the \texttt{GID} can achieve causally-robust predictions. I sketch some guidance for how to use the latent variables inferred by the \texttt{GID} in order to train a causally robust predictor (Table~\ref{table:instructions}). I then discuss two case studies showing how \textit{GID} can be applied on situations where either the covariate $X$ or the confounder $U$ has been intervened upon.
+
+% \begin{table}[t]
+%     \caption{\textsc{Single-Instance} scenario results. Mean difference between the ground-truth $\beta$ and the estimate $\theta$. I report the standard deviation over 100 different dataset settings.}
+%     \label{table:single-instance-results}
+%     \begin{center}
+%     \begin{tabularx}{\textwidth}{lYYY}
+%     \toprule & \texttt{OLS} & \texttt{IV-Econ} & \textbf{\texttt{IV-GID}}\\
+%     \midrule No intervention on $U$ & $a \pm b$ & $a \pm b$ & $a \pm b$ \\
+%     \midrule No intervention on $X$ & $a \pm b$ & $a \pm b$ & $a \pm b$ \\
+%     \bottomrule
+%     \end{tabularx}{\parfillskip=0pt\par}
+%     \end{center}
+% \end{table}
+
+% \begin{table}[t]
+%     \caption{\textsc{Whole-Group} scenario results. Difference between the ground-truth $\beta$ and the estimate $\theta$. Mean Squared Error between ground-truth responses and predicted responses. I report the standard deviation over 100 different dataset settings.}
+%     \label{table:whole-group-results}
+%     \begin{center}
+%     \begin{tabularx}{\textwidth}{lYYY}
+%     \toprule & \texttt{OLS} & \texttt{IV-Econ} & \textbf{\texttt{IV-GID}}\\
+%     \midrule No intervention on $U$ & $a \pm b$ & $a \pm b$ & $a \pm b$ \\
+%     \midrule No intervention on $X$ & $a \pm b$ & $a \pm b$ & $a \pm b$ \\
+%     \bottomrule
+%     \end{tabularx}{\parfillskip=0pt\par}
+%     \end{center}
+% \end{table}
+% \section{Case 1: No intervention on $U$}
+
+% Suppose we want to measure the causal effect that the price of a product has on its demand. Let $Q_k = \alpha + \beta  P_k + U_k$ be the function modelling the quantity sold of a given product $k$ given that it is sold at price $P_k$. The parameter we want to estimate is $\beta$. The confounder is $U_k$, which models the demand shocks on product $k$. For example, if the product is cake, the demand shock could be a change in VAT on cakes. The causal effect that we're interested in is the effect of a change in prices from $P_k$ to $P'_k$: $(Q_k (P_k) - Q_k(P'_k)) / (P_k - P'_k)$.
+
+% If we assume that the quantity sold is normally distributed, we can perform maximum likelihood via OLS to find the parameter $\beta$. However, this will be biased because $P_k$ is not independent of $U_k$.
+
+% We assume that the seller sets the price that maximises the profits, which are equal to price times the quantity minus the cost. The function mapping quantity to cost is $C_k (Q_k) = (c + V_k)  Q_k$. 
+
+% The profit is equal to $1_k = P_k  Q_k - C_k$. The profit is maximised with respect to price $P_k$ when $P_k = \frac{1}{2} \left( c + V_k - \frac{\alpha + U_k}{\beta} \right)$. The equations are:
+
+% \[
+%     Q_k = \alpha + \beta  P_k + U_k
+% \]
+% \[
+%     C_k = (c + V_k)  Q_k
+% \]
+% \[
+%     P_k = \frac{1}{2} \left(c + V_k - \frac{\alpha + U_k}{\beta} \right)
+% \]
+
+% Let's say we just perform OLS regression on the data. The implied model for price given the demand is $Q_k = \mu + \gamma  P_k + \nu$. 
+
+% \paragraph{Dataset.}
+
+% \draft{\paragraph{\textsc{Single-Instance} scenario.} We run an experiment to estimate the parameter $\beta$. We generate a few  datasets by randomly sampling values for the parameters $\alpha, \beta, \gamma$. We then use OLS to estimate the parameters, and show that the estimate is consistently biased. We then use two methods for instrumental variable regression. One is the conventional method of using another variable in the group as an instrument. The other is to use the latent representation of the whole group as an instrument. We show that the confidence interval that we get is tighter.}
+
+% \draft{\paragraph{\textsc{Whole-Group} scenario.} We run an experiment to estimate the parameter $\beta$. We generate a few  datasets by randomly sampling values for the parameters $\alpha, \beta, \gamma$. We train our predictor conditioned on }
+
+% \section{Case 2: No Intervention on $X$}
+
+% Let's further assume that either one (but not both) of the instance variable $C_i$ or the group variable $S_i$ approximates the confounder $U_i$ (Assumption~\textit{II}). I will discuss later under what conditions this assumption is justified. Without loss of generality, let's assume that the group variable $S_i$ approximates the confounder $U_i$. By ``approximates'', I mean that the mutual information between the group variable $S_i$ and the confounder $U_i$ is equal to the entropy of the confounder $U_i$: $\forall i \in \{1:N\}, ~ I(U_i; S_i) = H(S_i)$.
+
+% There are two ways of using the inferred latent variables to learn a causally robust predictor, depending on which test-time scenario we are in, \textsc{Whole-Group} or \textsc{Single-Instance}:
+
+% \begin{enumerate}
+%     \item \textsc{Whole-Group}. This is the case when the testing data comes from a single group. We train the predictor $f_\theta: \mathbb{R} \times \mathbb{R}^{D_S} \to \mathbb{R}$ to model the response $Y_i$ as a function of the covariate $X_i$ and the inferred group variable $S_i$: $Y_i = f_\theta(X_i, S_i)$. At test-time, we use the \texttt{GID} model to infer the group vector $\mathbf{s}'$ and use it alongside each covariate $x'_k$ to predict each response $y'_k$: $\forall k \in \{1:K'\}, ~ y'_k = f_\theta (x'_k, s')$. The predictor function $f_\theta$ is causally robust because conditioning on the group variable $S_i$ is equivalent to closing the backdoor path $U_i$.
+%     \item \textsc{Single-Instance}. This is the case when the testing data comes from different groups. We use the instance variable $C_i$ as an instrumental variable to estimate the parameter $\theta$ of the predictor function $f_\theta: \mathbb{R} \to \mathbb{R}$. We first estimate the linear parameter $\gamma_X$ mapping the instance variable $C_i$ to the covariate $X_i$ and then estimate the linear parameter $\gamma_Y$ mapping the instance variable $C_i$ to the response $Y_i$. The causal parameter $\theta$ will be equal to the ratio $\gamma_Y / \gamma_X$. At test-time, we predict each response $y'_k$ from $x'_k$: $\forall k \in \{1:K_i\}, ~ y'_k = f_\theta (x'_k)$. The instance $C_i$ is a valid instrumental variable because it is independent of the confounder $U_i$ due to Assumptions~\textit{I, II}.
+% \end{enumerate}
+
+\biblio
+
+\end{document}

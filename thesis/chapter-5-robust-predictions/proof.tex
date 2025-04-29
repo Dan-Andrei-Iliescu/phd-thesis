@@ -1,0 +1,158 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc} % Input encoding
+\usepackage[T1]{fontenc}    % Font encoding
+\usepackage{amsmath, amssymb, amsfonts, amsthm} % Added amsfonts explicitly
+\usepackage{bm} % For bold math symbols like vectors/matrices
+\usepackage{esvect} % For vector arrow accent \vv
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
+\renewcommand{\theassumption}{A\arabic{assumption}} % Custom assumption numbering
+
+% Notation Macros (Revised)
+\newcommand{\response}{Y}                       % Response variable
+\newcommand{\covarcause}{X_c}                   % Causal covariate random variable SET
+\newcommand{\covarsymp}{X_s}                    % Symptom covariate random variable SET
+
+% --- Feature Vectors (NO intercept) ---
+\newcommand{\covarcausevec}{\bm{x}_c}            % Random vector of causal features (d_c dims)
+\newcommand{\covarsympvec}{\bm{x}_s}            % Random vector of symptom features (d_s dims)
+\newcommand{\covarcausevecfull}[2]{\bm{x}_{c, #2}^{#1}} % Instance of causal feature vector
+\newcommand{\covarsympvecfull}[2]{\bm{x}_{s, #2}^{#1}} % Instance of symptom feature vector
+
+% --- Augmented Vectors (WITH intercept) ---
+% Using \vv{} from esvect package for arrow notation
+\newcommand{\covarcausevecaug}{\vv{x}_c}           % Augmented causal vector [1, x_c^T]^T (symbolic)
+\newcommand{\covarvecfullaug}[2]{\vv{x}_{#2}^{#1}}     % Full augmented vector instance [1, x_{c,k}^{i T}, x_{s,k}^{i T}]^T
+\newcommand{\covarcausevecfullaug}[2]{\vv{x}_{c, #2}^{#1}}% Augmented causal vector instance [1, x_{c,k}^{i T}]^T
+
+% --- Test Point Vectors (Augmented) ---
+\newcommand{\covarvecaugtest}{\vv{x}^*}             % Full augmented test vector
+\newcommand{\covarcausevecaugtest}{\vv{x}_c^*}         % Augmented causal test vector
+
+% --- Other Macros ---
+\newcommand{\responsevar}[2]{y_{#2}^{#1}}       % Response variable instance
+\newcommand{\samplesperenv}[1]{m_{#1}}          % Number of samples in environment #1
+\newcommand{\envidx}{i}                         % Environment index (training)
+\newcommand{\sampleidx}{k}                      % Sample index within environment
+\newcommand{\numenv}{n}                         % Number of training environments
+\newcommand{\totalsamples}{M}                   % Total number of training samples
+\newcommand{\param}{\theta}                     % Generic parameter vector symbol
+\newcommand{\paramvec}{\bm{\param}}             % Bold parameter vector symbol
+\newcommand{\paramtruecausal}{\paramvec_{causal}^*} % True causal parameter vector
+\newcommand{\paramhatcausal}{\hat{\paramvec}_{causal}} % Estimated causal parameter vector
+\newcommand{\paramhatnaive}{\hat{\paramvec}_{naive}} % Estimated naive parameter vector
+\newcommand{\error}{\epsilon}                   % Error term
+\newcommand{\envtest}{*}                        % Test environment indicator
+\newcommand{\dataset}{\mathcal{D}}              % Dataset symbol
+\newcommand{\datasettrain}{\dataset_{\text{train}}} % Training dataset
+\newcommand{\datatrainmat}{\mathbf{X}}          % Full training data matrix (rows are AUGMENTED sample vectors transposed)
+\newcommand{\datatrainmatcause}{\mathbf{X}_c}   % Causal training data matrix (rows are AUGMENTED sample vectors transposed)
+\newcommand{\datatrainresp}{\mathbf{y}}          % Training response vector
+
+\newcommand{\prednaive}{\hat{y}_{\text{naive}}^*} % Naive prediction for test point
+\newcommand{\predcausal}{\hat{y}_{\text{causal}}^*} % Causal prediction for test point
+
+\newcommand{\Expect}{\mathbb{E}}                % Expectation symbol
+\newcommand{\Prob}{\mathbb{P}}                % Probability symbol
+\newcommand{\Var}{\mathrm{Var}}                 % Variance symbol
+\newcommand{\MSPE}{\mathrm{MSPE}}               % Mean Squared Prediction Error
+
+\begin{document}
+
+\begin{theorem}[Finite Sample MSPE Advantage of Causal Predictor under Conditional Shift]
+\label{thm:finite_sample}
+% Setup
+Let the true data generating process for response $\response \in \mathbb{R}$ and covariates represented by feature vectors $\covarcausevec \in \mathbb{R}^{d_c}, \covarsympvec \in \mathbb{R}^{d_s}$ in environment $\envidx$ be given by:
+\begin{equation}
+\label{eq:true_model}
+% Use the augmented vector for the model equation
+\response = \covarcausevecaug^T \paramtruecausal + \error
+\end{equation}
+where $\covarcausevecaug = [1, \covarcausevec^T]^T \in \mathbb{R}^{1+d_c}$ is the augmented causal vector, $\paramtruecausal \in \mathbb{R}^{1+d_c}$ is the true, invariant causal parameter vector, and the error $\error$ satisfies $\Expect[\error | \covarcausevec, \envidx] = 0$ and $\Var(\error | \covarcausevec, \envidx) = \sigma^2 > 0$ for all environments $\envidx$.
+
+Let $\datasettrain = \{ (\covarcausevecfull{\envidx}{\sampleidx}, \covarsympvecfull{\envidx}{\sampleidx}, \responsevar{\envidx}{\sampleidx}) \}_{\envidx \in \{1..\numenv\}, \sampleidx \in \{1..\samplesperenv{\envidx}\}}$ be the training dataset with $\totalsamples = \sum_{\envidx=1}^{\numenv} \samplesperenv{\envidx}$ total samples.
+Let $\datatrainmat$ be the $M \times (1+d_c+d_s)$ matrix whose rows are $(\covarvecfullaug{\envidx}{\sampleidx})^T = [1, (\covarcausevecfull{\envidx}{\sampleidx})^T, (\covarsympvecfull{\envidx}{\sampleidx})^T]$,
+$\datatrainmatcause$ be the $M \times (1+d_c)$ matrix whose rows are $(\covarcausevecfullaug{\envidx}{\sampleidx})^T = [1, (\covarcausevecfull{\envidx}{\sampleidx})^T]$,
+and $\datatrainresp$ be the $M \times 1$ vector of responses $\responsevar{\envidx}{\sampleidx}$.
+
+Consider predicting a new response $y^*$ for covariates yielding feature vectors $(\covarcausevec^*, \covarsympvec^*)$ from a test environment $\envtest=*$. Let $\covarvecaugtest = [1, (\covarcausevec^*)^T, (\covarsympvec^*)^T]^T$ and $\covarcausevecaugtest = [1, (\covarcausevec^*)^T]^T$ be the corresponding augmented vectors. We compare two predictors trained via Ordinary Least Squares (OLS) on $\datasettrain$:
+\begin{itemize}
+    \item \textbf{Naive Predictor:} $\paramhatnaive = (\datatrainmat^T \datatrainmat)^{-1} \datatrainmat^T \datatrainresp$. Prediction: $\prednaive = (\covarvecaugtest)^T \paramhatnaive$.
+    \item \textbf{Causal Predictor:} $\paramhatcausal = (\datatrainmatcause^T \datatrainmatcause)^{-1} \datatrainmatcause^T \datatrainresp$. Prediction: $\predcausal = (\covarcausevecaugtest)^T \paramhatcausal$.
+\end{itemize}
+The performance metric is the Mean Squared Prediction Error (MSPE) in the test environment $\envtest$, conditional on the training data $\datasettrain$:
+\[ \MSPE(\hat{y}^* | \datasettrain) = \Expect_{\envtest}[ (y^* - \hat{y}^*)^2 | \datasettrain ] \]
+where $\Expect_{\envtest}[\cdot]$ denotes expectation over the distribution $P(\covarcausevec^*, \covarsympvec^*, y^* | \text{environment}=\envtest)$.
+
+% Assumptions
+We make the following assumptions:
+\begin{assumption}[Linear Invariant Causal Mechanism]
+\label{ass:A1}
+The true model is given by Eq.~\eqref{eq:true_model} with the stated error properties. This implies $\Expect[y | \covarcausevec, \covarsympvec, \envidx] = \Expect[y | \covarcausevec, \envidx] = \covarcausevecaug^T \paramtruecausal$.
+\end{assumption}
+\begin{assumption}[Environment-Dependent Correlations]
+\label{ass:A2}
+The joint distribution $P(\covarcausevec, \covarsympvec | \text{environment}=\envidx)$ depends on the environment $\envidx$. Specifically, the relationship between $\covarsympvec$ and $\covarcausevec$ differs across environments, including between the training mixture and the test environment $\envtest$.
+\end{assumption}
+\begin{assumption}[Non-Collinearity]
+\label{ass:A3}
+The matrices $\datatrainmat^T \datatrainmat$ and $\datatrainmatcause^T \datatrainmatcause$ from the training data $\datasettrain$ are invertible.
+\end{assumption}
+\begin{assumption}[Induced Training-Test Bias for Naive Predictor]
+\label{ass:A4}
+The naive predictor, trained on the specific finite dataset $\datasettrain$, yields predictions for the test environment $\envtest$ that are biased relative to the true conditional mean. Formally, the expected squared bias is strictly positive:
+% Use augmented vectors in the bias definition for consistency with predictions
+\[ \text{Bias}^2_{\text{naive}}(\envtest | \datasettrain) := \Expect_{\envtest}[ (\Expect[y^*|\covarcausevec^*, \covarsympvec^*, \envtest] - (\covarvecaugtest)^T \paramhatnaive)^2 ] = \Expect_{\envtest}[ ((\covarcausevecaugtest)^T \paramtruecausal - (\covarvecaugtest)^T \paramhatnaive)^2 ] > 0 \]
+This occurs because $\paramhatnaive$, estimated from $\datasettrain$, incorporates spurious correlations involving $\covarsympvec$ from the training environments (due to \ref{ass:A2}) that do not hold or differ in the test environment $\envtest$.
+\end{assumption}
+
+% Conclusion
+Under Assumptions \ref{ass:A1}-\ref{ass:A4}, the causal predictor achieves a strictly lower MSPE in the test environment $\envtest$, conditional on the training data $\datasettrain$, than the naive predictor, provided that the induced bias of the naive predictor outweighs the contribution from the causal predictor's estimation error:
+\[ \MSPE(\predcausal | \datasettrain) < \MSPE(\prednaive | \datasettrain) \]
+if
+% Use augmented test vector for causal predictor's error term too
+\[ \Expect_{\envtest}[ ((\covarcausevecaugtest)^T (\paramtruecausal - \paramhatcausal))^2 ] < \text{Bias}^2_{\text{naive}}(\envtest | \datasettrain) \]
+
+\end{theorem}
+
+\begin{proof}
+We decompose the MSPE conditional on the training data $\datasettrain$. For any predictor $\hat{y}^*$, the prediction error is $e^* = y^* - \hat{y}^*$.
+\begin{align*}
+\MSPE(\hat{y}^* | \datasettrain) &= \Expect_{\envtest}[ (y^* - \hat{y}^*)^2 | \datasettrain ] \\
+&= \Expect_{\envtest}[ (y^* - \Expect[y^*|\covarcausevec^*, \covarsympvec^*, \envtest] + \Expect[y^*|\covarcausevec^*, \covarsympvec^*, \envtest] - \hat{y}^*)^2 | \datasettrain ]
+% Use augmented vector for true conditional mean based on A1/Eq1
+\intertext{Using $\Expect[y^*|\covarcausevec^*, \covarsympvec^*, \envtest] = (\covarcausevecaugtest)^T \paramtruecausal$ from \ref{ass:A1}, and noting that $y^* - \Expect[y^*|\dots] = \error^*$, which has mean zero and is uncorrelated with terms depending only on covariates and the fixed training data $\datasettrain$:}
+&= \Expect_{\envtest}[ (\error^*)^2 ] + \Expect_{\envtest}[ ((\covarcausevecaugtest)^T \paramtruecausal - \hat{y}^*)^2 | \datasettrain ] \\
+&= \sigma^2 + \Expect_{\envtest}[ ((\covarcausevecaugtest)^T \paramtruecausal - \hat{y}^*)^2 | \datasettrain ]
+\end{align*}
+The second term represents the expected squared difference between the true conditional mean and the prediction generated by the model trained on $\datasettrain$.
+
+\textbf{MSPE for Causal Predictor:}
+Here, $\hat{y}^* = \predcausal = (\covarcausevecaugtest)^T \paramhatcausal$. The second term becomes:
+\[ \text{Err}^2_{\text{causal}} := \Expect_{\envtest}[ ((\covarcausevecaugtest)^T \paramtruecausal - (\covarcausevecaugtest)^T \paramhatcausal)^2 | \datasettrain ] = \Expect_{\envtest}[ ((\covarcausevecaugtest)^T (\paramtruecausal - \paramhatcausal))^2 ] \]
+Note that $\paramhatcausal$ is fixed since we condition on $\datasettrain$. This term measures the expected squared prediction error specifically due to the estimation error $(\paramtruecausal - \paramhatcausal)$ obtained from the finite training set $\datasettrain$.
+Thus,
+\[ \MSPE(\predcausal | \datasettrain) = \sigma^2 + \text{Err}^2_{\text{causal}} \]
+
+\textbf{MSPE for Naive Predictor:}
+Here, $\hat{y}^* = \prednaive = (\covarvecaugtest)^T \paramhatnaive$. The second term becomes:
+\[ \Expect_{\envtest}[ ((\covarcausevecaugtest)^T \paramtruecausal - (\covarvecaugtest)^T \paramhatnaive)^2 | \datasettrain ] \]
+This is precisely the term we defined as $\text{Bias}^2_{\text{naive}}(\envtest | \datasettrain)$ in Assumption \ref{ass:A4}, which we assumed to be strictly positive. It represents the expected squared discrepancy between the true conditional mean and the prediction from the naive model, averaged over the test distribution, given the specific parameters $\paramhatnaive$ learned from $\datasettrain$.
+Thus,
+\[ \MSPE(\prednaive | \datasettrain) = \sigma^2 + \text{Bias}^2_{\text{naive}}(\envtest | \datasettrain) \]
+
+\textbf{Comparison:}
+We compare $\MSPE(\predcausal | \datasettrain) = \sigma^2 + \text{Err}^2_{\text{causal}}$ with $\MSPE(\prednaive | \datasettrain) = \sigma^2 + \text{Bias}^2_{\text{naive}}(\envtest | \datasettrain)$.
+The causal predictor has strictly lower MSPE if and only if:
+\[ \sigma^2 + \text{Err}^2_{\text{causal}} < \sigma^2 + \text{Bias}^2_{\text{naive}}(\envtest | \datasettrain) \]
+\[ \implies \text{Err}^2_{\text{causal}} < \text{Bias}^2_{\text{naive}}(\envtest | \datasettrain) \]
+Substituting the definitions:
+\[ \Expect_{\envtest}[ ((\covarcausevecaugtest)^T (\paramtruecausal - \paramhatcausal))^2 ] < \Expect_{\envtest}[ ((\covarcausevecaugtest)^T \paramtruecausal - (\covarvecaugtest)^T \paramhatnaive)^2 ] \]
+This condition holds if the expected squared error due to the causal parameter estimation (left side) is smaller than the expected squared error committed by the naive predictor relative to the true conditional mean (right side), which is positive by Assumption \ref{ass:A4}.
+
+\textbf{Conclusion regarding Confidence Intervals:}
+The width of prediction intervals for $y^*$ is primarily determined by the square root of the prediction error variance, which is closely related to the MSPE. Since the causal predictor has a lower MSPE under the stated condition, it implies that, on average for data points drawn from the test environment $\envtest$, prediction intervals constructed based on the causal predictor will be tighter (more precise) than those based on the naive predictor. The naive predictor's reliance on potentially misleading correlations from $\covarsympvec$ in the finite training data $\datasettrain$ induces a bias (\ref{ass:A4}) in the test environment, inflating its MSPE compared to the causal predictor, provided this bias term is large enough relative to the estimation error of the causal parameters.
+\end{proof}
+
+\end{document}

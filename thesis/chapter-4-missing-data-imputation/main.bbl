@@ -1,0 +1,357 @@
+\begin{thebibliography}{64}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[An et~al.(2021)An, Soong, Yang, and Xie]{anEffectiveDirectControl2021}
+An, X., Soong, F.~K., Yang, S., and Xie, L.
+\newblock Effective and direct control of neural {{TTS}} prosody by removing interactions between different attributes.
+\newblock \emph{Neural Networks}, 2021.
+
+\bibitem[{Ben-David} et~al.(2016){Ben-David}, Multani, Shakuf, Rudzicz, and {van Lieshout}]{ben-davidProsodySemanticsAre2016}
+{Ben-David}, B.~M., Multani, N., Shakuf, V., Rudzicz, F., and {van Lieshout}, P.~H.
+\newblock Prosody and semantics are separate but not separable channels in the perception of emotional speech: {{Test}} for rating of emotions in speech.
+\newblock \emph{Journal of Speech, Language, and Hearing Research}, 59\penalty0 (1):\penalty0 72--89, 2016.
+
+\bibitem[Bengio et~al.(2013)Bengio, Yao, Alain, and Vincent]{bengioGeneralizedDenoisingAutoencoders2013}
+Bengio, Y., Yao, L., Alain, G., and Vincent, P.
+\newblock Generalized denoising auto-encoders as generative models.
+\newblock In \emph{Proceedings of the 26th {{International Conference}} on {{Neural Information Processing Systems}} - {{Volume}} 1}, {{NIPS}}'13, pp.\  899--907, Red Hook, NY, USA, December 2013. Curran Associates Inc.
+
+\bibitem[Blei et~al.(2017)Blei, Kucukelbir, and McAuliffe]{bleiVariationalInferenceReview2017}
+Blei, D.~M., Kucukelbir, A., and McAuliffe, J.~D.
+\newblock Variational {{Inference}}: {{A Review}} for {{Statisticians}}.
+\newblock \emph{Journal of the American Statistical Association}, 112\penalty0 (518):\penalty0 859--877, April 2017.
+\newblock ISSN 0162-1459.
+\newblock \doi{10.1080/01621459.2017.1285773}.
+
+\bibitem[Borsos et~al.(2022)Borsos, Sharifi, and Tagliasacchi]{borsosSpeechPainterTextconditionedSpeech2022}
+Borsos, Z., Sharifi, M., and Tagliasacchi, M.
+\newblock {{SpeechPainter}}: {{Text-conditioned Speech Inpainting}}.
+\newblock In \emph{Interspeech}, 2022.
+
+\bibitem[Brown et~al.(2020)Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal, Neelakantan, Shyam, Sastry, Askell, Agarwal, {Herbert-Voss}, Krueger, Henighan, Child, Ramesh, Ziegler, Wu, Winter, Hesse, Chen, Sigler, Litwin, Gray, Chess, Clark, Berner, McCandlish, Radford, Sutskever, and Amodei]{brownLanguageModelsAre2020a}
+Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J.~D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., Agarwal, S., {Herbert-Voss}, A., Krueger, G., Henighan, T., Child, R., Ramesh, A., Ziegler, D., Wu, J., Winter, C., Hesse, C., Chen, M., Sigler, E., Litwin, M., Gray, S., Chess, B., Clark, J., Berner, C., McCandlish, S., Radford, A., Sutskever, I., and Amodei, D.
+\newblock Language {{Models}} are {{Few-Shot Learners}}.
+\newblock In \emph{Advances in {{Neural Information Processing Systems}}}, volume~33, pp.\  1877--1901. Curran Associates, Inc., 2020.
+
+\bibitem[Bryant(2011)]{bryantVerbalIronyWild2011}
+Bryant, G.~A.
+\newblock Verbal irony in the wild.
+\newblock \emph{Pragmatics and Cognition}, 19\penalty0 (2):\penalty0 291--309, 2011.
+
+\bibitem[Cai et~al.(2010)Cai, Cand{\`e}s, and Shen]{caiSingularValueThresholding2010}
+Cai, J.-F., Cand{\`e}s, E.~J., and Shen, Z.
+\newblock A {{Singular Value Thresholding Algorithm}} for {{Matrix Completion}}.
+\newblock \emph{SIAM Journal on Optimization}, 20\penalty0 (4):\penalty0 1956--1982, January 2010.
+\newblock ISSN 1052-6234, 1095-7189.
+\newblock \doi{10.1137/080738970}.
+
+\bibitem[Calhoun(2010)]{calhounCentralityMetricalStructure2010}
+Calhoun, S.
+\newblock The {{Centrality Of Metrical Structure In Signaling Information Structure}}: {{A Probabilistic Perspective}}.
+\newblock \emph{Language}, 86\penalty0 (1):\penalty0 1--42, 2010.
+
+\bibitem[Campion \& Rubin(1989)Campion and Rubin]{campionMultipleImputationNonresponse1989}
+Campion, W.~M. and Rubin, D.~B.
+\newblock Multiple {{Imputation}} for {{Nonresponse}} in {{Surveys}}.
+\newblock \emph{Journal of Marketing Research}, 26:\penalty0 485, 1989.
+
+\bibitem[Chai \& Li(2020)Chai and Li]{chaiHumanintheloopTechniquesMachine2020}
+Chai, C. and Li, G.
+\newblock Human-in-the-loop {{Techniques}} in {{Machine Learning}}.
+\newblock \emph{IEEE Data Eng. Bull.}, 43\penalty0 (3):\penalty0 37--52, 2020.
+
+\bibitem[Chan et~al.(2007)Chan, Ng, Yau, and Yip]{chanSuperresolutionImageReconstruction2007}
+Chan, T.~F., Ng, M.~K., Yau, A.~C., and Yip, A.~M.
+\newblock Superresolution image reconstruction using fast inpainting algorithms.
+\newblock \emph{Applied and Computational Harmonic Analysis}, 23\penalty0 (1):\penalty0 3--24, July 2007.
+\newblock ISSN 1063-5203.
+\newblock \doi{10.1016/j.acha.2006.09.005}.
+
+\bibitem[Clark \& Brennan(1991)Clark and Brennan]{clarkGroundingCommunication1991}
+Clark, H.~H. and Brennan, S.~E.
+\newblock Grounding in communication.
+\newblock 1991.
+
+\bibitem[Devlin et~al.(2019)Devlin, Chang, Lee, and Toutanova]{devlinBERTPretrainingDeep2019}
+Devlin, J., Chang, M.-W., Lee, K., and Toutanova, K.
+\newblock {{BERT}}: {{Pre-training}} of {{Deep Bidirectional Transformers}} for {{Language Understanding}}.
+\newblock In \emph{Proceedings of the 2019 {{Conference}} of the {{North American Chapter}} of the {{Association}} for {{Computational Linguistics}}: {{Human Language Technologies}}, {{Volume}} 1 ({{Long}} and {{Short Papers}})}, pp.\  4171--4186, Minneapolis, Minnesota, June 2019. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/N19-1423}.
+
+\bibitem[Elharrouss et~al.(2020)Elharrouss, Almaadeed, {Al-Maadeed}, and Akbari]{elharroussImageInpaintingReview2020}
+Elharrouss, O., Almaadeed, N., {Al-Maadeed}, S., and Akbari, Y.
+\newblock Image {{Inpainting}}: {{A Review}}.
+\newblock \emph{Neural Processing Letters}, 51\penalty0 (2):\penalty0 2007--2028, April 2020.
+\newblock ISSN 1573-773X.
+\newblock \doi{10.1007/s11063-019-10163-0}.
+
+\bibitem[et~{al}(1992)]{alRethinkingContextLanguage1992}
+et~{al}, C.~G.
+\newblock \emph{Rethinking Context: {{Language}} as an Interactive Phenomenon}.
+\newblock Cambridge University Press, 1992.
+
+\bibitem[et~al. Povey(2011)]{poveyKaldiSpeechRecognition2011}
+et~al. Povey, D.
+\newblock The {{Kaldi Speech Recognition Toolkit}}.
+\newblock In \emph{{{IEEE}} 2011 {{Workshop}} on {{Automatic Speech Recognition}} and {{Understanding}}}. IEEE Signal Processing Society, December 2011.
+
+\bibitem[Fefferman et~al.(2016)Fefferman, Mitter, and Narayanan]{feffermanTestingManifoldHypothesis2016}
+Fefferman, C., Mitter, S., and Narayanan, H.
+\newblock Testing the manifold hypothesis.
+\newblock \emph{Journal of the American Mathematical Society}, 29\penalty0 (4):\penalty0 983--1049, October 2016.
+\newblock ISSN 0894-0347, 1088-6834.
+\newblock \doi{10.1090/jams/852}.
+
+\bibitem[Gironzetti(2017)]{gironzettiProsodicMultimodalMarkers2017}
+Gironzetti, E.
+\newblock Prosodic and multimodal markers of humor.
+\newblock In \emph{The {{Routledge}} Handbook of Language and Humor}, pp.\  400--413. Routledge, 2017.
+
+\bibitem[Gondara \& Wang(2018)Gondara and Wang]{gondaraMIDAMultipleImputation2018}
+Gondara, L. and Wang, K.
+\newblock {{MIDA}}: {{Multiple Imputation Using Denoising Autoencoders}}.
+\newblock In Phung, D., Tseng, V.~S., Webb, G.~I., Ho, B., Ganji, M., and Rashidi, L. (eds.), \emph{Advances in {{Knowledge Discovery}} and {{Data Mining}}}, pp.\  260--272, Cham, 2018. Springer International Publishing.
+\newblock ISBN 978-3-319-93040-4.
+\newblock \doi{10.1007/978-3-319-93040-4_21}.
+
+\bibitem[Gravano \& Hirschberg(2009)Gravano and Hirschberg]{gravanoTurnyieldingCuesTaskoriented2009}
+Gravano, A. and Hirschberg, J.
+\newblock Turn-yielding cues in task-oriented dialogue.
+\newblock In \emph{Sigdial}, pp.\  253--261, 2009.
+
+\bibitem[He et~al.(2022)He, Chen, Xie, Li, Dollar, and Girshick]{heMaskedAutoencodersAre2022}
+He, K., Chen, X., Xie, S., Li, Y., Dollar, P., and Girshick, R.
+\newblock Masked {{Autoencoders Are Scalable Vision Learners}}.
+\newblock \emph{2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, pp.\  15979--15988, June 2022.
+\newblock \doi{10.1109/CVPR52688.2022.01553}.
+
+\bibitem[Hodari(2022)]{hodariSynthesisingProsodyInsufficient2022}
+Hodari, Z.
+\newblock Synthesising prosody with insufficient context.
+\newblock 2022.
+
+\bibitem[Hodari et~al.(2019)Hodari, Watts, and King]{hodariUsingGenerativeModelling2019}
+Hodari, Z., Watts, O., and King, S.
+\newblock Using generative modelling to produce varied intonation for speech synthesis.
+\newblock In \emph{Ssw}, pp.\  239--244, Vienna, Austria, 2019.
+
+\bibitem[Hsu et~al.(2019)Hsu, Zhang, Weiss, Zen, Wu, Cao, and Wang]{hsuHierarchicalGenerativeModeling2019}
+Hsu, W.-N., Zhang, Y., Weiss, R., Zen, H., Wu, Y., Cao, Y., and Wang, Y.
+\newblock Hierarchical {{Generative Modeling}} for {{Controllable Speech Synthesis}}.
+\newblock In \emph{Iclr}, New Orleans, USA, 2019.
+
+\bibitem[Ilse et~al.(2018)Ilse, Tomczak, and Welling]{ilseAttentionbasedDeepMultiple2018}
+Ilse, M., Tomczak, J., and Welling, M.
+\newblock Attention-based {{Deep Multiple Instance Learning}}.
+\newblock In \emph{Proceedings of the 35th {{International Conference}} on {{Machine Learning}}}, pp.\  2127--2136. PMLR, July 2018.
+
+\bibitem[Jafrasteh et~al.(2022)Jafrasteh, {Hern{\'a}ndez-Lobato}, {Lubi{\'a}n-L{\'o}pez}, and {Benavente-Fern{\'a}nde}]{jafrastehGaussianProcessesMissing2022}
+Jafrasteh, B., {Hern{\'a}ndez-Lobato}, D., {Lubi{\'a}n-L{\'o}pez}, S.~P., and {Benavente-Fern{\'a}nde}, I.
+\newblock Gaussian {{Processes}} for {{Missing Value Imputation}}, July 2022.
+
+\bibitem[Kazijevs \& Samad(2023)Kazijevs and Samad]{kazijevsDeepImputationMissing2023}
+Kazijevs, M. and Samad, M.~D.
+\newblock Deep imputation of missing values in time series health data: {{A}} review with benchmarking.
+\newblock \emph{Journal of Biomedical Informatics}, 144:\penalty0 104440, August 2023.
+\newblock ISSN 1532-0464.
+\newblock \doi{10.1016/j.jbi.2023.104440}.
+
+\bibitem[Kingma \& Welling(2014)Kingma and Welling]{kingma2013auto}
+Kingma, D.~P. and Welling, M.
+\newblock Auto-encoding variational bayes.
+\newblock \emph{2nd International Conference on Learning Representations, ICLR 2019}, 2014.
+
+\bibitem[Lempitsky et~al.(2018)Lempitsky, Vedaldi, and Ulyanov]{lempitskyDeepImagePrior2018}
+Lempitsky, V., Vedaldi, A., and Ulyanov, D.
+\newblock Deep {{Image Prior}}.
+\newblock In \emph{2018 {{IEEE}}/{{CVF Conference}} on {{Computer Vision}} and {{Pattern Recognition}}}, pp.\  9446--9454, June 2018.
+\newblock \doi{10.1109/CVPR.2018.00984}.
+
+\bibitem[Li et~al.(2024)Li, Zhang, Wang, Wu, Wu, Liu, Xia, Tan, Liu, Sun, and Li]{liMaskedModelingSelfsupervised2024}
+Li, S., Zhang, L., Wang, Z., Wu, D., Wu, L., Liu, Z., Xia, J., Tan, C., Liu, Y., Sun, B., and Li, S.~Z.
+\newblock Masked {{Modeling}} for {{Self-supervised Representation Learning}} on {{Vision}} and {{Beyond}}.
+\newblock 2024.
+\newblock \doi{10.48550/ARXIV.2401.00897}.
+
+\bibitem[Mirza \& Osindero(2014)Mirza and Osindero]{mirza2014conditional}
+Mirza, M. and Osindero, S.
+\newblock Conditional generative adversarial nets.
+\newblock \emph{arXiv preprint arXiv:1411.1784}, 2014.
+
+\bibitem[Mohan et~al.(2021)Mohan, Hu, Teh, Torresquintero, Wallis, Staib, Foglianti, Gao, and King]{mohanCtrlPTemporalControl2021}
+Mohan, D. S.~R., Hu, V., Teh, T.~H., Torresquintero, A., Wallis, C. G.~R., Staib, M., Foglianti, L., Gao, J., and King, S.
+\newblock Ctrl-{{P}}: {{Temporal Control}} of {{Prosodic Variation}} for {{Speech Synthesis}}.
+\newblock In \emph{Interspeech}, Brno, Czech Republic, 2021.
+
+\bibitem[Park et~al.(2019)Park, Liu, Wang, and Zhu]{park2019semantic}
+Park, T., Liu, M.-Y., Wang, T.-C., and Zhu, J.-Y.
+\newblock Semantic image synthesis with spatially-adaptive normalization.
+\newblock In \emph{The {{IEEE}} Conference on Computer Vision and Pattern Recognition ({{CVPR}})}, June 2019.
+
+\bibitem[Prateek et~al.(2019)Prateek, {\L}ajszczak, {Barra-Chicote}, Drugman, {Lorenzo-Trueba}, Merritt, Ronanki, and Wood]{prateekOtherNewsBistyle2019}
+Prateek, N., {\L}ajszczak, M., {Barra-Chicote}, R., Drugman, T., {Lorenzo-Trueba}, J., Merritt, T., Ronanki, S., and Wood, T.
+\newblock In other news: {{A}} bi-style text-to-speech model for synthesizing newscaster voice with limited data.
+\newblock \emph{arXiv preprint arXiv:1904.02790}, 2019.
+
+\bibitem[Quan et~al.(2024)Quan, Chen, Liu, Yan, and Wonka]{quanDeepLearningBasedImage2024}
+Quan, W., Chen, J., Liu, Y., Yan, D.-M., and Wonka, P.
+\newblock Deep {{Learning-Based Image}} and {{Video Inpainting}}: {{A Survey}}.
+\newblock \emph{International Journal of Computer Vision}, January 2024.
+\newblock ISSN 1573-1405.
+\newblock \doi{10.1007/s11263-023-01977-6}.
+
+\bibitem[Ramesh et~al.(2022)Ramesh, Dhariwal, Nichol, Chu, and Chen]{rameshHierarchicalTextconditionalImage2022}
+Ramesh, A., Dhariwal, P., Nichol, A., Chu, C., and Chen, M.
+\newblock Hierarchical text-conditional image generation with clip latents.
+\newblock \emph{arXiv preprint arXiv:2204.06125}, 2022.
+
+\bibitem[Rasmussen \& Williams(2005)Rasmussen and Williams]{rasmussenGaussianProcessesMachine2005}
+Rasmussen, C.~E. and Williams, C. K.~I.
+\newblock Gaussian {{Processes}} for {{Machine Learning}} ({{Adaptive Computation}} and {{Machine Learning}}).
+\newblock December 2005.
+
+\bibitem[Rezende et~al.(2014)Rezende, Mohamed, and Wierstra]{rezende2014stochastic}
+Rezende, D.~J., Mohamed, S., and Wierstra, D.
+\newblock Stochastic backpropagation and approximate inference in deep generative models.
+\newblock In \emph{Proceedings of the 31st International Conference on Machine Learning}, volume~32, pp.\  1278--1286. PMLR, 2014.
+
+\bibitem[Rombach et~al.(2022)Rombach, Blattmann, Lorenz, Esser, and Ommer]{rombachHighresolutionImageSynthesis2022}
+Rombach, R., Blattmann, A., Lorenz, D., Esser, P., and Ommer, B.
+\newblock High-resolution image synthesis with latent diffusion models.
+\newblock In \emph{Proceedings of the {{IEEE}}/{{CVF Conference}} on {{Computer Vision}} and {{Pattern Recognition}}}, pp.\  10684--10695, 2022.
+
+\bibitem[Rubin(1976)]{rubinInferenceMissingData1976}
+Rubin, D.~B.
+\newblock Inference and missing data.
+\newblock \emph{Biometrika}, 63\penalty0 (3):\penalty0 581--592, December 1976.
+\newblock ISSN 0006-3444.
+\newblock \doi{10.1093/biomet/63.3.581}.
+
+\bibitem[Rubin(1996)]{rubinMultipleImputation181996}
+Rubin, D.~B.
+\newblock Multiple {{Imputation After}} 18+ {{Years}}.
+\newblock \emph{Journal of the American Statistical Association}, 91:\penalty0 473--489, 1996.
+
+\bibitem[Schr{\"o}der(2001)]{schroderEmotionalSpeechSynthesis2001}
+Schr{\"o}der, M.
+\newblock Emotional speech synthesis: {{A}} review.
+\newblock In \emph{Eurospeech}, Aalborg, Denmark, 2001. Citeseer.
+
+\bibitem[Sini et~al.(2020)Sini, Maguer, Lolive, and {Delais-Roussarie}]{siniIntroducingProsodicSpeaker2020}
+Sini, A., Maguer, S.~L., Lolive, D., and {Delais-Roussarie}, E.
+\newblock Introducing {{Prosodic Speaker Identity}} for a {{Better Expressive Speech Synthesis Control}}.
+\newblock \emph{Speech Prosody 2020}, 2020.
+
+\bibitem[Sohn et~al.(2015)Sohn, Lee, and Yan]{sohnLearningStructuredOutput2015}
+Sohn, K., Lee, H., and Yan, X.
+\newblock Learning structured output representation using deep conditional generative models.
+\newblock In \emph{Nips}, volume~28, pp.\  3483--3491, Montr{\'e}al, Canada, 2015.
+
+\bibitem[Sterne et~al.(2009)Sterne, White, Carlin, Spratt, Royston, Kenward, Wood, and Carpenter]{sterneMultipleImputationMissing2009}
+Sterne, J. A.~C., White, I.~R., Carlin, J.~B., Spratt, M., Royston, P., Kenward, M.~G., Wood, A.~M., and Carpenter, J.~R.
+\newblock Multiple imputation for missing data in epidemiological and clinical research: Potential and pitfalls.
+\newblock \emph{BMJ}, 338\penalty0 (jun29 1):\penalty0 b2393--b2393, September 2009.
+\newblock ISSN 0959-8138, 1468-5833.
+\newblock \doi{10.1136/bmj.b2393}.
+
+\bibitem[Su et~al.(2022)Su, Xu, and Yin]{suSurveyDeepLearning2022}
+Su, J., Xu, B., and Yin, H.
+\newblock A survey of deep learning approaches to image restoration.
+\newblock \emph{Neurocomputing}, 487:\penalty0 46--65, May 2022.
+\newblock ISSN 0925-2312.
+\newblock \doi{10.1016/j.neucom.2022.02.046}.
+
+\bibitem[Sugiyama et~al.(2012)Sugiyama, Suzuki, and Kanamori]{sugiyamaDensityRatioEstimation2012}
+Sugiyama, M., Suzuki, T., and Kanamori, T.
+\newblock \emph{Density {{Ratio Estimation}} in {{Machine Learning}}}.
+\newblock Cambridge University Press, Cambridge, 2012.
+\newblock ISBN 978-0-521-19017-6.
+\newblock \doi{10.1017/CBO9781139035613}.
+
+\bibitem[Sun et~al.(2020)Sun, Zhang, Weiss, Cao, Zen, and Wu]{sunFullyhierarchicalFinegrainedProsody2020}
+Sun, G., Zhang, Y., Weiss, R.~J., Cao, Y., Zen, H., and Wu, Y.
+\newblock Fully-hierarchical fine-grained prosody modeling for interpretable speech synthesis.
+\newblock In \emph{Icassp}, pp.\  6264--6268. IEEE, 2020.
+
+\bibitem[Talkin \& Kleijn(1995)Talkin and Kleijn]{talkinRobustAlgorithmPitch1995}
+Talkin, D. and Kleijn, W.~B.
+\newblock A robust algorithm for pitch tracking ({{RAPT}}).
+\newblock \emph{Speech coding and synthesis}, 495:\penalty0 518, 1995.
+
+\bibitem[Tang(2024)]{tangSelfsupervisedLearningDataefficient2024}
+Tang, C.~I.
+\newblock Self-supervised learning for data-efficient human activity recognition.
+\newblock April 2024.
+
+\bibitem[Tran(2020)]{tranNeuralModelsIntegrating2020}
+Tran, T.
+\newblock \emph{Neural {{Models}} for {{Integrating Prosody}} in {{Spoken Language Understanding}}}.
+\newblock PhD thesis, University of Washington, 2020.
+
+\bibitem[Tschannen et~al.(2018)Tschannen, Bachem, and Lucic]{tschannenRecentAdvancesAutoencoderBased2018}
+Tschannen, M., Bachem, O., and Lucic, M.
+\newblock Recent {{Advances}} in {{Autoencoder-Based Representation Learning}}.
+\newblock \emph{ArXiv}, December 2018.
+
+\bibitem[{van den Oord} et~al.(2016){van den Oord}, Dieleman, Zen, Simonyan, Vinyals, Graves, Kalchbrenner, Senior, and Kavukcuoglu]{vandenoordWaveNetGenerativeModel2016}
+{van den Oord}, A., Dieleman, S., Zen, H., Simonyan, K., Vinyals, O., Graves, A., Kalchbrenner, N., Senior, A., and Kavukcuoglu, K.
+\newblock {{WaveNet}}: {{A}} generative model for raw audio.
+\newblock \emph{arXiv preprint arXiv:1609.03499}, 2016.
+
+\bibitem[{van den Oord} et~al.(2017){van den Oord}, Vinyals, and Kavukcuoglu]{vandenoordNeuralDiscreteRepresentation2017}
+{van den Oord}, A., Vinyals, O., and Kavukcuoglu, K.
+\newblock Neural {{Discrete Representation Learning}}.
+\newblock In \emph{Advances in {{Neural Information Processing Systems}}}, volume~30. Curran Associates, Inc., 2017.
+
+\bibitem[Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, and Polosukhin]{vaswaniAttentionAllYou2017}
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.~N., Kaiser, {\L}., and Polosukhin, I.
+\newblock Attention is {{All You Need}}.
+\newblock In \emph{Proceedings of the 31st {{International Conference}} on {{Neural Information Processing Systems}}}, {{NIPS}}'17, pp.\  6000--6010. Curran Associates Inc., 2017.
+\newblock ISBN 978-1-5108-6096-4.
+
+\bibitem[Vincent et~al.(2008)Vincent, Larochelle, Bengio, and Manzagol]{vincentExtractingComposingRobust2008}
+Vincent, P., Larochelle, H., Bengio, Y., and Manzagol, P.-A.
+\newblock Extracting and composing robust features with denoising autoencoders.
+\newblock In \emph{Proceedings of the 25th International Conference on {{Machine}} Learning}, {{ICML}} '08, pp.\  1096--1103, New York, NY, USA, July 2008. Association for Computing Machinery.
+\newblock ISBN 978-1-60558-205-4.
+\newblock \doi{10.1145/1390156.1390294}.
+
+\bibitem[Wagner \& Watson(2010)Wagner and Watson]{wagnerExperimentalTheoreticalAdvances2010}
+Wagner, M. and Watson, D.~G.
+\newblock Experimental and theoretical advances in prosody: {{A}} review.
+\newblock \emph{Language and cognitive processes}, 25\penalty0 (7-9):\penalty0 905--945, 2010.
+
+\bibitem[Wan et~al.(2019)Wan, Chan, Kenter, Vit, and Clark]{wanCHiVEVaryingProsody2019}
+Wan, V., Chan, C.-a., Kenter, T., Vit, J., and Clark, R.
+\newblock {{CHiVE}}: {{Varying}} prosody in speech synthesis with a linguistically driven dynamic hierarchical conditional variational network.
+\newblock In \emph{Icml}, Long Beach, USA, 2019.
+
+\bibitem[Winkler et~al.(2020)Winkler, Worrall, Hoogeboom, and Welling]{winklerLearningLikelihoodsConditional2020}
+Winkler, C., Worrall, D., Hoogeboom, E., and Welling, M.
+\newblock Learning {{Likelihoods}} with {{Conditional Normalizing Flows}}, 2020.
+
+\bibitem[Wu et~al.(2022)Wu, Xiao, Sun, Zhang, Ma, and He]{wuSurveyHumanintheloopMachine2022}
+Wu, X., Xiao, L., Sun, Y., Zhang, J., Ma, T., and He, L.
+\newblock A survey of human-in-the-loop for machine learning.
+\newblock \emph{Future Generation Computer Systems}, 2022.
+
+\bibitem[Xin et~al.(2018)Xin, Ma, Liu, Macke, Song, and Parameswaran]{xinAcceleratingHumanintheloopMachine2018}
+Xin, D., Ma, L., Liu, J., Macke, S., Song, S., and Parameswaran, A.
+\newblock Accelerating human-in-the-loop machine learning: {{Challenges}} and opportunities.
+\newblock In \emph{Proceedings of the Second Workshop on Data Management for End-to-End Machine Learning}, pp.\  1--4, 2018.
+
+\bibitem[Zhang et~al.(2023)Zhang, Ji, Zhang, Yu, Jaakkola, and Chang]{zhangCoherentImageInpainting2023}
+Zhang, G., Ji, J., Zhang, Y., Yu, M., Jaakkola, T., and Chang, S.
+\newblock Towards {{Coherent Image Inpainting Using Denoising Diffusion Implicit Models}}.
+\newblock In \emph{International {{Conference}} on {{Machine Learning}}}, 2023.
+
+\bibitem[Zhang et~al.(2022)Zhang, Wang, and Wang]{zhangHowMaskMatters2022}
+Zhang, Q., Wang, Y., and Wang, Y.
+\newblock How {{Mask Matters}}: {{Towards Theoretical Understandings}} of {{Masked Autoencoders}}.
+\newblock \emph{Advances in Neural Information Processing Systems}, 35:\penalty0 27127--27139, December 2022.
+
+\end{thebibliography}

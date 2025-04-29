@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: icml2024.bst
+Database file #1: bibliography.bib
+Warning--empty journal in bach2005probabilistic
+Warning--empty journal in bahadur1954sufficiency
+Warning--empty year in bahadur1954sufficiency
+Warning--empty year in bahadur1954sufficiency
+Warning--empty school in bealVariationalAlgorithmsApproximate2003
+Warning--empty journal in bishopPatternRecognitionMachine2006
+Warning--empty booktitle in ek2008gp
+Warning--empty journal in higgins2016beta
+Warning--empty journal in maAdvancesBayesianMachine2022
+You've used 93 entries,
+            2773 wiz_defined-function locations,
+            1104 strings with 23880 characters,
+and the built_in function-call counts, 51476 in all, are:
+= -- 4577
+> -- 3222
+< -- 71
++ -- 1084
+- -- 990
+* -- 4131
+:= -- 7585
+add.period$ -- 305
+call.type$ -- 93
+change.case$ -- 603
+chr.to.int$ -- 92
+cite$ -- 195
+duplicate$ -- 2397
+empty$ -- 4034
+format.name$ -- 1116
+if$ -- 11065
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 94
+newline$ -- 483
+num.names$ -- 372
+pop$ -- 1333
+preamble$ -- 1
+purify$ -- 515
+quote$ -- 0
+skip$ -- 1966
+stack$ -- 0
+substring$ -- 1940
+swap$ -- 520
+text.length$ -- 41
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 1003
+warning$ -- 9
+while$ -- 420
+width$ -- 0
+write$ -- 1216
+(There were 9 warnings)

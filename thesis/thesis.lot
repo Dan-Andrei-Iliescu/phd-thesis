@@ -1,0 +1,7 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Our CxVAE model outperforms existing methods at disentanglement on the \texttt {Shift3DIdent} and \texttt {TestScores} datasets. The competing models are: GVAE \citep {hosoyaGroupbasedLearningDisentangled2019}, AdaGVAE \citep {locatelloWeaklySupervisedDisentanglementCompromises2020}, and COCO-FUNIT \citep {saitoCOCOFUNITFewShotUnsupervised2020}. The improvement in scores brought by our model is greater than the 95\% confidence interval around each score. Confidence intervals are computed by resampling train-test splits, weight initialisations and sampling seeds. All results are shown multiplied by 100.}}{63}{table.caption.27}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

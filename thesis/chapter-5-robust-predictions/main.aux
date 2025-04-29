@@ -1,0 +1,90 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Unsupervised domain adaptation}{1}{chapter.1}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {paragraph}{Abstract.}{1}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Introduction}{1}{section.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1.1}{\ignorespaces Causal diagram for the variables involved in the diabetes risk model. A major cause of type-2 diabetes, $\MakeUppercase    []{y}$, is a high body-mass index, $\MakeUppercase    []{x}_{c}$, which itself is affected by whether the patient has a diet rich in salt, $W$. The frequency of thirst, $\MakeUppercase    []{x}_{s}$, is symptom of both diabetes, $\MakeUppercase    []{y}$, and a salt-rich diet, $\MakeUppercase    []{w}$. The environments in this case correspond to different groups of patients organised by diet.}}{2}{figure.caption.2}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:diabetes}{{1.1}{2}{Causal diagram for the variables involved in the diabetes risk model. A major cause of type-2 diabetes, $\myrv {y}$, is a high body-mass index, $\myrv {x}_{c}$, which itself is affected by whether the patient has a diet rich in salt, $W$. The frequency of thirst, $\myrv {x}_{s}$, is symptom of both diabetes, $\myrv {y}$, and a salt-rich diet, $\myrv {w}$. The environments in this case correspond to different groups of patients organised by diet}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}Illustrative example: Diabetes risk}{2}{section.1.2}\protected@file@percent }
+\newlabel{sec:example-diabetes}{{1.2}{2}{Illustrative example: Diabetes risk}{section.1.2}{}}
+\citation{ruigePerformanceNIDDMScreening1997}
+\citation{petersCausalInferenceUsing2016}
+\@writefile{brf}{\backcite{ruigePerformanceNIDDMScreening1997}{{3}{1.2}{figure.caption.2}}}
+\@writefile{brf}{\backcite{petersCausalInferenceUsing2016}{{3}{1.2}{figure.caption.2}}}
+\newlabel{eq:diabetes-case-study}{{1.1}{3}{Illustrative example: Diabetes risk}{equation.1.2.1}{}}
+\newlabel{fig:x1-shift}{{1.2a}{4}{\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:x1-shift}{{a}{4}{\relax }{figure.caption.3}{}}
+\newlabel{fig:x2-shift}{{1.2b}{4}{\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:x2-shift}{{b}{4}{\relax }{figure.caption.3}{}}
+\newlabel{fig:x2-pred}{{1.2c}{4}{\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:x2-pred}{{c}{4}{\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.2}{\ignorespaces Causes are more consistent predictors than symptoms, although symptoms still contain important information. In (a), we can see that the probability of diabetes, $\MakeUppercase    []{y}$, conditioned on a cause of diabetes (body-mass index, $\MakeUppercase    []{x}_{c}$) remains constant across environments (i.e., regardless of whether salt intake, $\MakeUppercase    []{w}$, is 1 or 0). However, (b) shows that the probability of diabetes, $\MakeUppercase    []{y}$, conditioned on a symptom of diabetes (thirst frequency, $\MakeUppercase    []{x}_{s}$) changes across environments. Nevertheless, the probability of diabetes, $\MakeUppercase    []{y}$, changes with thirst frequency, $\MakeUppercase    []{x}_{s}$, within each environment (i.e., when the salt intake, $\MakeUppercase    []{w}$, is constant), as shown in (c).}}{4}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:x2}{{1.2}{4}{Causes are more consistent predictors than symptoms, although symptoms still contain important information. In (a), we can see that the probability of diabetes, $\myrv {y}$, conditioned on a cause of diabetes (body-mass index, $\myrv {x}_{c}$) remains constant across environments (i.e., regardless of whether salt intake, $\myrv {w}$, is 1 or 0). However, (b) shows that the probability of diabetes, $\myrv {y}$, conditioned on a symptom of diabetes (thirst frequency, $\myrv {x}_{s}$) changes across environments. Nevertheless, the probability of diabetes, $\myrv {y}$, changes with thirst frequency, $\myrv {x}_{s}$, within each environment (i.e., when the salt intake, $\myrv {w}$, is constant), as shown in (c)}{figure.caption.3}{}}
+\citation{quinonero-candelaDatasetShiftMachine2008}
+\citation{sharmaClinicalRiskPrediction2021}
+\@writefile{toc}{\contentsline {section}{\numberline {1.3}Background: Singleton predictions}{5}{section.1.3}\protected@file@percent }
+\@writefile{brf}{\backcite{quinonero-candelaDatasetShiftMachine2008}{{5}{1.3}{section.1.3}}}
+\@writefile{brf}{\backcite{sharmaClinicalRiskPrediction2021}{{5}{1.3}{section.1.3}}}
+\citation{perkoniggDynamicMemoryAlleviate2021}
+\citation{thompsonOvercomingCatastrophicForgetting2019}
+\citation{xuForgetMeNot2020}
+\citation{ben2010theory}
+\citation{liuNeedLanguageDescribing2023}
+\citation{liuNeedLanguageDescribing2023}
+\citation{glymourReviewCausalDiscovery2019}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3.1}Catastrophic forgetting}{6}{subsection.1.3.1}\protected@file@percent }
+\@writefile{brf}{\backcite{perkoniggDynamicMemoryAlleviate2021}{{6}{1.3.1}{subsection.1.3.1}}}
+\@writefile{brf}{\backcite{thompsonOvercomingCatastrophicForgetting2019}{{6}{1.3.1}{subsection.1.3.1}}}
+\@writefile{brf}{\backcite{xuForgetMeNot2020}{{6}{1.3.1}{subsection.1.3.1}}}
+\@writefile{brf}{\backcite{ben2010theory}{{6}{1.3.1}{subsection.1.3.1}}}
+\@writefile{brf}{\backcite{liuNeedLanguageDescribing2023}{{6}{1.3.1}{subsection.1.3.1}}}
+\@writefile{brf}{\backcite{liuNeedLanguageDescribing2023}{{6}{1.3.1}{subsection.1.3.1}}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3.2}Causal predictors}{6}{subsection.1.3.2}\protected@file@percent }
+\newlabel{sec:invariant-predictors}{{1.3.2}{6}{Causal predictors}{subsection.1.3.2}{}}
+\@writefile{brf}{\backcite{glymourReviewCausalDiscovery2019}{{6}{1.3.2}{subsection.1.3.2}}}
+\citation{pearl2009causality,scholkopfCausalAnticausalLearning2012}
+\citation{petersCausalInferenceUsing2016}
+\citation{magliacane2018domain}
+\citation{arjovskyInvariantRiskMinimization2019}
+\@writefile{brf}{\backcite{pearl2009causality}{{7}{1.3.2}{subsection.1.3.2}}}
+\@writefile{brf}{\backcite{scholkopfCausalAnticausalLearning2012}{{7}{1.3.2}{subsection.1.3.2}}}
+\@writefile{brf}{\backcite{petersCausalInferenceUsing2016}{{7}{1.3.2}{subsection.1.3.2}}}
+\@writefile{brf}{\backcite{magliacane2018domain}{{7}{1.3.2}{subsection.1.3.2}}}
+\@writefile{brf}{\backcite{arjovskyInvariantRiskMinimization2019}{{7}{1.3.2}{subsection.1.3.2}}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.4}My approach: Contextual predictions}{7}{section.1.4}\protected@file@percent }
+\citation{scholkopfCausalAnticausalLearning2012}
+\@writefile{brf}{\backcite{scholkopfCausalAnticausalLearning2012}{{8}{1.4}{section.1.4}}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.5}Group-instance predictor}{8}{section.1.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1.3}{\ignorespaces Evaluation results following the paradigm of contextual prediction. Each horizontal bar in the rugplot denotes the result for one random initialisation of the dataset and model weights. Our model, Group-Instance, which predicts jointly for an entire group of covariates, outperforms causal predictors, the current state-of-the-art under the paradigm of singleton prediction. As expected, the Naive Predictor (i.e., a model trained with maximum likelihood on the pooled data from the training environments) performs well on average but generalises poorly to new environments. The Oracle (i.e., a model similar to the Naive Predictor, but that also takes as input the ground-truth environment variable, $\MakeUppercase    []{w}$, in addition to the covariates, $\MakeUppercase    []{x}_{c}$ and $\MakeUppercase    []{x}_{s}$) performs best on average.}}{9}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:diabetes-empirical-results}{{1.3}{9}{Evaluation results following the paradigm of contextual prediction. Each horizontal bar in the rugplot denotes the result for one random initialisation of the dataset and model weights. Our model, Group-Instance, which predicts jointly for an entire group of covariates, outperforms causal predictors, the current state-of-the-art under the paradigm of singleton prediction. As expected, the Naive Predictor (i.e., a model trained with maximum likelihood on the pooled data from the training environments) performs well on average but generalises poorly to new environments. The Oracle (i.e., a model similar to the Naive Predictor, but that also takes as input the ground-truth environment variable, $\myrv {w}$, in addition to the covariates, $\myrv {x}_{c}$ and $\myrv {x}_{s}$) performs best on average}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.6}Experiment for illustration}{9}{section.1.6}\protected@file@percent }
+\newlabel{sec:domain-evaluation}{{1.6}{9}{Experiment for illustration}{section.1.6}{}}
+\citation{nobleRiskModelsScores2011}
+\@writefile{brf}{\backcite{nobleRiskModelsScores2011}{{10}{1.6}{Item.4}}}
+\citation{locatelloWeaklySupervisedDisentanglementCompromises2020}
+\@writefile{toc}{\contentsline {section}{\numberline {1.7}Discussion}{11}{section.1.7}\protected@file@percent }
+\bibstyle{icml2024}
+\bibdata{bibliography}
+\@writefile{brf}{\backcite{locatelloWeaklySupervisedDisentanglementCompromises2020}{{12}{1.7}{section.1.7}}}
+\bibcite{arjovskyInvariantRiskMinimization2019}{{1}{2019}{{Arjovsky et~al.}}{{Arjovsky, Bottou, Gulrajani, and {Lopez-Paz}}}}
+\bibcite{ben2010theory}{{2}{2010}{{{Ben-David} et~al.}}{{{Ben-David}, Blitzer, Crammer, Kulesza, Pereira, and Vaughan}}}
+\bibcite{glymourReviewCausalDiscovery2019}{{3}{2019}{{Glymour et~al.}}{{Glymour, Zhang, and Spirtes}}}
+\bibcite{liuNeedLanguageDescribing2023}{{4}{2023}{{Liu et~al.}}{{Liu, Wang, Cui, and Namkoong}}}
+\bibcite{locatelloWeaklySupervisedDisentanglementCompromises2020}{{5}{2020}{{Locatello et~al.}}{{Locatello, Poole, R{\"a}tsch, Scholkopf, Bachem, and Tschannen}}}
+\bibcite{magliacane2018domain}{{6}{2018}{{Magliacane et~al.}}{{Magliacane, {van Ommen}, Claassen, Bongers, Versteeg, and Mooij}}}
+\bibcite{nobleRiskModelsScores2011}{{7}{2011}{{Noble et~al.}}{{Noble, Mathur, Dent, Meads, and Greenhalgh}}}
+\bibcite{pearl2009causality}{{8}{2009}{{Pearl}}{{}}}
+\bibcite{perkoniggDynamicMemoryAlleviate2021}{{9}{2021}{{Perkonigg et~al.}}{{Perkonigg, Hofmanninger, Herold, Brink, Pianykh, Prosch, and Langs}}}
+\bibcite{petersCausalInferenceUsing2016}{{10}{2016}{{Peters et~al.}}{{Peters, B{\"u}hlmann, and Meinshausen}}}
+\bibcite{quinonero-candelaDatasetShiftMachine2008}{{11}{2008}{{{Qui{\~n}onero-Candela} et~al.}}{{{Qui{\~n}onero-Candela}, Sugiyama, Schwaighofer, and Lawrence}}}
+\bibcite{ruigePerformanceNIDDMScreening1997}{{12}{1997}{{Ruige et~al.}}{{Ruige, {de Neeling}, Kostense, Bouter, and Heine}}}
+\bibcite{scholkopfCausalAnticausalLearning2012}{{13}{2012}{{Sch{\"o}lkopf et~al.}}{{Sch{\"o}lkopf, Janzing, Peters, Sgouritsa, Zhang, and Mooij}}}
+\bibcite{sharmaClinicalRiskPrediction2021}{{14}{2021}{{Sharma et~al.}}{{Sharma, Davies, and Ainsworth}}}
+\bibcite{thompsonOvercomingCatastrophicForgetting2019}{{15}{2019}{{Thompson et~al.}}{{Thompson, Gwinnup, Khayrallah, Duh, and Koehn}}}
+\bibcite{xuForgetMeNot2020}{{16}{2020}{{Xu et~al.}}{{Xu, Zhong, Yepes, and Lau}}}
+\gdef \@abspage@last{14}
