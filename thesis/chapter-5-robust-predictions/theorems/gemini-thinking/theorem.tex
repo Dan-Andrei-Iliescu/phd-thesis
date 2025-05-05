@@ -1,0 +1,203 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx} % Required for Gamma function formula if needed visually
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{remark}{Remark}[section]
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\given}{\,|\,}
+
+\title{Variance Comparison of Causal and Contextual Predictors for Unsupervised Domain Adaptation: A Unified View}
+\author{A. Synthesis Author}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document synthesizes and clarifies results comparing the prediction error variance of a causal predictor versus a contextual predictor in unsupervised domain adaptation, drawing from the approaches of Giordano and Hieronymus. We consider a standard linear Gaussian structural causal model where data arises from different environments indexed by a latent variable $W$. The contextual predictor leverages information from multiple samples within a test environment to estimate the unobserved $W$. We present two main theorems under different assumptions about the precision of this environment estimation. Theorem 1 considers a simplified assumption where the estimation error variance scales as $1/n$ with the number of training environments $n$. Theorem 2 incorporates a more detailed derivation of the estimation error variance based on a specific VAE framework (as in Giordano), providing a more precise condition for finite $n$. Both theorems quantify the trade-off between the potential variance reduction from using a symptom covariate and the variance introduced by imperfectly estimating the environment context.
+\end{abstract}
+
+\section{Setup and Assumptions}
+
+We define the underlying generative model, data availability, and the predictors.
+
+\begin{assumption}[Generative Model]
+The data is generated according to the following linear Gaussian structural causal model for any given environment $W=w$:
+\begin{enumerate}
+    \item Environment Variable: $W \sim \N(0, \sigma_W^2)$, where $\sigma_W^2 > 0$.
+    \item Causal Covariate: $X_c = \alpha_c W + \epsilon_c$, where $\epsilon_c \sim \N(0, \sigma_c^2)$, $\alpha_c$ is a constant.
+    \item Response Variable: $Y = \beta_c X_c + \epsilon_y$, where $\epsilon_y \sim \N(0, \sigma_y^2)$, $\beta_c \neq 0$, $\sigma_y^2 > 0$.
+    \item Symptom Covariate: $X_s = \alpha_s W + \beta_s Y + \epsilon_s$, where $\epsilon_s \sim \N(0, \sigma_s^2)$, $\alpha_s \neq 0$, $\beta_s \neq 0$, $\sigma_s^2 > 0$.
+    \item The noise terms $\epsilon_c, \epsilon_y, \epsilon_s$ are mutually independent and independent of $W$.
+    \item All model parameters ($\alpha_c, \beta_c, \alpha_s, \beta_s, \sigma_c^2, \sigma_y^2, \sigma_s^2, \sigma_W^2$) are known constants.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Training Data]
+\begin{enumerate}
+    \item We observe $n$ training environments, indexed $i=1, \dots, n$, with $n \ge 1$ (or $n>2$ where required by specific estimation methods).
+    \item For each environment $i$, the environment variable $W_i$ is drawn independently from $\N(0, \sigma_W^2)$.
+    \item Within each environment $i$, we observe an infinite number of samples $\{(X_{c,ik}, X_{s,ik}, Y_{ik})\}_{k=1}^\infty$ generated according to Assumption 1.1 with $W=W_i$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Testing Data and Goal]
+\begin{enumerate}
+    \item A single test environment is considered, with environment variable $W_{\text{test}} \sim \N(0, \sigma_W^2)$, drawn independently of the training environments.
+    \item We observe an infinite number of covariate samples $\{(X_{c,\text{test},k}, X_{s,\text{test},k})\}_{k=1}^\infty$ from this test environment.
+    \item The goal is to predict $Y_{\text{test},k}$ for a randomly chosen sample $k$ from the test environment, minimizing the expected squared prediction error (variance, assuming unbiased predictors). The expectation is over the randomness of $W_{\text{test}}$ and the sample-specific noise terms $(\epsilon_{c,k}, \epsilon_{y,k}, \epsilon_{s,k})$ for sample $k$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Predictor Models]
+We consider two optimal linear predictors under their respective information sets:
+\begin{enumerate}
+    \item \textbf{Causal Predictor ($\hat{Y}_{C,k}$):} Uses only the causal covariate $X_{c,\text{test},k}$. It implements the true conditional expectation $\E[Y \given X_c]$.
+    \[ \hat{Y}_{C,k} = \E[Y_{\text{test},k} \given X_{c,\text{test},k}] = \beta_c X_{c,\text{test},k} \]
+    \item \textbf{Contextual Predictor ($\hat{Y}_{Ctx,k}$):} Uses the causal covariate $X_{c,\text{test},k}$, the symptom covariate $X_{s,\text{test},k}$, and an estimate $\hat{W}_{\text{test}}$ of the test environment variable $W_{\text{test}}$.
+        \begin{itemize}
+            \item \textbf{Environment Estimation:} Based on the infinite samples within the test environment (e.g., using the distribution of $X_s$ or $(X_c, X_s)$), an estimate $\hat{W}_{\text{test}}$ is formed. We model this estimate as $\hat{W}_{\text{test}} = W_{\text{test}} + \epsilon_W$, where $\epsilon_W$ is the estimation error, assumed to be independent of $W_{\text{test}}$ and the sample-specific noise terms $(\epsilon_{c,k}, \epsilon_{y,k}, \epsilon_{s,k})$. The variance $\Var(\epsilon_W) = \sigma_{\epsilon_W}^2$ depends on the estimation method and the number of training environments $n$.
+            \item \textbf{Prediction:} The predictor uses $X_{c,\text{test},k}$, $X_{s,\text{test},k}$, and $\hat{W}_{\text{test}}$. The optimal linear predictor approximating $\E[Y \given X_c, X_s, W_{\text{test}}]$ using $\hat{W}_{\text{test}}$ instead of $W_{\text{test}}$ is given by (derived similarly in both Giordano and Hieronymus):
+            \[ \hat{Y}_{Ctx,k} = \beta_c X_{c,\text{test},k} + \Delta (X_{s,\text{test},k} - \alpha_s \hat{W}_{\text{test}} - \beta_s \beta_c X_{c,\text{test},k}) \]
+            where $\Delta = \frac{\beta_s \sigma_y^2}{\beta_s^2 \sigma_y^2 + \sigma_s^2}$. Let $D = \beta_s^2 \sigma_y^2 + \sigma_s^2$, so $\Delta = \frac{\beta_s \sigma_y^2}{D}$.
+        \end{itemize}
+\end{enumerate}
+\end{assumption}
+
+\section{Causal Predictor Error Variance}
+
+The prediction error for the causal predictor for sample $k$ in the test environment is:
+\begin{align*}
+    \text{Error}_{C,k} &= Y_{\text{test},k} - \hat{Y}_{C,k} \\
+    &= (\beta_c X_{c,\text{test},k} + \epsilon_{y,\text{test},k}) - (\beta_c X_{c,\text{test},k}) \\
+    &= \epsilon_{y,\text{test},k}
+\end{align*}
+The variance of this error is:
+\begin{equation}
+    \Var(\text{Error}_{C,k}) = \Var(\epsilon_{y,\text{test},k}) = \sigma_y^2
+    \label{eq:causal_var}
+\end{equation}
+
+\section{Contextual Predictor Error Variance}
+
+The prediction error for the contextual predictor is:
+\begin{align*}
+    \text{Error}_{Ctx,k} &= Y_{\text{test},k} - \hat{Y}_{Ctx,k} \\
+    &= (\beta_c X_{c,\text{test},k} + \epsilon_{y,\text{test},k}) - \left[ \beta_c X_{c,\text{test},k} + \Delta (X_{s,\text{test},k} - \alpha_s \hat{W}_{\text{test}} - \beta_s \beta_c X_{c,\text{test},k}) \right] \\
+    &= \epsilon_{y,\text{test},k} - \Delta (X_{s,\text{test},k} - \alpha_s \hat{W}_{\text{test}} - \beta_s \beta_c X_{c,\text{test},k})
+\end{align*}
+Now substitute $X_{s,\text{test},k} = \alpha_s W_{\text{test}} + \beta_s Y_{\text{test},k} + \epsilon_{s,\text{test},k} = \alpha_s W_{\text{test}} + \beta_s (\beta_c X_{c,\text{test},k} + \epsilon_{y,\text{test},k}) + \epsilon_{s,\text{test},k}$ and $\hat{W}_{\text{test}} = W_{\text{test}} + \epsilon_W$:
+\begin{align*}
+    \text{Error}_{Ctx,k} &= \epsilon_{y,\text{test},k} - \Delta \left[ (\alpha_s W_{\text{test}} + \beta_s \beta_c X_{c,\text{test},k} + \beta_s \epsilon_{y,\text{test},k} + \epsilon_{s,\text{test},k}) - \alpha_s (W_{\text{test}} + \epsilon_W) - \beta_s \beta_c X_{c,\text{test},k} \right] \\
+    &= \epsilon_{y,\text{test},k} - \Delta \left[ \alpha_s W_{\text{test}} + \beta_s \epsilon_{y,\text{test},k} + \epsilon_{s,\text{test},k} - \alpha_s W_{\text{test}} - \alpha_s \epsilon_W \right] \\
+    &= \epsilon_{y,\text{test},k} - \Delta (\beta_s \epsilon_{y,\text{test},k} + \epsilon_{s,\text{test},k} - \alpha_s \epsilon_W) \\
+    &= (1 - \Delta \beta_s) \epsilon_{y,\text{test},k} - \Delta \epsilon_{s,\text{test},k} + \Delta \alpha_s \epsilon_W
+\end{align*}
+Using $1 - \Delta \beta_s = 1 - \frac{\beta_s^2 \sigma_y^2}{D} = \frac{D - \beta_s^2 \sigma_y^2}{D} = \frac{\sigma_s^2}{D}$, the error is:
+\[ \text{Error}_{Ctx,k} = \frac{\sigma_s^2}{D} \epsilon_{y,\text{test},k} - \frac{\beta_s \sigma_y^2}{D} \epsilon_{s,\text{test},k} + \frac{\beta_s \sigma_y^2 \alpha_s}{D} \epsilon_W \]
+Since $\epsilon_y, \epsilon_s, \epsilon_W$ are independent, the variance is:
+\begin{align}
+    \Var(\text{Error}_{Ctx,k}) &= \left(\frac{\sigma_s^2}{D}\right)^2 \Var(\epsilon_y) + \left(-\frac{\beta_s \sigma_y^2}{D}\right)^2 \Var(\epsilon_s) + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \Var(\epsilon_W) \nonumber \\
+    &= \frac{\sigma_s^4 \sigma_y^2}{D^2} + \frac{\beta_s^2 \sigma_y^4 \sigma_s^2}{D^2} + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \sigma_{\epsilon_W}^2 \nonumber \\
+    &= \frac{\sigma_s^2 \sigma_y^2 (\sigma_s^2 + \beta_s^2 \sigma_y^2)}{D^2} + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \sigma_{\epsilon_W}^2 \nonumber \\
+    &= \frac{\sigma_s^2 \sigma_y^2 D}{D^2} + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \sigma_{\epsilon_W}^2 \nonumber \\
+    &= \frac{\sigma_s^2 \sigma_y^2}{D} + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \sigma_{\epsilon_W}^2 \label{eq:contextual_var_general}
+\end{align}
+Let $\Var_{\text{opt}} = \frac{\sigma_s^2 \sigma_y^2}{D}$ be the optimal contextual error variance if $W_{\text{test}}$ were known perfectly ($\sigma_{\epsilon_W}^2 = 0$). Then $\Var(\text{Error}_{Ctx,k}) = \Var_{\text{opt}} + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \sigma_{\epsilon_W}^2$.
+
+\section{Theorem 1: Simplified Environment Estimation}
+
+This theorem corresponds to Hieronymus's setting, assuming a simple $1/n$ scaling for the estimation error variance.
+
+\begin{assumption}[Simplified Estimation Error]
+The variance of the environment estimation error $\epsilon_W = \hat{W}_{\text{test}} - W_{\text{test}}$ is given by:
+\[ \sigma_{\epsilon_W}^2 = \Var(\epsilon_W) = \frac{\sigma_W^2}{n} \]
+where $n$ is the number of training environments. This assumes an efficient estimation process based on $n$ environments.
+\label{ass:simple_error}
+\end{assumption}
+
+\begin{theorem}
+Under Assumptions 1.1-1.4 and the simplified estimation error Assumption \ref{ass:simple_error}, the prediction error variance of the contextual predictor $\hat{Y}_{Ctx,k}$ is lower than that of the causal predictor $\hat{Y}_{C,k}$ if and only if:
+\[ \alpha_s^2 \frac{\sigma_W^2}{n} < \beta_s^2 \sigma_y^2 + \sigma_s^2 \]
+\label{thm:simple}
+\end{theorem}
+
+\begin{proof}
+We require $\Var(\text{Error}_{Ctx,k}) < \Var(\text{Error}_{C,k})$. Using equations \eqref{eq:causal_var}, \eqref{eq:contextual_var_general}, and Assumption \ref{ass:simple_error}:
+\[ \frac{\sigma_s^2 \sigma_y^2}{D} + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 \]
+Rearrange the terms:
+\[ \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 - \frac{\sigma_s^2 \sigma_y^2}{D} \]
+\[ \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 \left(1 - \frac{\sigma_s^2}{D}\right) \]
+\[ \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 \left(\frac{D - \sigma_s^2}{D}\right) \]
+Substitute $D - \sigma_s^2 = \beta_s^2 \sigma_y^2$:
+\[ \frac{\beta_s^2 \sigma_y^4 \alpha_s^2}{D^2} \frac{\sigma_W^2}{n} < \sigma_y^2 \left(\frac{\beta_s^2 \sigma_y^2}{D}\right) \]
+\[ \frac{\beta_s^2 \sigma_y^4 \alpha_s^2}{D^2} \frac{\sigma_W^2}{n} < \frac{\beta_s^2 \sigma_y^4}{D} \]
+Since $\beta_s \neq 0$ and $\sigma_y^2 > 0$, we know $\beta_s^2 \sigma_y^4 > 0$. Also $D = \beta_s^2 \sigma_y^2 + \sigma_s^2 > 0$. We can divide by $\frac{\beta_s^2 \sigma_y^4}{D}$ (which is positive):
+\[ \frac{\alpha_s^2}{D} \frac{\sigma_W^2}{n} < 1 \]
+\[ \alpha_s^2 \frac{\sigma_W^2}{n} < D \]
+Substituting back $D = \beta_s^2 \sigma_y^2 + \sigma_s^2$:
+\[ \alpha_s^2 \frac{\sigma_W^2}{n} < \beta_s^2 \sigma_y^2 + \sigma_s^2 \]
+This completes the proof.
+\end{proof}
+
+\section{Theorem 2: VAE-Based Environment Estimation}
+
+This theorem corresponds to Giordano's setting, using a more detailed model for the estimation error based on a specific VAE framework.
+
+\begin{assumption}[VAE-Based Estimation Error]
+The estimate $\hat{W}_{\text{test}}$ is obtained using a group-instance VAE with linear encoders/decoders trained on covariate data $\{X_{c,ik}, X_{s,ik}\}$ from $n$ training environments ($n>2$), as described by Giordano. The VAE implicitly learns a scaling factor based on the empirical variance $\hat{\sigma}_{Wn}^2 = \frac{1}{n}\sum_{i=1}^n W_i^2$. The estimate for the test environment is $\hat{W}_{\text{test}} = \mu_{w,\text{test}} / \alpha_{\text{true}}$, where $\mu_{w,\text{test}} = \hat{a} W_{\text{test}}$ with $\hat{a}=1/\sqrt{\hat{\sigma}_{Wn}^2}$ and $\alpha_{\text{true}}=1/\sqrt{\sigma_W^2}$. This leads to an estimation error $\epsilon_W = \hat{W}_{\text{test}} - W_{\text{test}}$ with variance derived from inverse moments of the Chi-squared distribution:
+\[ \sigma_{\epsilon_W}^2 = \Var(\epsilon_W) = \sigma_W^2 \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\Gamma(\frac{n-1}{2})}{\Gamma(\frac{n}{2})} + 1 \right) \quad \text{for } n > 2 \]
+Let $f(n) = \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\Gamma(\frac{n-1}{2})}{\Gamma(\frac{n}{2})} + 1 \right)$. Then $\sigma_{\epsilon_W}^2 = \sigma_W^2 f(n)$.
+\label{ass:vae_error}
+\end{assumption}
+\textit{Note: $\Gamma(\cdot)$ is the Gamma function.}
+
+\begin{theorem}
+Under Assumptions 1.1-1.4 and the VAE-based estimation error Assumption \ref{ass:vae_error}, the prediction error variance of the contextual predictor $\hat{Y}_{Ctx,k}$ is lower than that of the causal predictor $\hat{Y}_{C,k}$ if and only if (for $n>2$):
+\[ \alpha_s^2 \sigma_W^2 f(n) < \beta_s^2 \sigma_y^2 + \sigma_s^2 \]
+where $f(n) = \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\Gamma(\frac{n-1}{2})}{\Gamma(\frac{n}{2})} + 1 \right)$.
+\label{thm:vae}
+\end{theorem}
+
+\begin{proof}
+The proof follows the same steps as the proof of Theorem \ref{thm:simple}, but substituting $\sigma_{\epsilon_W}^2 = \sigma_W^2 f(n)$ instead of $\sigma_W^2/n$.
+We require $\Var(\text{Error}_{Ctx,k}) < \Var(\text{Error}_{C,k})$. Using equations \eqref{eq:causal_var}, \eqref{eq:contextual_var_general}, and Assumption \ref{ass:vae_error}:
+\[ \frac{\sigma_s^2 \sigma_y^2}{D} + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \sigma_W^2 f(n) < \sigma_y^2 \]
+Rearranging and simplifying as in the previous proof leads to:
+\[ \frac{\alpha_s^2}{D} \sigma_W^2 f(n) < 1 \]
+\[ \alpha_s^2 \sigma_W^2 f(n) < D \]
+Substituting back $D = \beta_s^2 \sigma_y^2 + \sigma_s^2$:
+\[ \alpha_s^2 \sigma_W^2 f(n) < \beta_s^2 \sigma_y^2 + \sigma_s^2 \]
+This completes the proof.
+\end{proof}
+
+\section{Comparison and Remarks}
+
+\begin{remark}[Relationship between Theorems]
+Theorem \ref{thm:simple} can be viewed as a large-$n$ approximation of Theorem \ref{thm:vae}. For large $n$, the factor $f(n)$ in Assumption \ref{ass:vae_error} behaves like $1/n$. Specifically, $E[1/V_n] = n/(n-2) \approx 1 + 2/n$ and $E[1/\sqrt{V_n}]$ can be approximated using properties of the Gamma function or Taylor expansions, leading to $f(n) \approx 1/n$ (as noted by Giordano). Therefore, the condition in Theorem \ref{thm:vae} asymptotically approaches the condition in Theorem \ref{thm:simple}. However, for small or moderate $n$, Theorem \ref{thm:vae} provides a more precise condition based on the specific VAE estimation mechanism.
+\end{remark}
+
+\begin{remark}[Interpretation]
+Both theorems quantify the same fundamental trade-off. The contextual predictor can potentially reduce variance compared to the causal predictor by leveraging the information in the symptom $X_s$ about the residual variance in $Y$ not explained by $X_c$. The potential variance reduction is related to $D = \beta_s^2 \sigma_y^2 + \sigma_s^2$, which represents the variance of $X_s$ conditional on $W$ (since $X_s | W = \alpha_s W + \beta_s(\beta_c X_c + \epsilon_y) + \epsilon_s = \alpha_s W + \beta_s(\beta_c (\alpha_c W + \epsilon_c) + \epsilon_y) + \epsilon_s$, the part related to $Y$ is $\beta_s \epsilon_y$ and the independent part is $\epsilon_s$, giving variance $\beta_s^2 \sigma_y^2 + \sigma_s^2 = D$). However, using $X_s$ effectively requires estimating the unknown environment $W_{\text{test}}$. This estimation introduces noise, adding variance proportional to $\alpha_s^2 \sigma_{\epsilon_W}^2$. The contextual predictor is superior if and only if the cost of estimation ($\alpha_s^2 \sigma_{\epsilon_W}^2$) is less than the potential gain ($D$). Theorem \ref{thm:simple} uses the approximate cost $\alpha_s^2 \sigma_W^2 / n$, while Theorem \ref{thm:vae} uses the more precise cost $\alpha_s^2 \sigma_W^2 f(n)$.
+\end{remark}
+
+\begin{remark}[Practical Implications]
+The conditions highlight that the contextual predictor becomes more favorable relative to the causal predictor when:
+\begin{itemize}
+    \item The number of training environments $n$ is large (reducing $\sigma_{\epsilon_W}^2$).
+    \item The symptom $X_s$ is strongly related to the response $Y$ (large $\beta_s$) or has low residual noise (small $\sigma_s^2$), increasing $D$.
+    \item The symptom $X_s$ is weakly related to the environment $W$ (small $\alpha_s$) or the environment variability itself is small (small $\sigma_W^2$), reducing the cost term $\alpha_s^2 \sigma_{\epsilon_W}^2$.
+\end{itemize}
+Theorem \ref{thm:vae} provides a more accurate assessment of this trade-off for finite $n$ under the VAE estimation assumption.
+\end{remark}
+
+\end{document}

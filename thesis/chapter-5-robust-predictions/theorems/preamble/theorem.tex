@@ -1,0 +1,115 @@
+\documentclass{article}
+\usepackage{amsmath} % For math environments like align, text
+\usepackage{amssymb} % For symbols like \mathbb{E}, \mathcal{N}
+\usepackage{geometry} % For adjusting margins
+\geometry{a4paper, margin=1in}
+
+\title{Expected Log-Likelihood of the Naive Predictor in Unsupervised Domain Adaptation}
+\author{Derived based on user request}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem Setup}
+
+We aim to derive the expected log-likelihood of a naive predictor on test data in an unsupervised domain adaptation setting under specific assumptions.
+
+\subsection{Assumptions}
+\begin{itemize}
+    \item \textbf{True Generative Process:} The underlying data generation follows a linear model where the environment is characterized by a variable $W$. For a specific environment $w$:
+        \begin{align*}
+            X_c | w &\sim \mathcal{N}(\alpha_c + \beta_c w, \sigma_c^2) \\
+            Y | X_c &\sim \mathcal{N}(\alpha_y + \beta_y X_c, \sigma_y^2) \quad \text{(True causal relationship)} \\
+            X_s | w, Y &\sim \mathcal{N}(\alpha_s + \beta_s w + \gamma_s Y, \sigma_s^2) \quad \text{(Symptom)}
+        \end{align*}
+        We assume $Y$ is conditionally independent of $X_s$ and $W$ given $X_c$.
+    \item \textbf{Environment Variable:} The environment variable $W$ is normally distributed across environments: $W \sim \mathcal{N}(\mu_W, \sigma_W^2)$.
+    \item \textbf{Naive Predictor Model:} The naive predictor assumes a linear relationship using both covariates, ignoring the environment structure:
+        \[ Y | X_c, X_s \sim \mathcal{N}(\theta_1 + \theta_2 X_c + \theta_3 X_s, \sigma_{\text{naive}}^2) \]
+        The parameters $(\theta_1, \theta_2, \theta_3, \sigma_{\text{naive}}^2)$ are learned from training data.
+    \item \textbf{Training Data:} We have infinite samples ($m_i = \infty$) for each of $n$ distinct training environments $\{w_1, \dots, w_n\}$. Each $w_i$ is drawn i.i.d. from $\mathcal{N}(\mu_W, \sigma_W^2)$. The predictor is trained on the mixture distribution:
+        \[ P_{\text{train}}(X_c, X_s, Y) = \frac{1}{n} \sum_{i=1}^n P(X_c, X_s, Y | W=w_i) \]
+    \item \textbf{Testing Data:} Samples are drawn from a new environment $w_{\text{test}}$, where $w_{\text{test}}$ is drawn independently from $\mathcal{N}(\mu_W, \sigma_W^2)$. The test distribution is $P_{\text{test}}(X_c, X_s, Y) = P(X_c, X_s, Y | W=w_{\text{test}})$.
+\end{itemize}
+
+\section{Naive Predictor Parameters}
+
+Given infinite samples per training environment $w_1, \dots, w_n$, the naive predictor finds the exact parameters $\theta(w_1..n) = (\theta_1, \theta_2, \theta_3)$ and $\sigma_{\text{naive}}^2(w_1..n)$ that maximize the likelihood (minimize squared error) for the model $Y \approx \theta_1 + \theta_2 X_c + \theta_3 X_s$ over the specific mixture distribution $P_{\text{train}}$ corresponding to $w_1, \dots, w_n$.
+
+These parameters $\theta(w_1..n)$ and $\sigma_{\text{naive}}^2(w_1..n)$ are random variables because they depend on the random sample of environments $w_1, \dots, w_n$. As $n \to \infty$, $P_{\text{train}}$ converges to the marginal distribution $P_{\text{marginal}}(X_c, X_s, Y) = \mathbb{E}_{W}[P(X_c, X_s, Y | W)]$, and the parameters converge to $\theta_\infty$ and $\sigma_{\text{res},\infty}^2$, which are optimal for this marginal distribution.
+
+\section{Log-Likelihood}
+
+The log-likelihood of the naive predictor for a single data point $(y, x_c, x_s)$ from the test environment $w_{\text{test}}$, given the parameters $\theta(w_1..n)$ and $\sigma_{\text{naive}}^2(w_1..n)$ learned from the training environments, is:
+\begin{equation}
+\log P_{\text{naive}}(y | x_c, x_s; \theta(w_1..n), \sigma_{\text{naive}}^2(w_1..n)) = -\frac{1}{2} \log(2\pi \sigma_{\text{naive}}^2(w_1..n)) - \frac{(y - \mu_{\text{naive}}(x_c, x_s; w_1..n))^2}{2 \sigma_{\text{naive}}^2(w_1..n)}
+\end{equation}
+where $\mu_{\text{naive}}(x_c, x_s; w_1..n) = \theta_1(w_1..n) + \theta_2(w_1..n)x_c + \theta_3(w_1..n)x_s$.
+
+\section{Expected Log-Likelihood}
+
+We seek the expectation of this log-likelihood over the distribution of training environments ($w_1, \dots, w_n$), the test environment ($w_{\text{test}}$), and the test data ($X_c, X_s, Y$) given the test environment.
+\begin{equation}
+\mathbb{E}[LL] = \mathbb{E}_{w_1..n, w_{\text{test}}} \left[ \mathbb{E}_{X_c,X_s,Y | w_{\text{test}}} \left[ \log P_{\text{naive}}(Y | X_c, X_s; \theta(w_1..n), \sigma_{\text{naive}}^2(w_1..n)) \right] \right]
+\end{equation}
+The inner expectation is:
+\begin{align*}
+\mathbb{E}_{X_c,X_s,Y | w_{\text{test}}} [\dots] &= -\frac{1}{2} \log(2\pi \sigma_{\text{naive}}^2(w_1..n)) - \frac{1}{2 \sigma_{\text{naive}}^2(w_1..n)} \mathbb{E}_{X_c,X_s,Y | w_{\text{test}}} \left[ (Y - \mu_{\text{naive}}(X_c, X_s; w_1..n))^2 \right] \\
+&= -\frac{1}{2} \log(2\pi \sigma_{\text{naive}}^2(w_1..n)) - \frac{\text{MSE}(w_{\text{test}} | w_1..n)}{2 \sigma_{\text{naive}}^2(w_1..n)}
+\end{align*}
+where $\text{MSE}(w_{\text{test}} | w_1..n)$ is the Mean Squared Error of the predictor trained on $w_1..n$ and evaluated on the test environment $w_{\text{test}}$.
+
+\subsection{MSE Decomposition}
+We decompose the MSE using the law of total expectation and the true conditional mean $\mathbb{E}[Y | X_c, X_s, w_{\text{test}}] = \mathbb{E}[Y | X_c] = \alpha_y + \beta_y X_c$.
+\begin{align*}
+\text{MSE}(w_{\text{test}} | w_1..n) &= \mathbb{E}_{X_c,X_s,Y | w_{\text{test}}} \left[ (Y - \mu_{\text{naive}}(X_c, X_s; w_1..n))^2 \right] \\
+&= \mathbb{E}_{X_c,X_s,Y | w_{\text{test}}} \left[ (Y - \mathbb{E}[Y|X_c] + \mathbb{E}[Y|X_c] - \mu_{\text{naive}})^2 \right] \\
+&= \mathbb{E}_{X_c,X_s,Y | w_{\text{test}}} \left[ (Y - \mathbb{E}[Y|X_c])^2 \right] + \mathbb{E}_{X_c,X_s | w_{\text{test}}} \left[ (\mathbb{E}[Y|X_c] - \mu_{\text{naive}})^2 \right] \\
+&= \text{Var}(Y | X_c) + \mathbb{E}_{X_c,X_s | w_{\text{test}}} \left[ ( (\alpha_y + \beta_y X_c) - (\theta_1(w_1..n) + \theta_2(w_1..n)X_c + \theta_3(w_1..n)X_s) )^2 \right] \\
+&= \sigma_y^2 + \text{Bias}^2(w_{\text{test}} | w_1..n)
+\end{align*}
+where $\sigma_y^2$ is the irreducible error (variance of the true conditional distribution) and $\text{Bias}^2$ is the expected squared difference between the true conditional mean and the naive predictor's mean, evaluated over the test environment distribution.
+
+\subsection{Bias Decomposition}
+Let $\mu_\infty(X_c, X_s) = \theta_{1,\infty} + \theta_{2,\infty}X_c + \theta_{3,\infty}X_s$ be the predictor using parameters learned from infinitely many environments ($n=\infty$). We decompose the bias term:
+\[ \mathbb{E}[Y|X_c] - \mu_{\text{naive}}(w_1..n) = (\mathbb{E}[Y|X_c] - \mu_\infty(X_c, X_s)) + (\mu_\infty(X_c, X_s) - \mu_{\text{naive}}(w_1..n)) \]
+Taking the expectation of the squared bias over $w_1..n$ and $w_{\text{test}}$:
+\begin{align*}
+\mathbb{E}[\text{Bias}^2] &= \mathbb{E}_{w_1..n, w_{\text{test}}} \left[ \mathbb{E}_{X_c,X_s | w_{\text{test}}} \left[ ( (\mathbb{E}[Y|X_c] - \mu_\infty) + (\mu_\infty - \mu_{\text{naive}}) )^2 \right] \right] \\
+&\approx \mathbb{E}_{w_{\text{test}}} \left[ \mathbb{E}_{X_c,X_s | w_{\text{test}}} \left[ (\mathbb{E}[Y|X_c] - \mu_\infty)^2 \right] \right] \\
+&\quad + \mathbb{E}_{w_1..n, w_{\text{test}}} \left[ \mathbb{E}_{X_c,X_s | w_{\text{test}}} \left[ (\mu_\infty - \mu_{\text{naive}}(w_1..n))^2 \right] \right] \\
+&= B(\sigma_W^2) + V(n, \sigma_W^2)
+\end{align*}
+(Assuming the cross-term expectation is zero or negligible).
+
+Here:
+\begin{itemize}
+    \item $B(\sigma_W^2) = \mathbb{E}_{w_{\text{test}}} [ \mathbb{E}_{X_c,X_s | w_{\text{test}}} [ (\mathbb{E}[Y|X_c] - \mu_\infty(X_c, X_s))^2 ] ]$ is the \textbf{asymptotic bias}. It represents the irreducible squared bias incurred by using the best predictor optimal for the *average* (marginal) distribution ($\mu_\infty$) instead of the true causal predictor ($\mathbb{E}[Y|X_c]$). This bias arises because $\mu_\infty$ might rely on the spurious correlation between $X_s$ and $Y$ induced by $W$. This term increases with $\sigma_W^2$ (variance of environments) and $B(0)=0$ if $\mu_\infty = \mathbb{E}[Y|X_c]$ when $\sigma_W^2=0$.
+    \item $V(n, \sigma_W^2) = \mathbb{E}_{w_1..n, w_{\text{test}}} [ \mathbb{E}_{X_c,X_s | w_{\text{test}}} [ (\mu_\infty(X_c, X_s) - \mu_{\text{naive}}(w_1..n))^2 ] ]$ is the \textbf{estimator variance}. It reflects the additional squared error due to estimating the optimal marginal predictor $\mu_\infty$ using only $n$ training environments. The variance of the estimated parameters $\theta(w_1..n)$ around $\theta_\infty$ scales as $1/n$. Thus, this term scales as $V(n, \sigma_W^2) = C(\sigma_W^2) / n$, where $C(\sigma_W^2)$ depends on the complexity and variability across environments, influenced by $\sigma_W^2$.
+\end{itemize}
+
+\section{Final Expression}
+
+Combining the terms, the expected MSE is approximately:
+\[ \mathbb{E}[\text{MSE}] \approx \sigma_y^2 + B(\sigma_W^2) + \frac{C(\sigma_W^2)}{n} \]
+For the expected log-likelihood, we also need the expectation involving the log variance term. We approximate $\sigma_{\text{naive}}^2(w_1..n)$ with its asymptotic limit $\sigma_{\text{res},\infty}^2(\sigma_W^2)$, which is the residual variance of the optimal marginal predictor $\mu_\infty$. This variance also depends on $\sigma_W^2$.
+\[ \mathbb{E}_{w_1..n} \left[ -\frac{1}{2} \log(2\pi \sigma_{\text{naive}}^2(w_1..n)) \right] \approx -\frac{1}{2} \log(2\pi \sigma_{\text{res},\infty}^2(\sigma_W^2)) \]
+Using this approximation also in the denominator of the MSE term, the expected log-likelihood is approximately:
+\begin{equation} \label{eq:final_ell}
+\mathbb{E}[LL] \approx -\frac{1}{2} \log(2\pi \sigma_{\text{res},\infty}^2(\sigma_W^2)) - \frac{1}{2 \sigma_{\text{res},\infty}^2(\sigma_W^2)} \left( \sigma_y^2 + B(\sigma_W^2) + \frac{C(\sigma_W^2)}{n} \right)
+\end{equation}
+
+\section{Interpretation}
+
+The expected log-likelihood of the naive predictor on test data:
+\begin{itemize}
+    \item Decreases (performance worsens) with increasing irreducible error $\sigma_y^2$.
+    \item Decreases with increasing asymptotic bias $B(\sigma_W^2)$. This bias term captures the fundamental limitation of the naive predictor in ignoring the environmental structure ($W$) and relying on potentially spurious correlations (between $X_s$ and $Y$). This bias increases as the environments become more varied (larger $\sigma_W^2$).
+    \item Decreases with increasing estimator variance $C(\sigma_W^2)/n$. This term reflects the penalty for having only a finite number ($n$) of training environments. Performance improves as $n \to \infty$. The rate of improvement depends on $C(\sigma_W^2)$, which likely increases with $\sigma_W^2$ as more diverse environments make the average parameters harder to estimate accurately.
+    \item Is normalized by the residual variance of the best *average* predictor, $\sigma_{\text{res},\infty}^2(\sigma_W^2)$, which itself depends on the environmental variance $\sigma_W^2$.
+\end{itemize}
+This expression highlights the trade-offs involved: the naive predictor benefits from more training environments ($n$) but is fundamentally limited by its inability to model the environment-specific relationships, especially when environmental variance ($\sigma_W^2$) is high, leading to a large asymptotic bias $B(\sigma_W^2)$.
+
+\end{document}

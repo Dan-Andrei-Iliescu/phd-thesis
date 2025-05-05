@@ -1,0 +1,184 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[margin=1in]{geometry} % Set margins
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% Custom commands (optional)
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\N}{\mathcal{N}} % Normal distribution
+\newcommand{\R}{\mathbb{R}} % Real numbers
+\newcommand{\g}{\Gamma} % Gamma function
+
+\title{Variance Comparison of Causal and Contextual Predictors for Unsupervised Domain Adaptation}
+\author{Author Giordano}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document presents a theorem comparing the prediction error variance of a causal predictor versus a contextual predictor under a specific linear Gaussian generative model relevant to unsupervised domain adaptation. The contextual predictor utilizes a group-instance variational autoencoder (VAE) framework with linear encoders/decoders to estimate the unobserved environment variable from multiple samples within a test environment. We derive the variance of the environment estimation error based on the VAE training process (using the ELBO objective and $n$ training environments) and incorporate this into the condition under which the contextual predictor achieves lower prediction variance than the causal predictor. The result depends explicitly on the number of training environments $n$, the true variance of the environment variable $\sigma_W^2$, and other model parameters.
+\end{abstract}
+
+\section{Model and Predictor Definitions}
+
+We begin by defining the underlying generative model and the predictors under consideration.
+
+\begin{assumption}[Generative Model]\label{ass:model}
+The data is generated according to the following linear Gaussian structural causal model:
+\begin{enumerate}
+    \item Environment Variable: $W \sim \N(0, \sigma_W^2)$, where $\sigma_W^2 > 0$.
+    \item Causal Covariate: $X_c = aW + \epsilon_c$, where $\epsilon_c \sim \N(0, \sigma_c^2)$, $a \neq 0$, $\sigma_c^2 > 0$.
+    \item Response Variable: $Y = dX_c + \epsilon_y$, where $\epsilon_y \sim \N(0, \sigma_y^2)$, $d \neq 0$, $\sigma_y^2 > 0$.
+    \item Symptom Covariate: $X_s = bW + cY + \epsilon_s$, where $\epsilon_s \sim \N(0, \sigma_s^2)$, $b \neq 0$, $c \neq 0$, $\sigma_s^2 > 0$.
+    \item The noise terms $\epsilon_c, \epsilon_y, \epsilon_s$ are mutually independent and independent of $W$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Training Data]\label{ass:train}
+\begin{enumerate}
+    \item We observe $n$ training environments (groups), indexed $i=1, \dots, n$, with $n>2$.
+    \item For each environment $i$, the environment variable $W_i$ is drawn independently from $\N(0, \sigma_W^2)$.
+    \item Within each environment $i$, we observe an infinite number of samples $\{ (X_{c,ik}, X_{s,ik}, Y_{ik}) \}_{k=1}^\infty$ generated according to Assumption \ref{ass:model} with $W = W_i$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Testing Data]\label{ass:test}
+\begin{enumerate}
+    \item A single test environment $n+1$ is considered, with environment variable $W_{n+1} \sim \N(0, \sigma_W^2)$, drawn independently of the training environments.
+    \item We observe an infinite number of covariate samples $\{ (X_{c,(n+1)k}, X_{s,(n+1)k}) \}_{k=1}^\infty$ from this test environment.
+    \item The goal is to predict $Y_{(n+1)k}$ for a randomly chosen sample $k$ from the test environment, minimizing the expected squared prediction error (variance, since predictors are unbiased).
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Causal Predictor]\label{ass:causal}
+\begin{enumerate}
+    \item The causal predictor uses only the causal covariate $X_c$.
+    \item It implements the true conditional expectation $\E[Y | X_c]$.
+    \item Prediction for test sample $k$: $\hat{Y}_{\text{causal}, k} = \E[Y | X_c = X_{c,(n+1)k}]$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Contextual Predictor with VAE Estimation]\label{ass:contextual}
+\begin{enumerate}
+    \item A group-instance VAE with linear encoder/decoder is trained on the covariate data $\{X_{c,ik}, X_{s,ik}\}$ from the $n$ training environments (Assumption \ref{ass:train}) using the Evidence Lower Bound (ELBO) objective. The VAE has a scalar group latent $w$ and an instance latent $z$. The prior is $p(w)=\N(0,1)$.
+    \item Due to the ELBO's KL divergence term and infinite data per group, the VAE's group encoder learns an implicit scaling factor $\hat{\alpha} = 1 / \sqrt{\hat{\sigma}_{W,n}^2}$, where $\hat{\sigma}_{W,n}^2 = \frac{1}{n}\sum_{i=1}^n W_i^2$ is the empirical variance estimate from the training groups. The encoder produces a latent mean $\mu_{w,i} = \hat{\alpha} W_i$ for training group $i$.
+    \item For the test environment $n+1$, the encoder produces the latent mean $\mu_{w, n+1} = \hat{\alpha} W_{n+1}$.
+    \item The predictor estimates the test environment variable $W_{n+1}$ by inverting the relationship using the *true* variance $\sigma_W^2$, corresponding to an ideal scaling $\alpha_{\text{true}} = 1/\sqrt{\sigma_W^2}$. The estimate is $\hat{W}_{n+1} = \mu_{w, n+1} / \alpha_{\text{true}}$.
+    \item This estimation process results in an error $\text{error}_W = \hat{W}_{n+1} - W_{n+1}$ with variance $\sigma_{\text{err},W}^2(n, \sigma_W)$, derived in Section \ref{sec:error_var_derivation} as:
+    \[ \sigma_{\text{err},W}^2(n, \sigma_W) = \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\g((n-1)/2)}{\g(n/2)} + 1 \right) \sigma_W^2 \quad (\text{for } n>2) \]
+    We assume $\text{error}_W$ is independent of the instance-specific noise terms $\epsilon_{y,(n+1)k}$ and $\epsilon_{s,(n+1)k}$.
+    \item The contextual predictor uses $X_c$, $X_s$, and the estimate $\hat{W}_{n+1}$. It implements the true conditional expectation $\E[Y | X_c, X_s, W]$, substituting $\hat{W}_{n+1}$ for the unknown $W_{n+1}$.
+    \item Prediction for test sample $k$: $\hat{Y}_{\text{contextual}, k} = \E[Y | X_c=X_{c,(n+1)k}, X_s=X_{s,(n+1)k}, W=\hat{W}_{n+1}]$.
+\end{enumerate}
+\end{assumption}
+
+\section{Main Theorem}
+
+\begin{theorem}\label{thm:main_revised}
+Under Assumptions \ref{ass:model}-\ref{ass:contextual}, the prediction error variance of the contextual predictor for a random test sample $k$ from test environment $n+1$ is lower than that of the causal predictor if and only if (for $n>2$):
+\begin{equation} \label{eq:condition_revised}
+\frac{b^2 \sigma_W^2}{c^2\sigma_y^2 + \sigma_s^2} \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\g((n-1)/2)}{\g(n/2)} + 1 \right) < 1
+\end{equation}
+where $\g(\cdot)$ is the Gamma function.
+\end{theorem}
+
+\section{Proof}
+
+We compute the prediction error variance for each predictor. The prediction error for a predictor $\hat{Y}$ is $Y - \hat{Y}$. The expected squared error is the variance of the prediction error.
+
+\subsection{Causal Predictor Error Variance}
+The causal predictor is $\hat{Y}_{\text{causal}, k} = \E[Y | X_c = X_{c,(n+1)k}]$.
+From Assumption \ref{ass:model}, $Y = dX_c + \epsilon_y$. Since $\epsilon_y$ is independent of $X_c$:
+\[ \E[Y | X_c] = dX_c \]
+The prediction error for sample $k$ in environment $n+1$ is:
+\[ \text{Error}_{\text{causal}, k} = Y_{(n+1)k} - \hat{Y}_{\text{causal}, k} = (dX_{c,(n+1)k} + \epsilon_{y,(n+1)k}) - dX_{c,(n+1)k} = \epsilon_{y,(n+1)k} \]
+The variance of this error is:
+\begin{equation} \label{eq:var_causal_proof}
+\Var(\text{Error}_{\text{causal}, k}) = \Var(\epsilon_{y,(n+1)k}) = \sigma_y^2
+\end{equation}
+
+\subsection{Ideal Contextual Predictor Error Variance (Known $W_{n+1}$)}
+Consider an ideal predictor that knows the true $W_{n+1}$.
+$\hat{Y}_{\text{ideal}, k} = \E[Y | X_c=X_{c,(n+1)k}, X_s=X_{s,(n+1)k}, W=W_{n+1}]$.
+We established in previous derivations (or can re-derive similarly to the actual predictor below, setting $\text{error}_W=0$) that the error is $\text{Error}_{\text{ideal}, k} = (1 - \gamma c)\epsilon_{y,(n+1)k} - \gamma \epsilon_{s,(n+1)k}$, where $\gamma = \frac{c\sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2}$.
+The variance of this error is:
+\begin{equation} \label{eq:var_ideal_contextual_proof}
+\Var(\text{Error}_{\text{ideal}, k}) = \frac{\sigma_s^2 \sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2} =: \Var_{\text{opt}, \text{contextual}}
+\end{equation}
+
+\subsection{Actual Contextual Predictor Error Variance (Estimated $\hat{W}_{n+1}$)}
+The actual predictor uses $\hat{W}_{n+1} = W_{n+1} + \text{error}_W$.
+$\hat{Y}_{\text{contextual}, k} = \E[Y | X_c=X_{c,(n+1)k}, X_s=X_{s,(n+1)k}, W=\hat{W}_{n+1}]$.
+\[ \hat{Y}_{\text{contextual}, k} = dX_{c,(n+1)k} + \gamma (X_{s,(n+1)k} - b\hat{W}_{n+1} - cdX_{c,(n+1)k}) \]
+The prediction error is:
+\begin{align*}
+\text{Error}_{\text{contextual}, k} &= Y_{(n+1)k} - \hat{Y}_{\text{contextual}, k} \\
+&= (dX_{c,(n+1)k} + \epsilon_{y,(n+1)k}) - [dX_{c,(n+1)k} + \gamma (X_{s,(n+1)k} - b(W_{n+1}+\text{error}_W) - cdX_{c,(n+1)k})] \\
+&= \epsilon_{y,(n+1)k} - \gamma [(X_{s,(n+1)k} - bW_{n+1} - cdX_{c,(n+1)k}) - b\,\text{error}_W] \\
+&= \epsilon_{y,(n+1)k} - \gamma [(c\epsilon_{y,(n+1)k} + \epsilon_{s,(n+1)k}) - b\,\text{error}_W] \\
+&= (1 - \gamma c)\epsilon_{y,(n+1)k} - \gamma \epsilon_{s,(n+1)k} + \gamma b \,\text{error}_W
+\end{align*}
+Using the independence of $\text{error}_W$ from $\epsilon_y, \epsilon_s$ (Assumption \ref{ass:contextual}):
+\begin{align}
+\Var(\text{Error}_{\text{contextual}, k}) &= \Var((1 - \gamma c)\epsilon_{y,(n+1)k} - \gamma \epsilon_{s,(n+1)k}) + \Var(\gamma b \,\text{error}_W) \nonumber \\
+&= \Var(\text{Error}_{\text{ideal}, k}) + (\gamma b)^2 \Var(\text{error}_W) \nonumber \\
+&= \Var_{\text{opt}, \text{contextual}} + (\gamma b)^2 \sigma_{\text{err},W}^2(n, \sigma_W) \label{eq:var_contextual_proof}
+\end{align}
+where $\sigma_{\text{err},W}^2(n, \sigma_W)$ is the variance of the environment estimation error.
+
+\subsection{Derivation of Environment Estimation Error Variance} \label{sec:error_var_derivation}
+As outlined in Assumption \ref{ass:contextual}, the VAE learns $\hat{\alpha} = 1/\sqrt{\hat{\sigma}_{W,n}^2}$ and the predictor estimates $W_{n+1}$ as $\hat{W}_{n+1} = \mu_{w,n+1}/\alpha_{\text{true}} = \sqrt{\sigma_W^2/\hat{\sigma}_{W,n}^2} W_{n+1}$.
+The error is $\text{error}_W = (\sqrt{1/V_n} - 1)W_{n+1}$, where $V_n = \hat{\sigma}_{W,n}^2/\sigma_W^2 \sim \chi^2(n)/n$.
+The variance is $\sigma_{\text{err},W}^2 = \E[(\text{error}_W)^2] = (\E[1/V_n] - 2\E[1/\sqrt{V_n}] + 1)\sigma_W^2$.
+Using the expectations of inverse moments of the Chi-squared distribution (for $n>2$):
+$\E[1/V_n] = n/(n-2)$
+$\E[1/\sqrt{V_n}] = \sqrt{n/2} \g((n-1)/2) / \g(n/2)$
+Substituting gives:
+\begin{equation} \label{eq:sigma_err_W_proof}
+\sigma_{\text{err},W}^2(n, \sigma_W) = \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\g((n-1)/2)}{\g(n/2)} + 1 \right) \sigma_W^2
+\end{equation}
+
+\subsection{Comparison}
+We require $\Var(\text{Error}_{\text{contextual}, k}) < \Var(\text{Error}_{\text{causal}, k})$.
+\[ \Var_{\text{opt}, \text{contextual}} + (\gamma b)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \sigma_y^2 \]
+\[ (\gamma b)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \sigma_y^2 - \Var_{\text{opt}, \text{contextual}} \]
+The right side is the potential variance reduction $\Delta\Var$:
+\[ \Delta\Var = \sigma_y^2 - \frac{\sigma_s^2 \sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2} = \frac{c^2 \sigma_y^4}{c^2\sigma_y^2 + \sigma_s^2} \]
+The inequality becomes:
+\[ \left( \frac{c\sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2} b \right)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \frac{c^2 \sigma_y^4}{c^2\sigma_y^2 + \sigma_s^2} \]
+Assuming $c \neq 0$ and $\sigma_y^2 > 0$, we can simplify:
+\[ \frac{c^2 b^2 \sigma_y^4}{(c^2\sigma_y^2 + \sigma_s^2)^2} \sigma_{\text{err},W}^2(n, \sigma_W) < \frac{c^2 \sigma_y^4}{c^2\sigma_y^2 + \sigma_s^2} \]
+\[ \frac{b^2}{c^2\sigma_y^2 + \sigma_s^2} \sigma_{\text{err},W}^2(n, \sigma_W) < 1 \]
+Now, substitute the expression for $\sigma_{\text{err},W}^2(n, \sigma_W)$ from \eqref{eq:sigma_err_W_proof}:
+\[ \frac{b^2}{c^2\sigma_y^2 + \sigma_s^2} \left[ \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\g((n-1)/2)}{\g(n/2)} + 1 \right) \sigma_W^2 \right] < 1 \]
+Rearranging slightly gives the condition stated in the theorem:
+\[ \frac{b^2 \sigma_W^2}{c^2\sigma_y^2 + \sigma_s^2} \left( \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\g((n-1)/2)}{\g(n/2)} + 1 \right) < 1 \]
+This completes the proof.
+
+\section{Remarks}
+
+\begin{remark}
+The term $\frac{b^2 \sigma_W^2}{c^2\sigma_y^2 + \sigma_s^2}$ relates the influence of the environment ($b^2 \sigma_W^2$) to the inherent variability in the symptom $X_s$ not explained by $W$ directly ($c^2\sigma_y^2 + \sigma_s^2$ is related to $\Var(X_s|W)$).
+The term involving $n$ and Gamma functions, let's call it $f(n) = \frac{n}{n-2} - 2 \sqrt{\frac{n}{2}} \frac{\g((n-1)/2)}{\g(n/2)} + 1$, quantifies the inflation factor on $\sigma_W^2$ due to estimating it from $n$ samples. This factor represents the relative increase in error variance compared to knowing $W$ perfectly. The contextual predictor is better if the product of these two factors is less than 1.
+\end{remark}
+
+\begin{remark}[Large $n$ Approximation]
+For large $n$, we can approximate the error variance term $f(n) \sigma_W^2 \approx \sigma_W^2/n$. Substituting this into the condition \eqref{eq:condition_revised}:
+\[ \frac{b^2 \sigma_W^2}{c^2\sigma_y^2 + \sigma_s^2} \left( \frac{1}{n} \right) < 1 \]
+\[ n > \frac{b^2 \sigma_W^2}{c^2\sigma_y^2 + \sigma_s^2} \]
+This shows that for any given set of model parameters (with $b, c, \sigma_W, \sigma_y$ non-zero), there exists a finite number of training environments $N$ such that for all $n > N$, the contextual predictor achieves lower prediction variance than the causal predictor. The required number of environments increases with the relative influence of the environment on the symptom ($b^2 \sigma_W^2$) compared to the symptom's residual variance ($c^2\sigma_y^2 + \sigma_s^2$).
+\end{remark}
+
+\end{document}

@@ -40,6 +40,23 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
+\usepackage{bm}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+\usepackage{tabularx}
+\usepackage{subfiles}
+\usepackage{epigraph}
+\usepackage{bibentry}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+\usepackage[group-separator={,},group-minimum-digits=4]{siunitx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FONTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % \usepackage{fancyhdr}
 % \pagestyle{fancy}
 % \fancyhf{}
@@ -56,8 +73,8 @@
 % \usepackage{imfellEnglish}
 % \usepackage{euscript}
 % \usepackage{biolinum}
-\usepackage{helvet}
-% \usepackage{tgpagella}
+% \usepackage{helvet}
+\usepackage{tgpagella}
 % \usepackage{fbb}
 
 % \usepackage{newpxtext}
@@ -86,20 +103,66 @@
 % \pdfrender{StrokeColor=black,TextRenderingMode=2,LineWidth=0.0pt}
 % \makeatletter\let\normalrender\PdfRender@NormalColorHook\let\PdfRender@NormalColorHook\@empty\newcommand*{\textnormalrender}[1]{\begingroup\normalrender#1\endgroup}\makeatother
 
-% \usepackage{fouriernc}
-\usepackage{fourier}
-\usepackage{tgschola}
+% \usepackage{psb}
+% \renewcommand\rmdefault{psb}
 
-\usepackage{bm}
-\usepackage{natbib}
-\usepackage{pdflscape}
-\usepackage{afterpage}
-\usepackage{tabularx}
-\usepackage{subfiles}
-\usepackage{epigraph}
-\usepackage{bibentry}
-\usepackage{mathtools}
-\usepackage{amsthm}
+% \usepackage{fouriernc}
+% \usepackage{fourier}
+% \usepackage{tgschola}
+
+% 1. Default / Latin Modern (recommended default)
+% \usepackage{lmodern}
+
+% 2. Palatino
+% \usepackage{mathpazo}
+
+% 3. Fourier
+% \usepackage{fourier}
+
+% 4. Times (newer version)
+% \usepackage{newtxtext}
+% \usepackage{newtxmath}
+
+% 5. Euler Math (requires a text font, e.g., Pagella)
+% \usepackage{tgpagella} % Text font
+% \usepackage{eulervm}   % Math font
+
+% 6. Garamond (using mathdesign)
+% \usepackage[urw-garamond]{mathdesign}
+
+% 7. Garamond (using ebgaramond text + newtxmath)
+% \usepackage{ebgaramond} % Text font
+% \usepackage[garamond]{newtxmath} % Math font adapted for Garamond
+
+% 8. Libertine (using libertine text + newtxmath)
+% \usepackage{libertine} % Text font
+% \usepackage[libertine]{newtxmath} % Math font adapted for Libertine
+
+% 9. Charter (using XCharter text + newtxmath)
+\usepackage{XCharter} % Text font
+\usepackage[charter]{newtxmath} % Math font adapted for Charter
+
+% 10. Concrete (with Euler math)
+% \usepackage{concmath}
+
+% 11. Times (older version - generally not recommended over newtx)
+% \usepackage{mathptmx}
+
+% --- End of Font Package Selection ---
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{remark}{Remark}[section]
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\given}{\,|\,}
 
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 
@@ -129,12 +192,9 @@
 % \newcommand{\draft}[1]{\textcolor{blue}{#1}}
 \newcommand{\draft}[1]{}
 
-\newtheorem{lemma}{Lemma}
-
-\usepackage[group-separator={,},group-minimum-digits=4]{siunitx}
-
 \def\biblio{\bibliographystyle{icml2024}\bibliography{bibliography}}
 
+% \allsectionsfont{\rmfamily}
 \captionsetup{format=hang}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -194,7 +254,7 @@
 \date{3 July 2024}
 
 %% PDF meta-info:
-\subjectline{Machine Learning}
+\subjectline{Deep learning for Grouped Data}
 \keywords{}
 
 \newcommand{\flag}[1]{\textcolor[rgb]{0.9,0.3,0.3}{\textbf{#1}}}
@@ -208,17 +268,18 @@
 %% Acknowledgements:
 %%
 \acknowledgements{%
-I owe an immense debt of gratitude to Damon Wischik, my PhD supervisor. He taught me the essence the academic way of life. His guidance on structuring thoughts, formulating falsifiable claims, and communicating clearly – including the invaluable advice to always answer the question first – has fundamentally shaped my approach to academic work. Even fundamental skills, like how to take effective notes, were part of his mentorship. His unwavering commitment to providing detailed feedback on countless drafts, demonstrating remarkable patience even when I repeated the same mistakes, was instrumental in my development. It has been a privilege to do my PhD under his supervision.
 
-I am grateful to my fellow PhD students: Aliaksei Mikhailiuk, Omer Nivron, Tudor Suciu, and Raghul Parthipanm for sharing the journey. Their camaraderie provided essential support through the confusion and challenges of doctoral research. Our deep discussions were intellectually stimulating, and the process of giving and receiving feedback was crucial for our growth together.
+I am immensely grateful to my PhD supervisor, Damon Wischik. He embodied the principles of academic life and guided my development as a researcher. He showed me how scientific writing demands the courage to state a hypothesis boldly and not to bury it among qualifications. He taught me how to structure thoughts, formulate falsifiable claims, and communicate ideas clearly. Above all, his mentorship was deeply committed and generous. He provided meticulous feedback on numerous drafts and exercised remarkable patience in the face of my eternally recurring mistakes. It has been a true privilege to do my PhD under his supervision.
 
-My time as an intern at Papercup Technologies was enriched by my colleagues Zack Hodari, Tian Teh, and Devang Mohan, who also became valued co-authors. I thank them for their insightful feedback, for leading by example, and for their unwavering support throughout my internship. Working shoulder-to-shoulder on our paper was a rewarding collaborative experience.
+I extend my appreciation to my fellow PhD students: Aliaksei Mikhailiuk, Omer Nivron, Tudor Suciu, and Raghul Parthipan, with whom I shared this journey. Their camaraderie offered vital emotional sustenance through the ordeal of doctoral research. Our stimulating discussions deepened my thinking, and our tradition of exchanging feedback fuelled our mutual development.
 
-I would like to extend my sincere thanks to my PhD examiners, Professor Devavrat Shah and Professor Pietro Lio. I am grateful that they agreed to take on this role and dedicate their time to evaluating my work. The viva examination itself was a stimulating experience, and I deeply appreciate their engaging discussion, valuable feedback, and insightful ideas, which have given me much to consider for future work.
+My internship at Papercup Technologies was significantly enriched by my colleagues Zack Hodari, Tian Teh, and Devang Mohan. I thank them for their insightful feedback and their steadfast encouragement. Collaborating closely a deeply rewarding experience.
 
-I owe a huge debt of gratitude to my parents, Corina and Gabriel Iliescu. Their constant encouragement was crucial. Their genuine interest in my research I found very motivating, and knowing how happy they are that I have completed this journey is a reward in itself for me.
+I would like to convey my sincere thanks to my PhD examiners, Professor Devavrat Shah and Professor Pietro Lio. I appreciate their willingness to dedicate time to evaluating my work. The viva examination was intellectually stimulating, and I am thankful for their engaging discussion, valuable critiques, and perceptive ideas.
 
-Finally, my deepest gratitude goes to my wife, Miruna Pislar. Her support was unwavering, particularly during the difficult period of thesis writing. Her advice and feedback were invaluable, but even more so was her help in understanding why this endeavour was worthwhile. She gave my life colour and was a constant source of strength and inspiration throughout this entire process.
+I am profoundly indebted to my parents, Corina and Gabriel Iliescu. Their care and support throughout my doctoral years was heartening. Their genuine interest in my research provided a powerful source of motivation. It was a reward in itself to witness their joy when I finally submitted the thesis.
+
+Finally, my deepest gratitude belongs to my wife, Miruna Pislar. Her emotional and practical support was unfailing, particularly during the demanding period of thesis writing. She lent her skills to text editing, helped me prioritise tasks, and aided in decision-making. She shared in every small victory and setback over the past six years. Above all, she nurtured the determination without which this thesis would have been abandoned long ago.
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,7 +288,6 @@ Finally, my deepest gratitude goes to my wife, Miruna Pislar. Her support was un
 \begin{document}
 
 \def\biblio{}
-\allsectionsfont{\sffamily}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Title page, abstract, declaration etc.:

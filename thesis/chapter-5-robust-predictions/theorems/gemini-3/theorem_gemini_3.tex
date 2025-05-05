@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Custom commands if needed
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\N}{\mathcal{N}} % Normal distribution
+
+\title{Variance Comparison of Causal and Contextual Predictors for Unsupervised Domain Adaptation}
+\author{Author Hieronymus}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Setup and Assumptions}
+
+We consider a domain adaptation problem where data comes from different environments, indexed by a latent variable $W$. We aim to predict a response variable $Y$ using covariates $X_c$ (causal) and $X_s$ (symptom).
+
+\begin{assumption}[Data Generating Process] \label{ass:dgp}
+The variables follow a linear Gaussian model structure for any given environment $W=w$:
+\begin{enumerate}
+    \item Environment Variable: $W \sim \N(0, \sigma_W^2)$.
+    \item Causal Covariate: $X_c = \alpha_c W + \epsilon_c$, where $\epsilon_c \sim \N(0, \sigma_c^2)$.
+    \item Response Variable: $Y = \beta_c X_c + \epsilon_y$, where $\epsilon_y \sim \N(0, \sigma_y^2)$.
+    \item Symptom Covariate: $X_s = \alpha_s W + \beta_s Y + \epsilon_s$, where $\epsilon_s \sim \N(0, \sigma_s^2)$.
+    \item All noise terms ($\epsilon_c, \epsilon_y, \epsilon_s$) are mutually independent and independent of $W$.
+    \item We assume the parameters $\alpha_c, \sigma_c, \beta_c, \sigma_y, \alpha_s, \beta_s, \sigma_s, \sigma_W$ are known constants, and $\beta_c \neq 0$, $\beta_s \neq 0$, $\alpha_s \neq 0$, $\sigma_y^2 > 0$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Training and Testing] \label{ass:traintest}
+\begin{enumerate}
+    \item \textbf{Training:} We have data from $n$ distinct environments, $W_1, \dots, W_n$, drawn i.i.d. from $\N(0, \sigma_W^2)$. For each environment $W_i$, we observe an infinite number of samples $\{(X_{c,ik}, X_{s,ik}, Y_{ik})\}_{k=1}^\infty$ generated according to Assumption \ref{ass:dgp} with $W=W_i$.
+    \item \textbf{Testing:} We evaluate predictors on a new test environment $W_{test}$, drawn from $\N(0, \sigma_W^2)$ independently of the training environments. We observe an infinite number of samples $\{(X_{c,test,k}, X_{s,test,k}, Y_{test,k})\}_{k=1}^\infty$ from this test environment.
+    \item The goal is to predict $Y_{test,k}$ using available covariates from the test environment. We compare predictors based on the variance of their prediction error, $\Var(Y_{test,k} - \hat{Y}_k)$, where the variance is taken over the randomness of $W_{test}$ and the specific sample $k$ (i.e., the noise terms $\epsilon_c, \epsilon_y, \epsilon_s$ associated with sample $k$).
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Predictor Models] \label{ass:predictors}
+We consider two optimal linear predictors under their respective information sets:
+\begin{enumerate}
+    \item \textbf{Causal Predictor ($\hat{Y}_C$):} Uses only the causal covariate $X_{c,test,k}$. The optimal linear predictor is $\hat{Y}_{C,k} = \E[Y_{test,k} | X_{c,test,k}] = \beta_c X_{c,test,k}$.
+    \item \textbf{Group-Instance Contextual Predictor ($\hat{Y}_{GI}$):} Uses $X_{c,test,k}$, $X_{s,test,k}$, and context from the test environment's samples.
+        \begin{itemize}
+            \item \textit{Environment Estimation:} Based on the infinite samples from the test environment (specifically, the distribution of $X_s$), an estimate $\hat{W}$ of the true test environment $W_{test}$ is formed. We assume this estimate takes the form $\hat{W} = W_{test} + \epsilon_W$, where $\epsilon_W \sim \N(0, \sigma_{err}^2)$ is the estimation error, independent of $W_{test}, \epsilon_c, \epsilon_y, \epsilon_s$. Due to training on $n$ environments, we assume an efficient estimation process such that the error variance is $\sigma_{err}^2 = \frac{\sigma_W^2}{n}$.
+            \item \textit{Prediction:} The predictor uses $X_{c,test,k}$, $X_{s,test,k}$, and $\hat{W}$ to predict $Y_{test,k}$. The optimal linear predictor incorporating this information (aiming to approximate $\E[Y | X_c, X_s, W_{test}]$ using $\hat{W}$) is given by:
+            \[ \hat{Y}_{GI, k} = \beta_c X_{c,test,k} + \Delta (X_{s,test,k} - \alpha_s \hat{W} - \beta_s \beta_c X_{c,test,k}) \]
+            where $\Delta = \frac{\beta_s \sigma_y^2}{\beta_s^2 \sigma_y^2 + \sigma_s^2}$.
+        \end{itemize}
+\end{enumerate}
+\end{assumption}
+
+\section{Main Result}
+
+\begin{theorem}
+Under Assumptions \ref{ass:dgp}, \ref{ass:traintest}, and \ref{ass:predictors}, the variance of the prediction error for the Group-Instance contextual predictor ($\Var(e_{GI})$) is lower than the variance of the prediction error for the Causal predictor ($\Var(e_C)$), i.e., $\Var(Y_{test,k} - \hat{Y}_{GI,k}) < \Var(Y_{test,k} - \hat{Y}_{C,k})$, if and only if
+\begin{equation}
+\alpha_s^2 \frac{\sigma_W^2}{n} < \beta_s^2 \sigma_y^2 + \sigma_s^2
+\end{equation}
+where $n$ is the number of training environments, $\sigma_W^2$ is the variance of the environment variable, $\alpha_s$ is the sensitivity of the symptom $X_s$ to the environment $W$, $\beta_s$ is the sensitivity of $X_s$ to the response $Y$, $\sigma_y^2$ is the residual variance of $Y$ given $X_c$, and $\sigma_s^2$ is the residual variance of $X_s$ given $W$ and $Y$.
+\end{theorem}
+
+\begin{proof}
+We compute the variance of the prediction error for each predictor.
+
+1.  \textbf{Causal Predictor Error Variance:}
+    The prediction error is $e_C = Y_{test,k} - \hat{Y}_{C,k}$.
+    Substituting the definitions:
+    \[ e_C = ( \beta_c X_{c,test,k} + \epsilon_y ) - (\beta_c X_{c,test,k}) = \epsilon_y \]
+    The variance is:
+    \[ \Var(e_C) = \Var(\epsilon_y) = \sigma_y^2 \]
+
+2.  \textbf{Group-Instance Predictor Error Variance:}
+    The prediction error is $e_{GI} = Y_{test,k} - \hat{Y}_{GI,k}$.
+    Substituting the definitions:
+    \begin{align*} e_{GI} &= (\beta_c X_{c,test,k} + \epsilon_y) - \left( \beta_c X_{c,test,k} + \Delta (X_{s,test,k} - \alpha_s \hat{W} - \beta_s \beta_c X_{c,test,k}) \right) \\ &= \epsilon_y - \Delta (X_{s,test,k} - \alpha_s \hat{W} - \beta_s \beta_c X_{c,test,k}) \end{align*}
+    Now substitute $X_{s,test,k} = \alpha_s W_{test} + \beta_s Y_{test,k} + \epsilon_s = \alpha_s W_{test} + \beta_s (\beta_c X_{c,test,k} + \epsilon_y) + \epsilon_s$.
+    The term in the parenthesis becomes:
+    \begin{align*} & ( \alpha_s W_{test} + \beta_s \beta_c X_{c,test,k} + \beta_s \epsilon_y + \epsilon_s ) - \alpha_s (W_{test} + \epsilon_W) - \beta_s \beta_c X_{c,test,k} \\ &= \alpha_s W_{test} + \beta_s \beta_c X_{c,test,k} + \beta_s \epsilon_y + \epsilon_s - \alpha_s W_{test} - \alpha_s \epsilon_W - \beta_s \beta_c X_{c,test,k} \\ &= \beta_s \epsilon_y + \epsilon_s - \alpha_s \epsilon_W \end{align*}
+    Thus, the error is:
+    \[ e_{GI} = \epsilon_y - \Delta (\beta_s \epsilon_y + \epsilon_s - \alpha_s \epsilon_W) = (1 - \Delta \beta_s) \epsilon_y - \Delta \epsilon_s + \Delta \alpha_s \epsilon_W \]
+    Since $\epsilon_y, \epsilon_s, \epsilon_W$ are independent, the variance is:
+    \[ \Var(e_{GI}) = (1 - \Delta \beta_s)^2 \Var(\epsilon_y) + (-\Delta)^2 \Var(\epsilon_s) + (\Delta \alpha_s)^2 \Var(\epsilon_W) \]
+    Let $D = \beta_s^2 \sigma_y^2 + \sigma_s^2$. Then $\Delta = \frac{\beta_s \sigma_y^2}{D}$.
+    We have $1 - \Delta \beta_s = 1 - \frac{\beta_s^2 \sigma_y^2}{D} = \frac{D - \beta_s^2 \sigma_y^2}{D} = \frac{\sigma_s^2}{D}$.
+    Also, $\Var(\epsilon_y) = \sigma_y^2$, $\Var(\epsilon_s) = \sigma_s^2$, and $\Var(\epsilon_W) = \sigma_{err}^2 = \frac{\sigma_W^2}{n}$.
+    Substituting these into the variance expression:
+    \begin{align*} \Var(e_{GI}) &= \left(\frac{\sigma_s^2}{D}\right)^2 \sigma_y^2 + \left(\frac{\beta_s \sigma_y^2}{D}\right)^2 \sigma_s^2 + \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \frac{\sigma_W^2}{n} \\ &= \frac{\sigma_s^4 \sigma_y^2 + \beta_s^2 \sigma_y^4 \sigma_s^2}{D^2} + \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} \\ &= \frac{\sigma_s^2 \sigma_y^2 (\sigma_s^2 + \beta_s^2 \sigma_y^2)}{D^2} + \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} \\ &= \frac{\sigma_s^2 \sigma_y^2 D}{D^2} + \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} \\ &= \frac{\sigma_s^2 \sigma_y^2}{D} + \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} \end{align*}
+
+3.  \textbf{Comparison:}
+    We want to find the condition under which $\Var(e_{GI}) < \Var(e_C)$.
+    \[ \frac{\sigma_s^2 \sigma_y^2}{D} + \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 \]
+    Isolate the term containing $n$:
+    \[ \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 - \frac{\sigma_s^2 \sigma_y^2}{D} \]
+    \[ \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 \left(1 - \frac{\sigma_s^2}{D}\right) \]
+    \[ \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 \left(\frac{D - \sigma_s^2}{D}\right) \]
+    \[ \left(\Delta \alpha_s\right)^2 \frac{\sigma_W^2}{n} < \sigma_y^2 \left(\frac{\beta_s^2 \sigma_y^2}{D}\right) \]
+    Substitute $\Delta = \frac{\beta_s \sigma_y^2}{D}$:
+    \[ \left(\frac{\beta_s \sigma_y^2 \alpha_s}{D}\right)^2 \frac{\sigma_W^2}{n} < \frac{\sigma_y^2 \beta_s^2 \sigma_y^2}{D} \]
+    Since we assumed $\beta_s \neq 0$ and $\sigma_y^2 > 0$, we can divide both sides by $\frac{\beta_s^2 \sigma_y^4}{D}$ (which is positive):
+    \[ \frac{\alpha_s^2}{D} \frac{\sigma_W^2}{n} < 1 \]
+    Multiply by $D$ (which is positive as $\sigma_y^2, \sigma_s^2 \ge 0$ and $\sigma_y^2>0$):
+    \[ \alpha_s^2 \frac{\sigma_W^2}{n} < D \]
+    Substitute back $D = \beta_s^2 \sigma_y^2 + \sigma_s^2$:
+    \[ \alpha_s^2 \frac{\sigma_W^2}{n} < \beta_s^2 \sigma_y^2 + \sigma_s^2 \]
+    This inequality holds if and only if $\Var(e_{GI}) < \Var(e_C)$.
+
+4.  \textbf{Conclusion:}
+    The Group-Instance contextual predictor yields a lower prediction error variance than the Causal predictor precisely when the condition $\alpha_s^2 \frac{\sigma_W^2}{n} < \beta_s^2 \sigma_y^2 + \sigma_s^2$ is met.
+\end{proof}
+
+\begin{remark}
+The term $\alpha_s^2 \frac{\sigma_W^2}{n}$ represents the additional variance introduced into the prediction due to the imperfect estimation of the environment $W$, scaled by how strongly the symptom $X_s$ depends on $W$ ($\alpha_s^2$). The term $\beta_s^2 \sigma_y^2 + \sigma_s^2 = D$ relates to the potential reduction in variance achievable by using the symptom $X_s$ if the environment $W$ were known perfectly. The theorem quantifies the trade-off: the gain from using the symptom (related to $D$) must outweigh the noise introduced by estimating the environment context (related to $\alpha_s^2 \sigma_W^2 / n$).
+\end{remark}
+
+\end{document}

@@ -21,8 +21,6 @@
 
 \begin{document}
 
-\allsectionsfont{\sffamily}
-
 \chapter{Introduction}
 
 \epigraph{History does not repeat,\\ but it rhymes.}{Folk saying}
@@ -103,7 +101,7 @@ Group-level representations have a long history in statistics under the umbrella
 %     \item Secondly, I expand the scope of group modelling to include problems that have not been conventionally approached using this framework, such as image-to-image translation, text-to-speech synthesis, and climate modelling.
 % \end{enumerate}
 
-My contribution in this thesis is the application of the group-level representations to three grouped-data problems, namely \textit{style-content disentanglement}, \textit{missing data imputation}, and \textit{unsupervised domain adaptation}. I propose a set of novel computational approaches for efficiently inferring group-level representations for different kinds of complex data. They comprise a range of deep learning techniques based on the Variational Autoencoder. These approaches build upon state-of-the-art techniques in semi-supervised representation learning.
+My contribution in this thesis is the application of the group-level representations to three grouped-data problems, namely \textit{style-content disentanglement}, \textit{missing data imputation}, and \textit{unsupervised domain adaptation}. I propose a set of novel computational approaches for efficiently inferring group-level representations for different kinds of complex data. They comprise a range of deep learning techniques based on the Variational Autoencoder. These approaches build upon state-of-the-art techniques in semi-supervised representation learning~\footnote{The code for the experiments presented in this thesis can be found here: \href{https://github.com/Dan-Andrei-Iliescu/phd-thesis}{https://github.com/Dan-Andrei-Iliescu/phd-thesis}}.
 
 Firstly, I propose a novel representation learning method called the Context-Aware Variational Autoencoder (CxVAE). This model can perform style-content disentanglement on datasets with conditional shift. Conditional shift occurs when the distribution of a outcome variable $\myrv{y}$ conditional on the input observation $\myrv{x}$ --- $\mylik{P}_{\myrv{y}|\myrv{x}}$ --- changes across data environments (i.e., $\mylik{P}^{(i)}_{\myrv{y}|\myrv{x}} \neq \mylik{P}^{(j)}_{\myrv{y}|\myrv{x}}$, where $i,j$ are two different environments). I introduce two novel style-content disentanglement datasets to show empirically that existing methods fail to disentangle under conditional shift. CxVAE overcomes this limitation by enforcing independence across the content variables inferred from each environment. My model presents two innovations: a context-aware encoder and a content adversarial loss. We use a specially designed experiment to show empirically that these design choices directly cause an improvement of our model's performance on datasets with conditional shift. This contribution was presented in \citet{iliescuStyleContentDisentanglementConditional2024}.
 

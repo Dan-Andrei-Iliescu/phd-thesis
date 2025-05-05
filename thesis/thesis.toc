@@ -1,98 +1,105 @@
 \thispagestyle {empty}
 \contentsline {chapter}{\numberline {1}Introduction}{19}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Illustration}{21}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Probabilistic formulation}{22}{section.1.2}%
+\contentsline {section}{\numberline {1.2}Probabilistic formulation}{21}{section.1.2}%
 \contentsline {section}{\numberline {1.3}Contributions}{23}{section.1.3}%
 \contentsline {section}{\numberline {1.4}List of publications}{24}{section.1.4}%
-\contentsline {chapter}{\numberline {2}Background}{27}{chapter.2}%
-\contentsline {paragraph}{Mathematical notation.}{27}{section*.7}%
-\contentsline {section}{\numberline {2.1}The group-instance model}{28}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Deep neural networks as a function family}{30}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}Fitting the model with maximum likelihood estimation}{30}{subsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.1.3}Variational inference in the group-instance model}{31}{subsection.2.1.3}%
-\contentsline {subsection}{\numberline {2.1.4}Amortised variational inference using deep learning}{33}{subsection.2.1.4}%
-\contentsline {section}{\numberline {2.2}Other approaches for modelling groups}{35}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Unsupervised domain adaptation}{35}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Image-to-image translation}{38}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}Representation learning}{38}{subsection.2.2.3}%
-\contentsline {paragraph}{Information bottleneck.}{39}{section*.9}%
-\contentsline {subsection}{\numberline {2.2.4}Invariance to sensitive variables}{41}{subsection.2.2.4}%
-\contentsline {subsection}{\numberline {2.2.5}Style-Content Disentanglement}{43}{subsection.2.2.5}%
-\contentsline {subsection}{\numberline {2.2.6}Shared and private variation}{44}{subsection.2.2.6}%
-\contentsline {subsection}{\numberline {2.2.7}Bayesian CCA}{45}{subsection.2.2.7}%
-\contentsline {subsection}{\numberline {2.2.8}Manifold relevance determination}{45}{subsection.2.2.8}%
-\contentsline {subsection}{\numberline {2.2.9}Shared-private variation versus group-instance disentanglement}{46}{subsection.2.2.9}%
-\contentsline {chapter}{\numberline {3}Style-content disentanglement}{49}{chapter.3}%
-\contentsline {paragraph}{Abstract.}{49}{section*.11}%
-\contentsline {section}{\numberline {3.1}Introduction}{49}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Conditional shift}{50}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Contribution}{51}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}Related Work}{53}{section.3.2}%
-\contentsline {paragraph}{Style-Content Disentanglement.}{53}{section*.13}%
-\contentsline {paragraph}{Controlling for the Style Variable.}{53}{section*.14}%
-\contentsline {paragraph}{Conditional Shift.}{54}{section*.15}%
-\contentsline {paragraph}{Image Translation.}{54}{section*.16}%
-\contentsline {section}{\numberline {3.3}Background}{55}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Group Variational Autoencoder}{56}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Conditional shift}{57}{subsection.3.3.2}%
-\contentsline {section}{\numberline {3.4}Context-Aware Variational Autoencoder}{57}{section.3.4}%
-\contentsline {paragraph}{Conditioning on the style.}{57}{section*.18}%
-\contentsline {paragraph}{Adversarial loss.}{57}{section*.19}%
-\contentsline {section}{\numberline {3.5}Evaluation}{59}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Datasets}{59}{subsection.3.5.1}%
-\contentsline {paragraph}{TestScores.}{59}{section*.21}%
-\contentsline {paragraph}{Shift3DIdent.}{60}{section*.22}%
-\contentsline {subsection}{\numberline {3.5.2}Model setup}{61}{subsection.3.5.2}%
-\contentsline {subsection}{\numberline {3.5.3}Evaluation Metrics}{61}{subsection.3.5.3}%
-\contentsline {paragraph}{Target Variable Regression.}{61}{section*.24}%
-\contentsline {paragraph}{Mutual Information Gap.}{62}{section*.25}%
-\contentsline {paragraph}{Translation Between Styles.}{62}{section*.26}%
-\contentsline {section}{\numberline {3.6}Results}{63}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Conditional Shift Causes the Gap in Performance}{64}{section.3.7}%
-\contentsline {section}{\numberline {3.8}Conclusions}{65}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Missing data imputation}{67}{chapter.4}%
-\contentsline {paragraph}{Abstract.}{67}{section*.28}%
-\contentsline {section}{\numberline {4.1}Introduction}{67}{section.4.1}%
-\contentsline {paragraph}{Significance.}{68}{section*.29}%
-\contentsline {subsection}{\numberline {4.1.1}Conventional problem formulation}{69}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}My formulation: Versatile imputation}{69}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Contribution}{71}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Related Work}{72}{section.4.2}%
-\contentsline {paragraph}{Missing data imputation.}{72}{section*.31}%
-\contentsline {paragraph}{Human-in-the-loop Control.}{72}{section*.32}%
-\contentsline {paragraph}{Conditioning generative models.}{73}{section*.33}%
-\contentsline {paragraph}{Inpainting.}{73}{section*.34}%
-\contentsline {section}{\numberline {4.3}Conventional approach: Masked autoencoders}{73}{section.4.3}%
-\contentsline {paragraph}{Encoder architecture.}{75}{section*.36}%
-\contentsline {section}{\numberline {4.4}My approach: Multiple-instance VAE}{76}{section.4.4}%
-\contentsline {paragraph}{Training objective.}{77}{section*.38}%
-\contentsline {subsection}{\numberline {4.4.1}Alignment loss}{78}{subsection.4.4.1}%
-\contentsline {paragraph}{Interpretation.}{79}{section*.39}%
-\contentsline {paragraph}{Lemma.}{79}{section*.40}%
-\contentsline {paragraph}{Proof sketch.}{79}{section*.41}%
-\contentsline {paragraph}{Implementation.}{80}{section*.42}%
-\contentsline {section}{\numberline {4.5}Hypothesis: Making use of redundant instances}{81}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Evaluation}{82}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Generalisation to unseen missingness densities}{84}{subsection.4.6.1}%
-\contentsline {paragraph}{Missingness densities.}{84}{section*.44}%
-\contentsline {paragraph}{Training.}{84}{section*.45}%
-\contentsline {paragraph}{Testing.}{84}{section*.46}%
-\contentsline {paragraph}{Baselines.}{86}{section*.47}%
-\contentsline {subsection}{\numberline {4.6.2}Results}{86}{subsection.4.6.2}%
-\contentsline {section}{\numberline {4.7}Side claim: Efficiency of control}{86}{section.4.7}%
-\contentsline {paragraph}{Baselines.}{88}{section*.50}%
-\contentsline {subsection}{\numberline {4.7.1}Results}{89}{subsection.4.7.1}%
-\contentsline {subsection}{\numberline {4.7.2}Downstream performance}{89}{subsection.4.7.2}%
-\contentsline {section}{\numberline {4.8}Conclusion}{90}{section.4.8}%
-\contentsline {chapter}{\numberline {5}Unsupervised domain adaptation}{91}{chapter.5}%
-\contentsline {paragraph}{Abstract.}{91}{section*.52}%
-\contentsline {section}{\numberline {5.1}Introduction}{91}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Illustrative example: Diabetes risk}{92}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Background: Singleton predictions}{95}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Catastrophic forgetting}{96}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Causal predictors}{96}{subsection.5.3.2}%
-\contentsline {section}{\numberline {5.4}My approach: Contextual predictions}{97}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Group-instance predictor}{98}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Experiment for illustration}{99}{section.5.6}%
-\contentsline {section}{\numberline {5.7}Discussion}{101}{section.5.7}%
+\contentsline {chapter}{\numberline {2}Background}{25}{chapter.2}%
+\contentsline {paragraph}{Mathematical notation.}{25}{section*.7}%
+\contentsline {section}{\numberline {2.1}The group-instance model}{26}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Deep neural networks as a function family}{27}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Fitting the model with maximum likelihood estimation}{28}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Variational inference in the group-instance model}{29}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Amortised variational inference using deep learning}{31}{subsection.2.1.4}%
+\contentsline {section}{\numberline {2.2}Other approaches for modelling groups}{32}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Unsupervised domain adaptation}{33}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Image-to-image translation}{35}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Representation learning}{36}{subsection.2.2.3}%
+\contentsline {paragraph}{Information bottleneck.}{37}{section*.9}%
+\contentsline {subsection}{\numberline {2.2.4}Invariance to sensitive variables}{39}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Style-Content Disentanglement}{41}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.6}Shared and private variation}{42}{subsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.2.7}Bayesian CCA}{42}{subsection.2.2.7}%
+\contentsline {subsection}{\numberline {2.2.8}Manifold relevance determination}{43}{subsection.2.2.8}%
+\contentsline {subsection}{\numberline {2.2.9}Shared-private variation versus group-instance disentanglement}{44}{subsection.2.2.9}%
+\contentsline {chapter}{\numberline {3}Style-content disentanglement}{45}{chapter.3}%
+\contentsline {paragraph}{Abstract.}{45}{section*.11}%
+\contentsline {section}{\numberline {3.1}Introduction}{45}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Conditional shift}{46}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Contribution}{47}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Related Work}{48}{section.3.2}%
+\contentsline {paragraph}{Style-Content Disentanglement.}{48}{section*.13}%
+\contentsline {paragraph}{Controlling for the Style Variable.}{49}{section*.14}%
+\contentsline {paragraph}{Conditional Shift.}{50}{section*.15}%
+\contentsline {paragraph}{Image Translation.}{50}{section*.16}%
+\contentsline {section}{\numberline {3.3}Background}{51}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Group Variational Autoencoder}{52}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Conditional shift}{52}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Context-Aware Variational Autoencoder}{53}{section.3.4}%
+\contentsline {paragraph}{Conditioning on the style.}{53}{section*.18}%
+\contentsline {paragraph}{Adversarial loss.}{53}{section*.19}%
+\contentsline {section}{\numberline {3.5}Evaluation}{54}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Datasets}{54}{subsection.3.5.1}%
+\contentsline {paragraph}{TestScores.}{54}{section*.21}%
+\contentsline {paragraph}{Shift3DIdent.}{56}{section*.22}%
+\contentsline {subsection}{\numberline {3.5.2}Model setup}{56}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Evaluation Metrics}{57}{subsection.3.5.3}%
+\contentsline {paragraph}{Target Variable Regression.}{57}{section*.24}%
+\contentsline {paragraph}{Mutual Information Gap.}{57}{section*.25}%
+\contentsline {paragraph}{Translation Between Styles.}{58}{section*.26}%
+\contentsline {section}{\numberline {3.6}Results}{58}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Conditional Shift Causes the Gap in Performance}{59}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Conclusions}{60}{section.3.8}%
+\contentsline {chapter}{\numberline {4}Missing data imputation}{61}{chapter.4}%
+\contentsline {paragraph}{Abstract.}{61}{section*.28}%
+\contentsline {section}{\numberline {4.1}Introduction}{61}{section.4.1}%
+\contentsline {paragraph}{Significance.}{62}{section*.29}%
+\contentsline {subsection}{\numberline {4.1.1}Conventional problem formulation}{63}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}My formulation: Versatile imputation}{63}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Contribution}{65}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Related Work}{66}{section.4.2}%
+\contentsline {paragraph}{Missing data imputation.}{66}{section*.31}%
+\contentsline {paragraph}{Human-in-the-loop Control.}{66}{section*.32}%
+\contentsline {paragraph}{Conditioning generative models.}{67}{section*.33}%
+\contentsline {paragraph}{Inpainting.}{67}{section*.34}%
+\contentsline {section}{\numberline {4.3}Conventional approach: Masked autoencoders}{67}{section.4.3}%
+\contentsline {paragraph}{Encoder architecture.}{69}{section*.36}%
+\contentsline {section}{\numberline {4.4}My approach: Multiple-instance VAE}{70}{section.4.4}%
+\contentsline {paragraph}{Training objective.}{70}{section*.38}%
+\contentsline {subsection}{\numberline {4.4.1}Alignment loss}{71}{subsection.4.4.1}%
+\contentsline {paragraph}{Interpretation.}{73}{section*.39}%
+\contentsline {paragraph}{Lemma.}{73}{section*.40}%
+\contentsline {paragraph}{Proof sketch.}{73}{section*.41}%
+\contentsline {paragraph}{Implementation.}{74}{section*.42}%
+\contentsline {section}{\numberline {4.5}Hypothesis: Making use of redundant instances}{75}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Evaluation}{76}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Generalisation to unseen missingness densities}{78}{subsection.4.6.1}%
+\contentsline {paragraph}{Missingness densities.}{78}{section*.44}%
+\contentsline {paragraph}{Training.}{79}{section*.45}%
+\contentsline {paragraph}{Testing.}{79}{section*.46}%
+\contentsline {paragraph}{Baselines.}{79}{section*.47}%
+\contentsline {subsection}{\numberline {4.6.2}Results}{80}{subsection.4.6.2}%
+\contentsline {section}{\numberline {4.7}Side claim: Efficiency of control}{80}{section.4.7}%
+\contentsline {paragraph}{Baselines.}{81}{section*.50}%
+\contentsline {subsection}{\numberline {4.7.1}Results}{82}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}Downstream performance}{82}{subsection.4.7.2}%
+\contentsline {section}{\numberline {4.8}Conclusion}{83}{section.4.8}%
+\contentsline {chapter}{\numberline {5}Unsupervised domain adaptation}{85}{chapter.5}%
+\contentsline {paragraph}{Abstract.}{85}{section*.52}%
+\contentsline {section}{\numberline {5.1}Introduction}{85}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Illustrative example: Diabetes risk}{86}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Background: Singleton predictions}{88}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Catastrophic forgetting}{90}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Causal predictors}{90}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}My approach: Contextual predictions}{91}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Group-instance predictor}{92}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Experiment for illustration}{93}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Theoretical Comparison of Causal and Contextual Predictors}{95}{section.5.7}%
+\contentsline {paragraph}{Causal Predictor.}{96}{section*.56}%
+\contentsline {paragraph}{Contextual Predictor.}{96}{section*.57}%
+\contentsline {subsection}{\numberline {5.7.1}Conditions for Superiority of Contextual Predictor}{97}{subsection.5.7.1}%
+\contentsline {subsubsection}{\numberline {5.7.1.1}Scenario 1: Simplified Estimation Error Scaling}{97}{subsubsection.5.7.1.1}%
+\contentsline {subsubsection}{\numberline {5.7.1.2}Scenario 2: VAE-Based Estimation Error}{98}{subsubsection.5.7.1.2}%
+\contentsline {subsection}{\numberline {5.7.2}Interpretation of Theoretical Results}{99}{subsection.5.7.2}%
+\contentsline {section}{\numberline {5.8}Discussion}{100}{section.5.8}%
 \contentsline {chapter}{\numberline {6}Conclusion}{103}{chapter.6}%

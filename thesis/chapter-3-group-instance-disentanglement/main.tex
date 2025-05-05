@@ -3,8 +3,6 @@
 
 \begin{document}
 
-\allsectionsfont{\sffamily}
-
 \chapter{Style-content disentanglement}
 
 \paragraph{Abstract.} In this chapter, I propose the Context-Aware Variational Autoencoder (CxVAE), a model that can perform style-content disentanglement with conditional shift. Style-content disentanglement is the task of decomposing an observation, $\myrv{x}$, into a style variable, $\myrv{w}$, and a content variable, $\myrv{z}$. Conditional shift is a property of the data-generating process whereby the conditional density of the content, $\myrv{z}$, given the observation, $\myrv{x}$, changes according to the style, $\myrv{w}$ (i.e., $\exists a \neq b,$ such that $\myfunc{p}(\myrv{z} | \myrv{x}, \myrv{w}=a) \not\equiv \myfunc{p}(\myrv{z} | \myrv{x}, \myrv{w}=b)$). Current style-content disentanglement models often fail to learn disentangled representations in real-world scenarios because they lack the capacity for conditional shift. However, this is not reflected in the literature because the most popular datasets were generated without conditional shift. To show this, I create two datasets with conditional shift on which state-of-the-art style-content disentanglement methods fail to learn disentangled representations. Then, I show that my proposed model, the CxVAE, can learn disentangled representations on those datasets. Finally, I show that, by removing conditional shift from the data-generating process, the relative performance advantage of CxVAE disappears, demonstrating that CxVAE successfully disentangles under conditional shift.

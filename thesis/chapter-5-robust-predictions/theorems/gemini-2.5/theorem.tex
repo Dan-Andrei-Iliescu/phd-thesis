@@ -1,0 +1,209 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[margin=1in]{geometry} % Set margins
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% Custom commands (optional)
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\N}{\mathcal{N}} % Normal distribution
+\newcommand{\R}{\mathbb{R}} % Real numbers
+
+\title{Variance Comparison of Causal and Contextual Predictors in Unsupervised Domain Adaptation}
+\author{Derived via AI Assistant}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document presents a theorem comparing the prediction error variance of a causal predictor versus a contextual predictor under a specific linear Gaussian generative model relevant to unsupervised domain adaptation. The contextual predictor utilizes a group-instance variational autoencoder (VAE) framework to estimate the unobserved environment variable from multiple samples within a test environment. We establish conditions based on the number of training environments ($n$) and the variability of the environment variable ($\sigma_W^2$) under which the contextual predictor achieves lower variance than the causal predictor, assuming infinite data within each environment.
+\end{abstract}
+
+\section{Model and Predictor Definitions}
+
+We begin by defining the underlying generative model and the predictors under consideration.
+
+\begin{assumption}[Generative Model]\label{ass:model}
+The data is generated according to the following linear Gaussian structural causal model:
+\begin{enumerate}
+    \item Environment Variable: $W \sim \N(0, \sigma_W^2)$, where $\sigma_W^2 > 0$.
+    \item Causal Covariate: $X_c = aW + \epsilon_c$, where $\epsilon_c \sim \N(0, \sigma_c^2)$, $a \neq 0$, $\sigma_c^2 > 0$.
+    \item Response Variable: $Y = dX_c + \epsilon_y$, where $\epsilon_y \sim \N(0, \sigma_y^2)$, $d \neq 0$, $\sigma_y^2 > 0$.
+    \item Symptom Covariate: $X_s = bW + cY + \epsilon_s$, where $\epsilon_s \sim \N(0, \sigma_s^2)$, $b \neq 0$, $c \neq 0$, $\sigma_s^2 > 0$.
+    \item The noise terms $\epsilon_c, \epsilon_y, \epsilon_s$ are mutually independent and independent of $W$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Training Data]\label{ass:train}
+\begin{enumerate}
+    \item We observe $n$ training environments (groups), indexed $i=1, \dots, n$.
+    \item For each environment $i$, the environment variable $W_i$ is drawn independently from $\N(0, \sigma_W^2)$.
+    \item Within each environment $i$, we observe an infinite number of samples $\{ (X_{c,ik}, X_{s,ik}, Y_{ik}) \}_{k=1}^\infty$ generated according to Assumption \ref{ass:model} with $W = W_i$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Testing Data]\label{ass:test}
+\begin{enumerate}
+    \item A single test environment $n+1$ is considered, with environment variable $W_{n+1} \sim \N(0, \sigma_W^2)$, drawn independently of the training environments.
+    \item We observe an infinite number of covariate samples $\{ (X_{c,(n+1)k}, X_{s,(n+1)k}) \}_{k=1}^\infty$ from this test environment.
+    \item The goal is to predict $Y_{(n+1)k}$ for a randomly chosen sample $k$ from the test environment, minimizing the expected squared prediction error (variance, since predictors are unbiased).
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Causal Predictor]\label{ass:causal}
+\begin{enumerate}
+    \item The causal predictor uses only the causal covariate $X_c$.
+    \item It implements the true conditional expectation given infinite training data within environments (though it doesn't use environment information directly for prediction).
+    \item Prediction for test sample $k$: $\hat{Y}_{\text{causal}, k} = \E[Y | X_c = X_{c,(n+1)k}]$.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Contextual Predictor]\label{ass:contextual}
+\begin{enumerate}
+    \item A group-instance VAE with linear encoder/decoder is trained on the symptom data $\{X_{s,ik}\}$ from the $n$ training environments (Assumption \ref{ass:train}).
+    \item Given infinite data within each training environment $i$, the VAE learns to perfectly infer a group latent variable proportional to $W_i$.
+    \item For the test environment $n+1$, using the infinite covariate samples $\{ (X_{c,(n+1)k}, X_{s,(n+1)k}) \}_{k=1}^\infty$ and the VAE encoder trained on $n$ groups, the predictor infers an estimate $\hat{W}_{n+1}$ of the true test environment variable $W_{n+1}$.
+    \item This estimate is unbiased but imperfect due to finite $n$: $\hat{W}_{n+1} = W_{n+1} + \text{error}_W$, where $\E[\text{error}_W] = 0$ and $\Var(\text{error}_W) = \sigma_{\text{err},W}^2(n, \sigma_W)$.
+    \item The error variance $\sigma_{\text{err},W}^2(n, \sigma_W)$ is a non-negative function, monotonically decreasing in $n$ (approaching 0 as $n \to \infty$ for fixed $\sigma_W > 0$), and increasing as $\sigma_W \to 0$ (for fixed $n$). We assume $\text{error}_W$ is independent of the instance-specific noise terms $\epsilon_{y,(n+1)k}$ and $\epsilon_{s,(n+1)k}$.
+    \item The contextual predictor uses $X_c$, $X_s$, and the estimate $\hat{W}_{n+1}$. It implements the true conditional expectation $\E[Y | X_c, X_s, W]$, substituting $\hat{W}_{n+1}$ for the unknown $W_{n+1}$.
+    \item Prediction for test sample $k$: $\hat{Y}_{\text{contextual}, k} = \E[Y | X_c=X_{c,(n+1)k}, X_s=X_{s,(n+1)k}, W=\hat{W}_{n+1}]$.
+\end{enumerate}
+\end{assumption}
+
+\section{Main Theorem}
+
+\begin{theorem}\label{thm:main}
+Under Assumptions \ref{ass:model}-\ref{ass:contextual}, the prediction error variance of the contextual predictor for a random test sample $k$ from test environment $n+1$ is lower than that of the causal predictor if and only if:
+\begin{equation} \label{eq:condition}
+\left( \frac{c b \sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2} \right)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \frac{c^2 \sigma_y^4}{c^2\sigma_y^2 + \sigma_s^2}
+\end{equation}
+where $\sigma_{\text{err},W}^2(n, \sigma_W)$ is the variance of the estimation error for the test environment variable $W_{n+1}$.
+\end{theorem}
+
+\begin{proof}
+We compute the prediction error variance for each predictor. The prediction error for a predictor $\hat{Y}$ is $Y - \hat{Y}$. Since both predictors are constructed based on true conditional expectations (given their respective information sets, with $\hat{W}$ used in the contextual case), they are conditionally unbiased given their inputs. The expected squared error is thus the variance of the prediction error.
+
+\textbf{1. Causal Predictor Error Variance:}
+The causal predictor is $\hat{Y}_{\text{causal}, k} = \E[Y | X_c = X_{c,(n+1)k}]$.
+From Assumption \ref{ass:model}, $Y = dX_c + \epsilon_y$. Since $\epsilon_y$ is independent of $X_c$ (as $\epsilon_y$ is independent of $W$ and $\epsilon_c$), we have:
+\[
+\E[Y | X_c] = \E[dX_c + \epsilon_y | X_c] = dX_c + \E[\epsilon_y | X_c] = dX_c
+\]
+The prediction error for sample $k$ in environment $n+1$ is:
+\[
+\text{Error}_{\text{causal}, k} = Y_{(n+1)k} - \hat{Y}_{\text{causal}, k} = (dX_{c,(n+1)k} + \epsilon_{y,(n+1)k}) - dX_{c,(n+1)k} = \epsilon_{y,(n+1)k}
+\]
+The variance of this error is:
+\begin{equation} \label{eq:var_causal}
+\Var(\text{Error}_{\text{causal}, k}) = \Var(\epsilon_{y,(n+1)k}) = \sigma_y^2
+\end{equation}
+
+\textbf{2. Ideal Contextual Predictor Error Variance (Known $W_{n+1}$):}
+First, consider an ideal predictor that knows the true $W_{n+1}$.
+$\hat{Y}_{\text{ideal}, k} = \E[Y | X_c=X_{c,(n+1)k}, X_s=X_{s,(n+1)k}, W=W_{n+1}]$.
+\[
+\E[Y | X_c, X_s, W] = \E[dX_c + \epsilon_y | X_c, X_s, W] = dX_c + \E[\epsilon_y | X_c, X_s, W]
+\]
+We need to compute the conditional expectation of $\epsilon_y$. Let $U = X_s - bW - cdX_c$. Substituting the expressions for $X_s$ and $Y$:
+\[
+U = (bW + cY + \epsilon_s) - bW - cdX_c = c(dX_c + \epsilon_y) + \epsilon_s - cdX_c = c\epsilon_y + \epsilon_s
+\]
+Note that $U$ is observable if $X_c, X_s, W$ are known. $U$ is a linear combination of independent Gaussian variables $\epsilon_y, \epsilon_s$, so $U \sim \N(0, c^2\sigma_y^2 + \sigma_s^2)$.
+We need $\E[\epsilon_y | U]$. Since $\epsilon_y$ and $U$ are jointly Gaussian with mean zero:
+\[
+\E[\epsilon_y | U] = \frac{\Cov(\epsilon_y, U)}{\Var(U)} U
+\]
+$\Cov(\epsilon_y, U) = \Cov(\epsilon_y, c\epsilon_y + \epsilon_s) = c\Var(\epsilon_y) + \Cov(\epsilon_y, \epsilon_s) = c\sigma_y^2$ (since $\epsilon_y, \epsilon_s$ are independent).
+Let $\gamma = \frac{c\sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2}$. Then $\E[\epsilon_y | X_c, X_s, W] = \gamma U = \gamma (X_s - bW - cdX_c)$.
+The ideal predictor is $\hat{Y}_{\text{ideal}, k} = dX_c + \gamma (X_s - bW - cdX_c)$.
+The prediction error is:
+\begin{align*}
+\text{Error}_{\text{ideal}, k} &= Y_{(n+1)k} - \hat{Y}_{\text{ideal}, k} \\
+&= (dX_{c,(n+1)k} + \epsilon_{y,(n+1)k}) - [dX_{c,(n+1)k} + \gamma (X_{s,(n+1)k} - bW_{n+1} - cdX_{c,(n+1)k})] \\
+&= \epsilon_{y,(n+1)k} - \gamma (c\epsilon_{y,(n+1)k} + \epsilon_{s,(n+1)k}) \\
+&= (1 - \gamma c)\epsilon_{y,(n+1)k} - \gamma \epsilon_{s,(n+1)k}
+\end{align*}
+The variance of this error is (using independence of $\epsilon_y, \epsilon_s$):
+\begin{align*}
+\Var(\text{Error}_{\text{ideal}, k}) &= (1 - \gamma c)^2 \Var(\epsilon_y) + (-\gamma)^2 \Var(\epsilon_s) \\
+&= \left(1 - \frac{c^2\sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2}\right)^2 \sigma_y^2 + \left(\frac{c\sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2}\right)^2 \sigma_s^2 \\
+&= \left(\frac{\sigma_s^2}{c^2\sigma_y^2 + \sigma_s^2}\right)^2 \sigma_y^2 + \frac{c^2\sigma_y^4}{(c^2\sigma_y^2 + \sigma_s^2)^2} \sigma_s^2 \\
+&= \frac{\sigma_s^4 \sigma_y^2 + c^2\sigma_y^4 \sigma_s^2}{(c^2\sigma_y^2 + \sigma_s^2)^2} \\
+&= \frac{\sigma_s^2 \sigma_y^2 ( \sigma_s^2 + c^2\sigma_y^2 )}{(c^2\sigma_y^2 + \sigma_s^2)^2} \\
+&= \frac{\sigma_s^2 \sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2}
+\end{align*}
+Let $\Var_{\text{opt}, \text{contextual}} = \frac{\sigma_s^2 \sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2}$. This is the minimum achievable variance if $W$ were known.
+
+\textbf{3. Actual Contextual Predictor Error Variance (Estimated $\hat{W}_{n+1}$):}
+The actual predictor uses $\hat{W}_{n+1} = W_{n+1} + \text{error}_W$.
+$\hat{Y}_{\text{contextual}, k} = \E[Y | X_c=X_{c,(n+1)k}, X_s=X_{s,(n+1)k}, W=\hat{W}_{n+1}]$.
+\[
+\hat{Y}_{\text{contextual}, k} = dX_{c,(n+1)k} + \gamma (X_{s,(n+1)k} - b\hat{W}_{n+1} - cdX_{c,(n+1)k})
+\]
+The prediction error is:
+\begin{align*}
+\text{Error}_{\text{contextual}, k} &= Y_{(n+1)k} - \hat{Y}_{\text{contextual}, k} \\
+&= (dX_{c,(n+1)k} + \epsilon_{y,(n+1)k}) - [dX_{c,(n+1)k} + \gamma (X_{s,(n+1)k} - b(W_{n+1}+\text{error}_W) - cdX_{c,(n+1)k})] \\
+&= \epsilon_{y,(n+1)k} - \gamma [(X_{s,(n+1)k} - bW_{n+1} - cdX_{c,(n+1)k}) - b\,\text{error}_W] \\
+&= \epsilon_{y,(n+1)k} - \gamma [(c\epsilon_{y,(n+1)k} + \epsilon_{s,(n+1)k}) - b\,\text{error}_W] \\
+&= (1 - \gamma c)\epsilon_{y,(n+1)k} - \gamma \epsilon_{s,(n+1)k} + \gamma b \,\text{error}_W
+\end{align*}
+The variance of this error is computed using the independence of $\text{error}_W$ from the instance-specific noise terms $\epsilon_y, \epsilon_s$ (Assumption \ref{ass:contextual}):
+\begin{align}
+\Var(\text{Error}_{\text{contextual}, k}) &= \Var((1 - \gamma c)\epsilon_{y,(n+1)k} - \gamma \epsilon_{s,(n+1)k}) + \Var(\gamma b \,\text{error}_W) \nonumber \\
+&= \Var(\text{Error}_{\text{ideal}, k}) + (\gamma b)^2 \Var(\text{error}_W) \nonumber \\
+&= \Var_{\text{opt}, \text{contextual}} + (\gamma b)^2 \sigma_{\text{err},W}^2(n, \sigma_W) \label{eq:var_contextual}
+\end{align}
+
+\textbf{4. Comparison:}
+We want the condition under which $\Var(\text{Error}_{\text{contextual}, k}) < \Var(\text{Error}_{\text{causal}, k})$.
+Substituting \eqref{eq:var_contextual} and \eqref{eq:var_causal}:
+\[
+\Var_{\text{opt}, \text{contextual}} + (\gamma b)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \sigma_y^2
+\]
+Rearranging:
+\[
+(\gamma b)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \sigma_y^2 - \Var_{\text{opt}, \text{contextual}}
+\]
+Let $\Delta\Var = \sigma_y^2 - \Var_{\text{opt}, \text{contextual}}$ be the maximum potential variance reduction by using $X_s$ and known $W$.
+\begin{align*}
+\Delta\Var &= \sigma_y^2 - \frac{\sigma_s^2 \sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2} \\
+&= \sigma_y^2 \left( 1 - \frac{\sigma_s^2}{c^2\sigma_y^2 + \sigma_s^2} \right) \\
+&= \sigma_y^2 \left( \frac{c^2\sigma_y^2 + \sigma_s^2 - \sigma_s^2}{c^2\sigma_y^2 + \sigma_s^2} \right) \\
+&= \frac{c^2 \sigma_y^4}{c^2\sigma_y^2 + \sigma_s^2}
+\end{align*}
+The condition becomes:
+\[
+(\gamma b)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \Delta\Var
+\]
+Substituting $\gamma = \frac{c\sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2}$:
+\[
+\left( \frac{c\sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2} b \right)^2 \sigma_{\text{err},W}^2(n, \sigma_W) < \frac{c^2 \sigma_y^4}{c^2\sigma_y^2 + \sigma_s^2}
+\]
+This is the condition stated in the theorem \eqref{eq:condition}.
+\end{proof}
+
+\begin{remark}
+The term $\Delta\Var = \frac{c^2 \sigma_y^4}{c^2\sigma_y^2 + \sigma_s^2}$ represents the variance reduction achieved by optimally using the information in the symptom $X_s$ when the environment $W$ is known, compared to using only the cause $X_c$. This term is positive provided $c \neq 0$ and $\sigma_y^2 > 0$.
+\end{remark}
+
+\begin{remark}
+The term $\left( \frac{c b \sigma_y^2}{c^2\sigma_y^2 + \sigma_s^2} \right)^2 \sigma_{\text{err},W}^2(n, \sigma_W)$ represents the increase in prediction variance incurred by the contextual predictor due to the imperfect estimation of the environment variable $W_{n+1}$ based on $n$ training environments with variability $\sigma_W^2$.
+\end{remark}
+
+\begin{remark}
+Since $\Delta\Var > 0$ (assuming $c \neq 0, \sigma_y^2 > 0$) and $\sigma_{\text{err},W}^2(n, \sigma_W) \to 0$ as $n \to \infty$ (for fixed $\sigma_W > 0$), the inequality \eqref{eq:condition} will always hold for sufficiently large $n$. This implies that with enough diverse training environments, the contextual predictor will eventually outperform the causal predictor under these model assumptions. Conversely, for small $n$ or very small $\sigma_W$ (making $W$ hard to estimate), the causal predictor might be superior.
+\end{remark}
+
+\end{document}
